@@ -2,8 +2,7 @@
 <html>
 <head>
     <title>Audience Response System</title>
-    <script src="https://cdn.socket.io/4.0.0/socket.io.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/lodash@4.17.21/lodash.min.js"></script>
+    <script src="https://cdn.socket.io/4.8.1/socket.io.min.js"></script>
 </head>
 <body>
     <h1>Audience Response System</h1>
@@ -26,10 +25,17 @@
 
         const responseInput = document.getElementById('responseInput');
 
-        // Send response to server with debounce using lodash
-        const sendResponse = _.debounce((response) => {
+        function debounce(func, wait) {
+            let timeout;
+            return function(...args) {
+                clearTimeout(timeout);
+                timeout = setTimeout(() => func.apply(this, args), wait);
+            };
+        }
+
+        const sendResponse = debounce((response) => {
             socket.emit('response', response);
-        }, 500);
+        }, 200);
 
         responseInput.addEventListener('input', () => {
             const response = responseInput.value;
