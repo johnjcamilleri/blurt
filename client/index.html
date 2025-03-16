@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Audience Response System</title>
+    <script src="https://cdn.socket.io/4.0.0/socket.io.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/lodash@4.17.21/lodash.min.js"></script>
+</head>
+<body>
+    <h1>Audience Response System</h1>
+    <input type="text" id="responseInput" placeholder="Type your response here..." />
+
+    <script>
+        const socket = io(window.location.origin);
+
+        socket.on('connect', () => {
+            console.log('Connected to server');
+        });
+
+        socket.on('updateResponses', (responses) => {
+            console.log('Updated responses:', responses);
+        });
+
+        socket.on('disconnect', () => {
+            console.log('Disconnected from server');
+        });
+
+        const responseInput = document.getElementById('responseInput');
+
+        // Send response to server with debounce using lodash
+        const sendResponse = _.debounce((response) => {
+            socket.emit('response', response);
+        }, 500);
+
+        responseInput.addEventListener('input', () => {
+            const response = responseInput.value;
+            sendResponse(response);
+        });
+    </script>
+</body>
+</html>
