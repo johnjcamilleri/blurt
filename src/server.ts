@@ -7,11 +7,11 @@ const app = express();
 const server = http.createServer(app);
 const io = new Server(server);
 
-interface ClientResponse {
+interface ClientResponses {
     [clientId: string]: string;
 }
 
-const clientResponses: ClientResponse = {};
+const clientResponses: ClientResponses = {};
 
 // Serve static files
 app.use(express.static(path.join(__dirname, '../client')));

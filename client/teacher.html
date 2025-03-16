@@ -27,10 +27,19 @@
         socket.on('updateResponses', (responses) => {
             const responsesDiv = document.getElementById('responses');
             responsesDiv.innerHTML = '';
-            for (const [clientId, response] of Object.entries(responses)) {
-                const responseElement = document.createElement('div');
-                responseElement.className = 'alert alert-secondary';
-                responseElement.textContent = `${response}`;
+
+            // Count the frequency of each response
+            const responseCounts = {};
+            for (const response of Object.values(responses)) {
+                responseCounts[response] = (responseCounts[response] || 0) + 1;
+            }
+
+            // Create a cloud of responses
+            for (const [response, count] of Object.entries(responseCounts)) {
+                const responseElement = document.createElement('span');
+                responseElement.className = 'badge bg-secondary m-1';
+                responseElement.textContent = response;
+                responseElement.style.fontSize = `${10 + count * 5}px`; // Increase font size based on count
                 responsesDiv.appendChild(responseElement);
             }
         });
