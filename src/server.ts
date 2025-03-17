@@ -5,13 +5,15 @@ import path from 'path';
 
 const app = express();
 const server = http.createServer(app);
-const io = new Server(server);
+const io = new Server(server, {
+    maxHttpBufferSize: 128, // bytes or characters
+});
 
-interface ClientResponses {
-    [clientId: string]: string;
-}
+type ClientResponses = {
+    [clientId: string]: string | null;
+};
 
-let clientResponses: ClientResponses = {};
+const clientResponses: ClientResponses = {};
 
 // Serve static files
 app.use(express.static(path.join(__dirname, '../client')));
@@ -19,31 +21,37 @@ app.use(express.static(path.join(__dirname, '../client')));
 // Socket.IO setup
 io.on('connection', (socket: Socket) => {
     console.log(`Client connected: ${socket.id}`);
+    const isTeacher = socket.handshake.query.role === 'teacher';
+    if (!isTeacher) {
+        clientResponses[socket.id] = null;
+    }
 
     // Handle client response
-    socket.on('response', (response: string) => {
+    socket.on('respond', (response: string) => {
         clientResponses[socket.id] = response;
         console.log(`Received response from ${socket.id}: ${response}`);
-        io.emit('updateResponses', clientResponses);
+        io.emit('update responses', clientResponses); // broadcast
     });
 
     // Handle client disconnect
     socket.on('disconnect', () => {
         console.log(`Client disconnected: ${socket.id}`);
         delete clientResponses[socket.id];
-        io.emit('updateResponses', clientResponses);
+        io.emit('update responses', clientResponses);
     });
 
-    // Send the current responses to the teacher client
-    socket.on('getResponses', () => {
-        socket.emit('updateResponses', clientResponses);
+    // Send current responses
+    socket.on('get responses', () => {
+        socket.emit('update responses', clientResponses);
     });
 
-    // Reset reponses
-    socket.on('clearResponses', () => {
+    // Clear all responses
+    socket.on('clear responses', () => {
         console.log(`Clearing responses`);
-        clientResponses = {};
-        io.emit('updateResponses', clientResponses);
+        Object.keys(clientResponses).forEach(clientId => {
+            clientResponses[clientId] = null;
+        });
+        io.emit('update responses', clientResponses); // broadcast
     });
 });
 

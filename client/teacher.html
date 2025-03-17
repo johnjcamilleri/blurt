@@ -71,10 +71,14 @@
     </script>
 
     <script>
-        const socket = io(window.location.origin);
+        const socket = io({
+            query: {
+                role: 'teacher'
+            }
+        });
 
         socket.on('connect', () => {
-            socket.emit('getResponses');
+            socket.emit('get responses');
         });
 
         socket.on('updateResponses', (responses) => {
@@ -99,7 +103,7 @@
 
         const clearResponsesButton = document.getElementById('clearButton');
         clearResponsesButton.addEventListener('click', () => {
-            socket.emit('clearResponses');
+            socket.emit('clear responses');
         });
 
     </script>

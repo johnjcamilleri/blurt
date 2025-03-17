@@ -25,7 +25,7 @@
     </div>
 
     <script>
-        const socket = io(window.location.origin);
+        const socket = io();
 
         const responseInput = document.getElementById('responseInput');
         const clearInputButton = document.getElementById('clearInput');
@@ -39,10 +39,10 @@
         }
 
         const sendResponse = debounce((response) => {
-            socket.emit('response', response);
+            socket.emit('respond', response);
         }, 200);
 
-        socket.on('updateResponses', (responses) => {
+        socket.on('update responses', (responses) => {
             if (!responses[socket.id])
                 responseInput.value = '';
         });
