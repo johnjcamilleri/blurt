@@ -7,7 +7,7 @@ An audience response system with minimal barrier to entry — just blurt out you
 ### Build with Docker
 
 ```sh
- docker build . --tag blurt:latest
+docker build . --tag blurt:latest
 ```
 
 ### Run with Docker
