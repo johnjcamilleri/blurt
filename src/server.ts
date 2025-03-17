@@ -11,7 +11,7 @@ interface ClientResponses {
     [clientId: string]: string;
 }
 
-const clientResponses: ClientResponses = {};
+let clientResponses: ClientResponses = {};
 
 // Serve static files
 app.use(express.static(path.join(__dirname, '../client')));
@@ -34,9 +34,16 @@ io.on('connection', (socket: Socket) => {
         io.emit('updateResponses', clientResponses);
     });
 
-    // Send the current responses to the newly connected teacher client
+    // Send the current responses to the teacher client
     socket.on('getResponses', () => {
         socket.emit('updateResponses', clientResponses);
+    });
+
+    // Reset reponses
+    socket.on('clearResponses', () => {
+        console.log(`Clearing responses`);
+        clientResponses = {};
+        io.emit('updateResponses', clientResponses);
     });
 });
 
