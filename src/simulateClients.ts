@@ -29,22 +29,22 @@ for (let i = 0; i < NUM_CLIENTS; i++) {
     const socket = io(SERVER_URL);
 
     socket.on('connect', () => {
-        console.log(`Client ${i} connected: ${socket.id}`);
+        console.log(`${socket.id} connected`);
     });
 
     socket.on('disconnect', () => {
-        console.log(`Client ${i} disconnected: ${socket.id}`);
+        console.log(`${socket.id} disconnected`);
     });
 
     clients.push(socket);
 }
 
 setInterval(() => {
-    clients.forEach((socket, index) => {
+    clients.forEach((socket) => {
         setTimeout(() => {
             const response = WORDS[Math.floor(Math.random() * WORDS.length)];
             socket.emit('respond', response);
-            console.log(`Client ${index} sent: ${response}`);
+            console.log(`${socket.id} sent: ${response}`);
         }, Math.floor(Math.random() * 501));
     });
 }, INTERVAL_MS);
