@@ -9,26 +9,26 @@
     <script src="https://cdn.jsdelivr.net/npm/qrcode@1.5.1/build/qrcode.min.js"></script>
 </head>
 <body class="container mt-5">
-    <nav class="navbar navbar-expand-lg">
+    <nav class="navbar navbar-expand-md">
         <div class="container-fluid">
-            <span class="navbar-brand text-body-tertiary h1">
+            <span class="navbar-brand text-body-tertiary fs-2 fw-medium">
                 <img src="icon.svg" alt="blurt logo" style="width: 50px; height: 50px;">
                 blurt (teacher)
             </span>
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav ms-auto gap-2">
+                    <li class="navbar-text me-2" id="responseStats"></li>
                     <li class="nav-item">
-                        <button id="hideButton" class="btn btn-dark border-dark-subtle">hide</button>
+                        <button id="hideButton" class="btn btn-outline-secondary border-dark-subtle">hide</button>
                     </li>
                     <li class="nav-item">
-                        <button id="clearButton" class="btn btn-dark border-dark-subtle">clear</button>
+                        <button id="clearButton" class="btn btn-outline-secondary border-dark-subtle">clear</button>
                     </li>
                 </ul>
             </div>
         </div>
     </nav>
 
-    <div id="responseStats" class=""></div>
     <div id="responses" class="mt-4"></div>
 
     <div id="qrcodeContainer"
