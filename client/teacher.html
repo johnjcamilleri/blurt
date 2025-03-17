@@ -9,7 +9,7 @@
     <script src="https://cdn.jsdelivr.net/npm/qrcode@1.5.1/build/qrcode.min.js"></script>
 </head>
 <body class="container mt-5">
-    <nav class="navbar navbar-expand-md">
+    <nav class="navbar navbar-expand-sm">
         <div class="container-fluid">
             <span class="navbar-brand text-body-tertiary fs-2 fw-medium">
                 <img src="icon.svg" alt="blurt logo" style="width: 50px; height: 50px;">
@@ -43,7 +43,11 @@
         const qrcodeCanvas = document.getElementById('qrcode');
 
         function renderSmall() {
-            qrOptions = { margin: 2, color: { light: "#0000", dark: "#fffa" } };
+            qrOptions = {
+                width: 80,
+                margin: 2,
+                color: { light: "#0000", dark: "#fffa" }
+            };
             QRCode.toCanvas(qrcodeCanvas, studentViewUrl, qrOptions, (error) => {
                 if (error) console.error(error);
             });
