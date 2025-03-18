@@ -9,17 +9,15 @@
     "sim": "ts-node src/simulateClients.ts"
   },
   "dependencies": {
-    "express": "^4.17.1",
-    "socket.io": "^4.0.0"
+    "express": "^4.21.2",
+    "socket.io": "^4.8.1"
   },
   "devDependencies": {
-    "@types/express": "^4.17.13",
-    "@types/node": "^16.11.7",
-    "@types/socket.io": "^3.0.2",
+    "@types/express": "^5.0.0",
     "nodemon": "^3.1.9",
     "socket.io-client": "^4.8.1",
-    "ts-node": "^10.0.0",
-    "typescript": "^4.5.0"
+    "ts-node": "^10.9.2",
+    "typescript": "^5.8.2"
   },
   "author": "John J. Camilleri",
   "license": "MIT"
