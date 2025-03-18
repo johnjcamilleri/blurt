@@ -5,17 +5,20 @@
   "scripts": {
     "start": "node dist/server.js",
     "build": "tsc",
+    "build:client": "tsc --project tsconfig.client.json",
     "dev": "nodemon --watch 'src/**/*.ts' --exec 'ts-node' src/server.ts",
     "sim": "ts-node src/simulateClients.ts"
   },
   "dependencies": {
     "express": "^4.21.2",
-    "socket.io": "^4.8.1"
+    "qrcode": "^1.5.1",
+    "socket.io": "^4.8.1",
+    "socket.io-client": "^4.8.1"
   },
   "devDependencies": {
     "@types/express": "^5.0.0",
+    "@types/qrcode": "^1.5.5",
     "nodemon": "^3.1.9",
-    "socket.io-client": "^4.8.1",
     "ts-node": "^10.9.2",
     "typescript": "^5.8.2"
   },
