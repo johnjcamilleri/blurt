@@ -5,9 +5,9 @@
   "scripts": {
     "start": "node dist/server.js",
     "build": "tsc",
-    "build:client": "esbuild client/src/index.ts client/src/teacher.ts --bundle --outdir=client/dist --format=esm --target=es6 --sourcemap",
-    "build:client:watch": "esbuild client/src/index.ts client/src/teacher.ts --bundle --outdir=client/dist --format=esm --target=es6 --sourcemap --watch",
     "dev": "nodemon --watch 'src/**/*.ts' --exec 'ts-node' src/server.ts",
+    "build:client": "esbuild client/src/index.ts client/src/teacher.ts --bundle --outdir=client/dist --format=esm",
+    "dev:client": "esbuild client/src/index.ts client/src/teacher.ts --bundle --outdir=client/dist --format=esm --sourcemap --watch",
     "sim": "ts-node src/simulateClients.ts"
   },
   "dependencies": {

@@ -15,3 +15,9 @@ docker build . --tag blurt:latest
 ```sh
 docker run --rm --publish 3000:3000 blurt:latest
 ```
+
+## TODO
+
+- Add linting
+- Change visualisation of responses
+- Add support for multiple rooms
