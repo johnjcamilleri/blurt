@@ -11,12 +11,14 @@
     "sim": "ts-node src/simulateClients.ts"
   },
   "dependencies": {
+    "alpinejs": "^3.14.9",
     "express": "^4.21.2",
     "qrcode": "^1.5.1",
     "socket.io": "^4.8.1",
     "socket.io-client": "^4.8.1"
   },
   "devDependencies": {
+    "@types/alpinejs": "^3.13.11",
     "@types/express": "^5.0.0",
     "@types/qrcode": "^1.5.5",
     "esbuild": "^0.25.1",

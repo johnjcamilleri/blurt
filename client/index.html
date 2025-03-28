@@ -9,17 +9,26 @@
 <body class="container">
     <div class="d-flex flex-column justify-content-center vh-100">
         <h1 class="mb-4 text-body-tertiary">
-            <img src="icon.svg" alt="Icon" style="width: 50px; height: 50px;">
+            <img src="icon.svg" alt="app icon" style="width: 50px; height: 50px;">
             blurt
         </h1>
-        <div class="mb-3">
+        <div x-data="state" class="mb-3">
             <div class="input-group">
-                <input type="text" id="responseInput" class="form-control fs-1 px-5 py-4 border-secondary-subtle border-end-0" placeholder="..." />
-                <button class="btn border-secondary-subtle border-start-0 px-4" type="button" id="clearInput">✖</button>
+                <input
+                    type="text"
+                    class="form-control fs-1 px-5 py-4 border-secondary-subtle border-end-0"
+                    placeholder="..."
+                    x-model="response"
+                />
+                <button
+                    type="button"
+                    class="btn border-secondary-subtle border-start-0 px-4"
+                    @click="response = ''"
+                >✖</button>
             </div>
-            <button data-prefill class="btn btn-success mt-3 opacity-75">yes</button>
-            <button data-prefill class="btn btn-warning mt-3 opacity-75">maybe</button>
-            <button data-prefill class="btn btn-danger mt-3 opacity-75">no</button>
+            <button class="btn btn-success mt-3 opacity-75" @click="response = 'yes'">yes</button>
+            <button class="btn btn-warning mt-3 opacity-75" @click="response = 'maybe'">maybe</button>
+            <button class="btn btn-danger mt-3 opacity-75" @click="response = 'no'">no</button>
         </div>
     </div>
 
