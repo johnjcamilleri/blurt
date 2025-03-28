@@ -1,55 +1,46 @@
 import { io } from 'socket.io-client';
 import QRCode from 'qrcode';
+import Alpine from 'alpinejs';
 
 import { debounce } from './common';
+import { ClientResponses } from "../../src/server";
 
 // Generate QR code for student view URL
 const studentViewUrl = `${window.location.origin}/`;
-const qrcodeCanvas = document.getElementById('qrcode');
-
-function renderSmall() {
+function renderSmall(elem) {
     const qrOptions = {
         width: 80,
         margin: 2,
         color: { light: "#0000", dark: "#fffa" }
     };
-    QRCode.toCanvas(qrcodeCanvas, studentViewUrl, qrOptions, (error) => {
+    QRCode.toCanvas(elem, studentViewUrl, qrOptions, (error) => {
         if (error) console.error(error);
     });
 }
-function renderBig() {
+function renderBig(elem) {
     const width = Math.min(window.innerWidth, window.innerHeight) - 100;
     const qrOptions = { margin: 2, width };
-    QRCode.toCanvas(qrcodeCanvas, studentViewUrl, qrOptions, (error) => {
+    QRCode.toCanvas(elem, studentViewUrl, qrOptions, (error) => {
         if (error) console.error(error);
     });
 }
-renderSmall();
+renderSmall(document.getElementById('qrcodeSmall'));
+renderBig(document.getElementById('qrcodeBig'));
 
-// Display the value of the QR code
-const qrcodeValue = document.getElementById('qrcodeValue') as HTMLElement;
-qrcodeValue.textContent = studentViewUrl;
-
-// Grow/shrink the QR code
-const qrcodeContainer = document.getElementById('qrcodeContainer') as HTMLElement;
-let isFullscreen = false;
-qrcodeContainer.addEventListener('click', () => {
-    isFullscreen = !isFullscreen;
-    if (isFullscreen) {
-        renderBig();
-        qrcodeContainer.style.bottom = '0';
-        qrcodeContainer.style.right = '0';
-        qrcodeContainer.style.width = '100vw';
-        qrcodeContainer.style.height = '100vh';
-        qrcodeContainer.style.fontSize = 'xx-large';
-        qrcodeContainer.style.backgroundColor = 'white';
-        qrcodeValue.style.display = 'block';
-    } else {
-        renderSmall();
-        qrcodeContainer.style = "";
-        qrcodeValue.style.display = 'none';
-    }
+const state = Alpine.reactive({
+    responses: {},
+    clearResponses() {
+        socket.emit('clear responses');
+    },
+    get totalResponses() {
+        return Object.keys(this.responses).length;
+    },
+    get nonEmptyResponses() {
+        return Object.values(this.responses).filter(response => response !== null && response !== '').length;
+    },
 });
+Alpine.data('state', () => state);
+Alpine.start();
 
 const socket = io({
     query: {
@@ -61,17 +52,10 @@ socket.on('connect', () => {
     socket.emit('get responses');
 });
 
-// TODO share definition with server.ts
-type ClientResponses = {
-    [clientId: string]: string | null;
-};
-
 const responseStatsDiv = document.getElementById('responseStats') as HTMLElement;
 const responsesDiv = document.getElementById('responses') as HTMLElement;
 const renderResponses = debounce((responses: ClientResponses) => {
-    const totalClients = Object.keys(responses).length;
-    const nonEmptyResponses = Object.values(responses).filter(response => response !== null && response !== '').length;
-    responseStatsDiv.innerHTML = `${nonEmptyResponses}/${totalClients}`;
+    state.responses = responses;
     responsesDiv.innerHTML = '';
 
     // Count the frequency of each response
@@ -99,22 +83,4 @@ const renderResponses = debounce((responses: ClientResponses) => {
 
 socket.on('update responses', (responses) => {
     renderResponses(responses);
-});
-
-let showResponses = true;
-const hideButton = document.getElementById('hideButton') as HTMLButtonElement;
-hideButton.addEventListener('click', () => {
-    showResponses = !showResponses;
-    if (showResponses) {
-        hideButton.textContent = 'hide';
-        responsesDiv.classList.remove('d-none');
-    } else {
-        hideButton.textContent = 'show';
-        responsesDiv.classList.add('d-none');
-    }
-});
-
-const clearResponsesButton = document.getElementById('clearButton') as HTMLButtonElement;
-clearResponsesButton.addEventListener('click', () => {
-    socket.emit('clear responses');
 });

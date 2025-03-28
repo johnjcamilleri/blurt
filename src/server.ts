@@ -9,7 +9,7 @@ const io = new Server(server, {
     maxHttpBufferSize: 128, // bytes or characters
 });
 
-type ClientResponses = {
+export type ClientResponses = {
     [clientId: string]: string | null;
 };
 

@@ -1,7 +1,8 @@
 import { io } from 'socket.io-client';
+import Alpine from 'alpinejs';
+
 import { debounce } from './common';
 
-import Alpine from 'alpinejs';
 const socket = io();
 
 const sendResponse = debounce((response: string) => {
