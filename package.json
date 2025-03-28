@@ -2,13 +2,14 @@
   "name": "blurt",
   "version": "1.0.0",
   "main": "dist/server.js",
+  "type": "module",
   "scripts": {
     "start": "node dist/server.js",
     "build": "tsc",
     "dev": "nodemon --watch 'src/**/*.ts' --exec 'ts-node' src/server.ts",
     "build:client": "esbuild client/src/index.ts client/src/teacher.ts --bundle --outdir=client/dist --format=esm",
     "dev:client": "esbuild client/src/index.ts client/src/teacher.ts --bundle --outdir=client/dist --format=esm --sourcemap --watch",
-    "sim": "ts-node src/simulateClients.ts"
+    "sim": "ts-node src/simulate-clients.ts"
   },
   "dependencies": {
     "alpinejs": "^3.14.9",
@@ -24,8 +25,20 @@
     "esbuild": "^0.25.1",
     "nodemon": "^3.1.9",
     "ts-node": "^10.9.2",
-    "typescript": "^5.8.2"
+    "typescript": "^5.8.2",
+    "xo": "^0.60.0"
   },
   "author": "John J. Camilleri",
-  "license": "MIT"
+  "license": "MIT",
+  "xo": {
+    "space": 4,
+    "semicolon": true,
+    "rules": {
+      "capitalized-comments": "off",
+      "curly": "off",
+      "unicorn/prevent-abbreviations": "off",
+      "import/no-named-as-default": "off",
+      "n/prefer-global/process": "off"
+    }
+  }
 }

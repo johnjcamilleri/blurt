@@ -1,4 +1,6 @@
-import { io, Socket } from 'socket.io-client';
+/* eslint-disable array-element-newline */
+/* eslint-disable @typescript-eslint/naming-convention */
+import {io, type Socket} from 'socket.io-client';
 
 const SERVER_URL = 'http://localhost:3000';
 const NUM_CLIENTS = 30;
@@ -14,13 +16,13 @@ const FRUITS = [
     'indianfig', 'jabuticaba', 'kiwano', 'longan', 'mandarin', 'naranjilla', 'olive', 'persimmon', 'quararibea', 'roseapple',
     'sapodilla', 'tangelo', 'ugni', 'vaccinium', 'waxapple', 'ximenia', 'yumberry', 'zabergau', 'ackee', 'breadfruit',
     'calamondin', 'durian', 'emblic', 'farkleberry', 'gac', 'hornedmelon', 'ilama', 'jostaberry', 'kabosu', 'lucuma',
-    'mammee', 'noni', 'osageorange', 'pitanga', 'quenepa', 'ribes', 'santol', 'tamarillo', 'uchuva', 'voavanga'
+    'mammee', 'noni', 'osageorange', 'pitanga', 'quenepa', 'ribes', 'santol', 'tamarillo', 'uchuva', 'voavanga',
 ];
 
 // const WORDS = FRUITS.sort(() => 0.5 - Math.random()).slice(0, WORD_NO);
 const WORDS = [
     'yes', 'no', 'maybe',
-    'apple', 'banana', 'cherry', 'date', 'elderberry'
+    'apple', 'banana', 'cherry', 'date', 'elderberry',
 ];
 
 const clients: Socket[] = [];
@@ -40,11 +42,11 @@ for (let i = 0; i < NUM_CLIENTS; i++) {
 }
 
 setInterval(() => {
-    clients.forEach((socket) => {
+    for (const socket of clients) {
         setTimeout(() => {
             const response = WORDS[Math.floor(Math.random() * WORDS.length)];
             socket.emit('respond', response);
             console.log(`${socket.id} sent: ${response}`);
         }, Math.floor(Math.random() * 501));
-    });
+    }
 }, INTERVAL_MS);

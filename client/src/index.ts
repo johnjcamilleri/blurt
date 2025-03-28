@@ -1,7 +1,6 @@
-import { io } from 'socket.io-client';
+import {io} from 'socket.io-client';
 import Alpine from 'alpinejs';
-
-import { debounce } from './common';
+import {debounce, type ClientResponses} from './common.js';
 
 const socket = io();
 
@@ -18,7 +17,7 @@ Alpine.effect(() => {
 });
 Alpine.start();
 
-socket.on('update responses', (responses) => {
+socket.on('update responses', (responses: ClientResponses) => {
     if (socket.id && !responses[socket.id]) {
         state.response = '';
     }
