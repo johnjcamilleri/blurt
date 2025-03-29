@@ -15,6 +15,14 @@ type ClientResponses = Map<string, string>;
 
 const clientResponses: ClientResponses = new Map();
 
+const teacherSockets: Set<Socket> = new Set<Socket>();
+
+function updateTeachers() {
+    for (const teacherSocket of teacherSockets) {
+        teacherSocket.emit('update responses', Object.fromEntries(clientResponses));
+    }
+}
+
 // Serve static files
 const __dirname = import.meta.dirname;
 app.use(express.static(path.join(__dirname, '../client')));
@@ -23,37 +31,40 @@ app.use(express.static(path.join(__dirname, '../client')));
 io.on('connection', (socket: Socket) => {
     console.log(`Client connected: ${socket.id}`);
     const isTeacher = socket.handshake.query.role === 'teacher';
-    if (!isTeacher) {
-        clientResponses.set(socket.id as string, '');
+    if (isTeacher) {
+        teacherSockets.add(socket);
+    } else {
+        clientResponses.set(socket.id, '');
     }
 
     // Handle client response
     socket.on('respond', (response: string) => {
-        clientResponses.set(socket.id as string, response);
+        clientResponses.set(socket.id, response);
         console.log(`Received response from ${socket.id}: ${response}`);
-        io.emit('update responses', Object.fromEntries(clientResponses));
+        updateTeachers();
     });
 
     // Handle client disconnect
     socket.on('disconnect', () => {
         console.log(`Client disconnected: ${socket.id}`);
-        clientResponses.delete(socket.id as string);
-        io.emit('update responses', Object.fromEntries(clientResponses));
+        clientResponses.delete(socket.id);
+        updateTeachers();
     });
 
     // Send current responses
     socket.on('get responses', () => {
-        socket.emit('update responses', Object.fromEntries(clientResponses));
+        updateTeachers();
     });
 
     // Clear all responses
     socket.on('clear responses', () => {
         console.log('Clearing responses');
-        for (const clientId of clientResponses.keys()) {
-            clientResponses.set(clientId, '');
+        for (const socketId of clientResponses.keys()) {
+            const socket = io.sockets.sockets.get(socketId);
+            if (socket) {
+                socket.emit('clear response');
+            }
         }
-
-        io.emit('update responses', Object.fromEntries(clientResponses)); // broadcast
     });
 });
 
@@ -71,7 +82,7 @@ server.on('error', (error: NodeJS.ErrnoException) => {
 // Graceful shutdown
 const gracefulShutdown = async () => {
     console.log('Received shutdown signal, shutting down gracefully...');
-    await io.close(() => {
+    void io.close(() => {
         console.log('Closed out remaining connections.');
         process.exit(0);
     });
