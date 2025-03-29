@@ -1,6 +1,6 @@
 import {io} from 'socket.io-client';
 import Alpine from 'alpinejs';
-import {debounce} from './common.js';
+import {debounce, type Mode} from './common.js';
 
 const socket = io();
 
@@ -8,8 +8,14 @@ const sendResponse = debounce((response: string) => {
     socket.emit('respond', response);
 }, 200);
 
-const state = Alpine.reactive({
+type State = {
+    response: string;
+    mode: Mode;
+};
+
+const state = Alpine.reactive<State>({
     response: '',
+    mode: 'free-text',
 });
 Alpine.data('state', () => state);
 Alpine.effect(() => {
@@ -21,3 +27,7 @@ socket.on('clear response', () => {
     state.response = '';
 });
 
+socket.on('set mode', (mode: Mode) => {
+    console.log(`received mode: ${mode}`);
+    state.mode = mode;
+});

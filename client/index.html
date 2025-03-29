@@ -14,7 +14,7 @@
             blurt
         </h1>
         <div x-data="state" class="mb-3">
-            <div class="input-group">
+            <div class="input-group" x-show="mode == 'free-text'">
                 <input
                     type="text"
                     class="form-control fs-1 px-5 py-4 border-secondary-subtle border-end-0"
@@ -27,9 +27,14 @@
                     @click="response = ''"
                 >✖</button>
             </div>
-            <button class="btn btn-success mt-3 opacity-75" @click="response = 'yes'">yes</button>
-            <button class="btn btn-warning mt-3 opacity-75" @click="response = 'maybe'">maybe</button>
-            <button class="btn btn-danger mt-3 opacity-75" @click="response = 'no'">no</button>
+            <div x-show="mode == 'yes-no-maybe'">
+                <button class="btn btn-success mt-3 opacity-75" @click="response = 'yes'">yes</button>
+                <button class="btn btn-warning mt-3 opacity-75" @click="response = 'maybe'">maybe</button>
+                <button class="btn btn-danger mt-3 opacity-75" @click="response = 'no'">no</button>
+            </div>
+            <div x-show="mode == 'programming'" class="fs-1">
+                💻
+            </div>
         </div>
     </div>
 

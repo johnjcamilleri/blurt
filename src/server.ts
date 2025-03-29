@@ -66,6 +66,12 @@ io.on('connection', (socket: Socket) => {
             }
         }
     });
+
+    // Handle set mode
+    socket.on('set mode', (mode: string) => {
+        console.log(`Teacher set mode: ${mode}`);
+        io.emit('set mode', mode);
+    });
 });
 
 // Start the server

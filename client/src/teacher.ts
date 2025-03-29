@@ -1,7 +1,7 @@
 import Alpine from 'alpinejs';
 import {io} from 'socket.io-client';
 import QRCode from 'qrcode';
-import {debounce, type ClientResponses} from './common.js';
+import {debounce, type ClientResponses, type Mode} from './common.js';
 
 // Generate QR code for student view URL
 const studentViewUrl = `${globalThis.location.origin}/`;
@@ -32,6 +32,7 @@ type State = {
     clearResponses: () => void;
     totalResponses: number;
     nonEmptyResponses: number;
+    setMode: (Mode) => void;
 };
 
 const state = Alpine.reactive<State>({
@@ -44,6 +45,10 @@ const state = Alpine.reactive<State>({
     },
     get nonEmptyResponses() {
         return Object.values(this.responses).filter(response => response !== null && response !== '').length;
+    },
+    setMode(mode: Mode) {
+        console.log(`setting mode to ${mode}`);
+        socket.emit('set mode', mode);
     },
 });
 Alpine.data('state', () => state);

@@ -44,6 +44,18 @@
                         >clear</button>
                     </li>
                     <li>
+                        <div class="dropdown">
+                            <button class="btn btn-outline-secondary border-dark-subtle dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                question mode
+                            </button>
+                            <ul class="dropdown-menu">
+                                <li><a class="dropdown-item" href="#" @click="setMode('programming')">programing</a></li>
+                                <li><a class="dropdown-item" href="#" @click="setMode('yes-no-maybe')">yes,no and maybe</a></li>
+                                <li><a class="dropdown-item" href="#" @click="setMode('free-text')">free text</a></li>
+                            </ul>
+                        </div>
+                    </li>
+                    <li>
                         <div
                             class="cursor-pointer"
                             x-show="!showQRCode"
@@ -66,5 +78,6 @@
     </nav>
     <div id="responses" class="mt-4" x-show="showResponses"></div>
     <script type="module" src="dist/teacher.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
 </body>
 </html>

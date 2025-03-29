@@ -9,3 +9,5 @@ export function debounce<T extends (...args: any[]) => void>(func: T, wait: numb
 }
 
 export type ClientResponses = Record<string, string>;
+
+export type Mode = 'programming' | 'yes-no-maybe' | 'free-text';
