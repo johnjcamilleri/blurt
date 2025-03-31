@@ -27,35 +27,10 @@ function renderBig(element: HTMLElement) {
 renderSmall(document.querySelector('#qrcodeSmall')!);
 renderBig(document.querySelector('#qrcodeBig')!);
 
-type State = {
-    responses: ClientResponses;
-    clearResponses: () => void;
-    totalResponses: number;
-    nonEmptyResponses: number;
-    setMode: (Mode) => void;
-};
-
-const state = Alpine.reactive<State>({
-    responses: new Map(),
-    clearResponses() {
-        socket.emit('clear responses');
-    },
-    get totalResponses(): number {
-        return this.responses.size;
-    },
-    get nonEmptyResponses(): number {
-        return Array.from(this.responses.values()).filter(response => response !== null && response !== '').length;
-    },
-    setMode(mode: Mode) {
-        socket.emit('set mode', mode);
-    },
-});
-Alpine.data('state', () => state);
-Alpine.start();
+const responsesDiv = document.querySelector('#responses')!;
 
 // Render the response cloud
-const responsesDiv = document.querySelector('#responses')!;
-const renderResponses = debounce((responses: ClientResponses) => {
+const renderResponseCloud = debounce((responses: ClientResponses) => {
     responsesDiv.innerHTML = '';
 
     // Count the frequency of each response
@@ -96,6 +71,38 @@ const renderResponses = debounce((responses: ClientResponses) => {
     }
 }, 200);
 
+// Clear the response cloud
+const clearResponseCloud = () => {
+    responsesDiv.innerHTML = '';
+};
+
+type State = {
+    responses: ClientResponses;
+    clearResponses: () => void;
+    totalResponses: number;
+    nonEmptyResponses: number;
+    setMode: (Mode) => void;
+};
+
+const state = Alpine.reactive<State>({
+    responses: new Map(),
+    clearResponses() {
+        socket.emit('clear responses');
+        clearResponseCloud();
+    },
+    get totalResponses(): number {
+        return this.responses.size;
+    },
+    get nonEmptyResponses(): number {
+        return Array.from(this.responses.values()).filter(response => response !== null && response !== '').length;
+    },
+    setMode(mode: Mode) {
+        socket.emit('set mode', mode);
+    },
+});
+Alpine.data('state', () => state);
+Alpine.start();
+
 const socket = io({
     query: {
         role: 'teacher',
@@ -108,7 +115,7 @@ socket.on('connect', () => {
 
 socket.on('all responses', (responses: Array<[string, string]>) => {
     state.responses = new Map(responses);
-    renderResponses(state.responses);
+    renderResponseCloud(state.responses);
 });
 
 socket.on('update response', (socketId: string, response: string) => {
@@ -118,5 +125,5 @@ socket.on('update response', (socketId: string, response: string) => {
         state.responses.set(socketId, response);
     }
 
-    renderResponses(state.responses);
+    renderResponseCloud(state.responses);
 });

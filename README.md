@@ -29,7 +29,7 @@ git push origin main
 
 ## TODO
 
-- Clear responses when chagning mode
+- Clear responses when changing mode
 - Make yes-no-maybe buttons stateful
 - Implement code mode
 - Change visualisation of responses

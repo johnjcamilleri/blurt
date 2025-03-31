@@ -1,7 +1,6 @@
 #!/usr/bin/env node
 
 import http from 'node:http';
-import path from 'node:path';
 import express from 'express';
 import {Server, type Socket} from 'socket.io';
 
@@ -18,8 +17,7 @@ const studentResponses: StudentResponses = new Map();
 const teacherSockets: Set<Socket> = new Set<Socket>();
 
 // Serve static files
-// const __dirname = import.meta.dirname;
-app.use(express.static(path.join(__dirname, '../client'))); // eslint-disable-line unicorn/prefer-module
+app.use(express.static('./client'));
 
 // Socket.IO setup
 io.on('connection', (socket: Socket) => {
