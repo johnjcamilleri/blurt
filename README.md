@@ -18,6 +18,15 @@ docker build . --tag blurt:latest
 docker run --rm --publish 3000:3000 blurt:latest
 ```
 
+## Snippets
+
+Fast-forward merge `dev` into `main` and push (from `dev`):
+
+```sh
+git fetch . dev:main
+git push origin main
+```
+
 ## TODO
 
 - Clear responses when chagning mode
