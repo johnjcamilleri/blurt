@@ -16,17 +16,23 @@ const studentResponses: StudentResponses = new Map();
 
 const teacherSockets: Set<Socket> = new Set<Socket>();
 
+type Mode = 'free-text' | 'code' | 'yes-no-maybe';
+
+let mode: Mode = 'code';
+
 // Serve static files
 app.use(express.static('./client'));
 
 // Socket.IO setup
 io.on('connection', (socket: Socket) => {
-    console.log(`Client connected: ${socket.id}`);
     const isTeacher = socket.handshake.query.role === 'teacher';
     if (isTeacher) {
+        console.log(`Teacher connected: ${socket.id}`);
         teacherSockets.add(socket);
     } else {
+        console.log(`Student connected: ${socket.id}`);
         studentResponses.set(socket.id, '');
+        socket.emit('set mode', mode);
     }
 
     // Handle client disconnect
@@ -39,8 +45,9 @@ io.on('connection', (socket: Socket) => {
     });
 
     // Handle set mode
-    socket.on('set mode', (mode: string) => {
-        console.log(`Set mode: ${mode}`);
+    socket.on('set mode', (newMode: Mode) => {
+        console.log(`Set mode: ${newMode}`);
+        mode = newMode;
         io.emit('set mode', mode);
     });
 

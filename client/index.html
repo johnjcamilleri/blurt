@@ -17,8 +17,9 @@
             <div class="input-group" x-show="mode == 'free-text'">
                 <input
                     type="text"
+                    spellcheck="false"
                     class="form-control fs-1 px-5 py-4 border-secondary-subtle border-end-0"
-                    placeholder="..."
+                    placeholder=""
                     x-model="response"
                 />
                 <button
@@ -27,13 +28,19 @@
                     @click="response = ''"
                 >✖</button>
             </div>
+            <div class="input-group" x-show="mode == 'code'">
+                <textarea
+                    spellcheck="false"
+                    class="form-control fs-3 px-4 py-4 border-secondary-subtle font-monospace text-secondary-emphasis"
+                    placeholder=""
+                    x-model="response"
+                    rows="3"
+                ></textarea>
+            </div>
             <div x-show="mode == 'yes-no-maybe'">
                 <button class="btn btn-success mt-3 opacity-75" @click="response = 'yes'">yes</button>
                 <button class="btn btn-warning mt-3 opacity-75" @click="response = 'maybe'">maybe</button>
                 <button class="btn btn-danger mt-3 opacity-75" @click="response = 'no'">no</button>
-            </div>
-            <div x-show="mode == 'programming'" class="fs-1">
-                💻
             </div>
         </div>
     </div>

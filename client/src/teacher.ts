@@ -97,6 +97,8 @@ const state = Alpine.reactive<State>({
         return Array.from(this.responses.values()).filter(response => response !== null && response !== '').length;
     },
     setMode(mode: Mode) {
+        socket.emit('clear responses');
+        clearResponseCloud();
         socket.emit('set mode', mode);
     },
 });

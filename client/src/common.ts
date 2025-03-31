@@ -10,4 +10,4 @@ export function debounce<T extends (...args: any[]) => void>(func: T, wait: numb
 
 export type ClientResponses = Map<string, string>;
 
-export type Mode = 'programming' | 'yes-no-maybe' | 'free-text';
+export type Mode = 'free-text' | 'code' | 'yes-no-maybe';
