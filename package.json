@@ -12,13 +12,13 @@
     "sim": "ts-node src/simulate-clients.ts"
   },
   "dependencies": {
-    "alpinejs": "^3.14.9",
     "express": "^4.21.2",
-    "qrcode": "^1.5.1",
-    "socket.io": "^4.8.1",
-    "socket.io-client": "^4.8.1"
+    "socket.io": "^4.8.1"
   },
   "devDependencies": {
+    "alpinejs": "^3.14.9",
+    "qrcode": "^1.5.1",
+    "socket.io-client": "^4.8.1",
     "@types/alpinejs": "^3.13.11",
     "@types/express": "^5.0.0",
     "@types/qrcode": "^1.5.5",
