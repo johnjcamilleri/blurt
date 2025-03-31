@@ -29,6 +29,6 @@ git push origin main
 
 ## TODO
 
-- Make yes-no-maybe buttons stateful
 - Change visualisation of responses
 - Add support for multiple rooms
+- Responsiveness, accessibility
