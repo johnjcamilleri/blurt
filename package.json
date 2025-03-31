@@ -2,7 +2,6 @@
   "name": "blurt",
   "version": "1.0.0",
   "main": "dist/server.js",
-  "type": "module",
   "scripts": {
     "start": "node dist/server.js",
     "build": "tsc",

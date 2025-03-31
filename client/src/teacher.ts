@@ -36,42 +36,31 @@ type State = {
 };
 
 const state = Alpine.reactive<State>({
-    responses: {},
+    responses: new Map(),
     clearResponses() {
         socket.emit('clear responses');
     },
-    get totalResponses() {
-        return Object.keys(this.responses).length;
+    get totalResponses(): number {
+        return this.responses.size;
     },
-    get nonEmptyResponses() {
-        return Object.values(this.responses).filter(response => response !== null && response !== '').length;
+    get nonEmptyResponses(): number {
+        return Array.from(this.responses.values()).filter(response => response !== null && response !== '').length;
     },
     setMode(mode: Mode) {
-        console.log(`setting mode to ${mode}`);
         socket.emit('set mode', mode);
     },
 });
 Alpine.data('state', () => state);
 Alpine.start();
 
-const socket = io({
-    query: {
-        role: 'teacher',
-    },
-});
-
-socket.on('connect', () => {
-    socket.emit('get responses');
-});
-
+// Render the response cloud
 const responsesDiv = document.querySelector('#responses')!;
 const renderResponses = debounce((responses: ClientResponses) => {
-    state.responses = responses;
     responsesDiv.innerHTML = '';
 
     // Count the frequency of each response
     const responseCounts: Record<string, number> = {};
-    for (const response of Object.values(responses)) {
+    for (const response of responses.values()) {
         if (!response) continue;
         responseCounts[response] = (responseCounts[response] || 0) + 1;
     }
@@ -107,6 +96,27 @@ const renderResponses = debounce((responses: ClientResponses) => {
     }
 }, 200);
 
-socket.on('update responses', (responses: ClientResponses) => {
-    renderResponses(responses);
+const socket = io({
+    query: {
+        role: 'teacher',
+    },
+});
+
+socket.on('connect', () => {
+    socket.emit('get responses');
+});
+
+socket.on('all responses', (responses: Array<[string, string]>) => {
+    state.responses = new Map(responses);
+    renderResponses(state.responses);
+});
+
+socket.on('update response', (socketId: string, response: string) => {
+    if (response === undefined || response === null) {
+        state.responses.delete(socketId);
+    } else {
+        state.responses.set(socketId, response);
+    }
+
+    renderResponses(state.responses);
 });

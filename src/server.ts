@@ -11,21 +11,15 @@ const io = new Server(server, {
     maxHttpBufferSize: 128, // bytes or characters
 });
 
-type ClientResponses = Map<string, string>;
+type StudentResponses = Map<string, string>;
 
-const clientResponses: ClientResponses = new Map();
+const studentResponses: StudentResponses = new Map();
 
 const teacherSockets: Set<Socket> = new Set<Socket>();
 
-function updateTeachers() {
-    for (const teacherSocket of teacherSockets) {
-        teacherSocket.emit('update responses', Object.fromEntries(clientResponses));
-    }
-}
-
 // Serve static files
-const __dirname = import.meta.dirname;
-app.use(express.static(path.join(__dirname, '../client')));
+// const __dirname = import.meta.dirname;
+app.use(express.static(path.join(__dirname, '../client'))); // eslint-disable-line unicorn/prefer-module
 
 // Socket.IO setup
 io.on('connection', (socket: Socket) => {
@@ -34,32 +28,35 @@ io.on('connection', (socket: Socket) => {
     if (isTeacher) {
         teacherSockets.add(socket);
     } else {
-        clientResponses.set(socket.id, '');
+        studentResponses.set(socket.id, '');
     }
-
-    // Handle client response
-    socket.on('respond', (response: string) => {
-        clientResponses.set(socket.id, response);
-        console.log(`Received response from ${socket.id}: ${response}`);
-        updateTeachers();
-    });
 
     // Handle client disconnect
     socket.on('disconnect', () => {
         console.log(`Client disconnected: ${socket.id}`);
-        clientResponses.delete(socket.id);
-        updateTeachers();
+        studentResponses.delete(socket.id);
+        for (const teacherSocket of teacherSockets) {
+            teacherSocket.emit('update response', socket.id, undefined);
+        }
     });
 
-    // Send current responses
+    // Handle set mode
+    socket.on('set mode', (mode: string) => {
+        console.log(`Set mode: ${mode}`);
+        io.emit('set mode', mode);
+    });
+
+    // Send all responses
     socket.on('get responses', () => {
-        updateTeachers();
+        console.log('Get responses');
+        const serialised: Array<[string, string]> = Array.from(studentResponses.entries());
+        socket.emit('all responses', serialised);
     });
 
     // Clear all responses
     socket.on('clear responses', () => {
         console.log('Clearing responses');
-        for (const socketId of clientResponses.keys()) {
+        for (const socketId of studentResponses.keys()) {
             const socket = io.sockets.sockets.get(socketId);
             if (socket) {
                 socket.emit('clear response');
@@ -67,10 +64,13 @@ io.on('connection', (socket: Socket) => {
         }
     });
 
-    // Handle set mode
-    socket.on('set mode', (mode: string) => {
-        console.log(`Teacher set mode: ${mode}`);
-        io.emit('set mode', mode);
+    // Handle student response
+    socket.on('respond', (response: string) => {
+        console.log(`Received response from ${socket.id}: ${response}`);
+        studentResponses.set(socket.id, response);
+        for (const teacherSocket of teacherSockets) {
+            teacherSocket.emit('update response', socket.id, response);
+        }
     });
 });
 

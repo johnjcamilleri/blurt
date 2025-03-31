@@ -23,6 +23,5 @@ docker run --rm --publish 3000:3000 blurt:latest
 - Clear responses when chagning mode
 - Make yes-no-maybe buttons stateful
 - Implement code mode
-- Only send changes to teacher, not all messages
 - Change visualisation of responses
 - Add support for multiple rooms

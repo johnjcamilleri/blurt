@@ -10,5 +10,5 @@
     "outDir": "./dist"
   },
   "include": ["src/**/*.ts"],
-  "exclude": ["node_modules", "src/simulateClients.ts"]
+  "exclude": ["node_modules", "src/simulate-clients.ts"]
 }
