@@ -7,7 +7,7 @@
     "start": "node dist/server.js",
     "build": "tsc",
     "dev": "nodemon --watch 'src/**/*.ts' --exec 'ts-node' src/server.ts",
-    "build:client": "esbuild client/src/index.ts client/src/teacher.ts --bundle --outdir=client/dist --format=esm",
+    "build:client": "esbuild client/src/index.ts client/src/teacher.ts --bundle --outdir=client/dist --format=esm --minify",
     "dev:client": "esbuild client/src/index.ts client/src/teacher.ts --bundle --outdir=client/dist --format=esm --sourcemap --watch",
     "sim": "ts-node src/simulate-clients.ts"
   },

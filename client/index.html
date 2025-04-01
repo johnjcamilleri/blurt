@@ -9,10 +9,6 @@
 </head>
 <body class="container">
     <div class="d-flex flex-column justify-content-center vh-100">
-        <!-- <h1 class="mb-4 text-body-tertiary">
-            <img src="icon.svg" alt="app icon" style="width: 50px; height: 50px;">
-            blurt
-        </h1> -->
         <div x-data="state" class="mb-3">
             <div class="input-group" x-show="mode == 'free-text'">
                 <input
@@ -39,15 +35,15 @@
             </div>
             <div x-show="mode == 'yes-no-maybe'">
                 <button
-                    class="btn opacity-75 me-1"
+                    class="btn me-1"
                     :class="response == 'yes' ? 'btn-success' : 'btn-outline-success'"
                     @click="response = 'yes'">yes</button>
                 <button
-                    class="btn opacity-75 me-1"
+                    class="btn me-1"
                     :class="response == 'maybe' ? 'btn-warning' : 'btn-outline-warning'"
                     @click="response = 'maybe'">maybe</button>
                 <button
-                    class="btn opacity-75 me-1"
+                    class="btn me-1"
                     :class="response == 'no' ? 'btn-danger' : 'btn-outline-danger'"
                     @click="response = 'no'">no</button>
             </div>

@@ -18,7 +18,7 @@ const teacherSockets: Set<Socket> = new Set<Socket>();
 
 type Mode = 'free-text' | 'code' | 'yes-no-maybe';
 
-let mode: Mode = 'code';
+let mode: Mode = 'free-text';
 
 // Serve static files
 app.use(express.static('./client'));
