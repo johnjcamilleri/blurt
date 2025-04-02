@@ -6,25 +6,24 @@
   "scripts": {
     "start": "node dist/server.js",
     "build": "tsc",
-    "dev": "nodemon --watch 'src/**/*.ts' --exec 'ts-node' src/server.ts",
+    "dev": "tsx watch src/server.ts",
     "build:client": "esbuild client/src/index.ts client/src/teacher.ts --bundle --outdir=client/dist --format=esm --minify",
     "dev:client": "esbuild client/src/index.ts client/src/teacher.ts --bundle --outdir=client/dist --format=esm --sourcemap --watch",
-    "sim": "ts-node src/simulate-clients.ts"
+    "sim": "tsx src/simulate-clients.ts"
   },
   "dependencies": {
     "express": "^4.21.2",
     "socket.io": "^4.8.1"
   },
   "devDependencies": {
-    "alpinejs": "^3.14.9",
-    "qrcode": "^1.5.1",
-    "socket.io-client": "^4.8.1",
     "@types/alpinejs": "^3.13.11",
     "@types/express": "^5.0.0",
     "@types/qrcode": "^1.5.5",
+    "alpinejs": "^3.14.9",
     "esbuild": "^0.25.1",
-    "nodemon": "^3.1.9",
-    "ts-node": "^10.9.2",
+    "qrcode": "^1.5.1",
+    "socket.io-client": "^4.8.1",
+    "tsx": "^4.19.3",
     "typescript": "^5.8.2",
     "xo": "^0.60.0"
   },
