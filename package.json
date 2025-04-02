@@ -7,20 +7,24 @@
     "start": "node dist/server.js",
     "build": "tsc",
     "dev": "tsx watch src/server.ts",
-    "build:client": "esbuild client/src/index.ts client/src/teacher.ts --bundle --outdir=client/dist --format=esm --minify",
-    "dev:client": "esbuild client/src/index.ts client/src/teacher.ts --bundle --outdir=client/dist --format=esm --sourcemap --watch",
+    "build:client": "esbuild client/src/student.ts client/src/teacher.ts --bundle --outdir=client/dist --format=esm --minify",
+    "dev:client": "esbuild client/src/student.ts client/src/teacher.ts --bundle --outdir=client/dist --format=esm --sourcemap --watch",
     "sim": "tsx src/simulate-clients.ts"
   },
   "dependencies": {
+    "cookie-parser": "^1.4.7",
     "express": "^4.21.2",
     "socket.io": "^4.8.1"
   },
   "devDependencies": {
     "@types/alpinejs": "^3.13.11",
+    "@types/cookie-parser": "^1.4.8",
     "@types/express": "^5.0.0",
+    "@types/js-cookie": "^3.0.6",
     "@types/qrcode": "^1.5.5",
     "alpinejs": "^3.14.9",
     "esbuild": "^0.25.1",
+    "js-cookie": "^3.0.5",
     "qrcode": "^1.5.1",
     "socket.io-client": "^4.8.1",
     "tsx": "^4.19.3",

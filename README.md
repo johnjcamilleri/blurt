@@ -18,6 +18,18 @@ docker build . --tag blurt:latest
 docker run --rm --publish 3000:3000 blurt:latest
 ```
 
+## Usage
+
+- Visiting <blurt.lol> will show two options:
+  - Create room (server chooses new name)
+  - Join room (server checks if name exists before redirecting)
+- Visiting <blurt.lol/room> will
+  - Create `room` if it doesn't exist and make you the teacher
+  - Join `room` as a student if it exists
+- Teacher saves room secret as cookie
+- A room has exactly one teacher
+- A room is destroyed if is has no students or teachers
+
 ## Snippets
 
 Fast-forward merge `dev` into `main` and push (from `dev`):
@@ -29,6 +41,6 @@ git push origin main
 
 ## TODO
 
+- UI messages
 - Change visualisation of responses
-- Add support for multiple rooms
 - Responsiveness, accessibility

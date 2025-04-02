@@ -2,7 +2,13 @@ import {io} from 'socket.io-client';
 import Alpine from 'alpinejs';
 import {debounce, type Mode} from './common.js';
 
-const socket = io();
+const roomName = globalThis.location.pathname.slice(1);
+
+const socket = io({
+    query: {
+        roomName,
+    },
+});
 
 const sendResponse = debounce((response: string) => {
     socket.emit('respond', response);

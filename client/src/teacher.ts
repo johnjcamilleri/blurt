@@ -1,10 +1,11 @@
 import Alpine from 'alpinejs';
+import Cookies from 'js-cookie';
 import {io} from 'socket.io-client';
 import QRCode from 'qrcode';
 import {debounce, type ClientResponses, type Mode} from './common.js';
 
 // Generate QR code for student view URL
-const studentViewUrl = `${globalThis.location.origin}/`;
+const studentViewUrl = `${globalThis.location.origin}${globalThis.location.pathname}`;
 function renderSmall(element: HTMLElement) {
     const qrOptions = {
         width: 80,
@@ -26,6 +27,7 @@ function renderBig(element: HTMLElement) {
 
 renderSmall(document.querySelector('#qrcodeSmall')!);
 renderBig(document.querySelector('#qrcodeBig')!);
+document.querySelector('#qrcodeText')!.textContent = studentViewUrl;
 
 const responsesDiv = document.querySelector('#responses')!;
 
@@ -105,9 +107,15 @@ const state = Alpine.reactive<State>({
 Alpine.data('state', () => state);
 Alpine.start();
 
+// Get room name from URL path and secret from cookie
+const roomName = globalThis.location.pathname.slice(1);
+const roomSecret = Cookies.get(roomName);
+
+// Connect web socket
 const socket = io({
     query: {
-        role: 'teacher',
+        roomName,
+        roomSecret,
     },
 });
 

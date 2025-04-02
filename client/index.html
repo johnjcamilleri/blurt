@@ -8,48 +8,38 @@
     <link rel="icon" href="icon.svg" sizes="any" type="image/svg+xml">
 </head>
 <body class="container">
-    <div class="d-flex flex-column justify-content-center vh-100">
-        <div x-data="state" class="mb-3">
-            <div class="input-group" x-show="mode == 'free-text'">
-                <input
-                    type="text"
-                    spellcheck="false"
-                    class="form-control fs-1 px-5 py-4 border-secondary-subtle border-end-0"
-                    placeholder=""
-                    x-model="response"
-                />
-                <button
-                    type="button"
-                    class="btn border-secondary-subtle border-start-0 px-4"
-                    @click="response = ''"
-                >✖</button>
+    <div class="d-flex flex-column justify-content-center align-items-center vh-100">
+        <span class="text-body-tertiary display-3 fw-medium mb-4">
+            <img src="icon.svg" alt="blurt logo" style="height: 1em;">
+            blurt
+        </span>
+        <div class="row g-3">
+            <div class="col-12 col-md-auto">
+                <a
+                    href="/new"
+                    class="btn btn-outline-secondary w-100"
+                >
+                    Create room
+                </a>
             </div>
-            <div class="input-group" x-show="mode == 'code'">
-                <textarea
-                    spellcheck="false"
-                    class="form-control fs-3 px-4 py-4 border-secondary-subtle font-monospace text-secondary-emphasis"
-                    placeholder=""
-                    x-model="response"
-                    rows="3"
-                ></textarea>
-            </div>
-            <div x-show="mode == 'yes-no-maybe'">
-                <button
-                    class="btn me-1"
-                    :class="response == 'yes' ? 'btn-success' : 'btn-outline-success'"
-                    @click="response = 'yes'">yes</button>
-                <button
-                    class="btn me-1"
-                    :class="response == 'maybe' ? 'btn-warning' : 'btn-outline-warning'"
-                    @click="response = 'maybe'">maybe</button>
-                <button
-                    class="btn me-1"
-                    :class="response == 'no' ? 'btn-danger' : 'btn-outline-danger'"
-                    @click="response = 'no'">no</button>
+            <div class="col-12 col-md">
+                <div class="input-group">
+                    <input
+                        type="text"
+                        class="form-control"
+                        placeholder="room name"
+                        aria-label="room name"
+                    >
+                    <button
+                        type="button"
+                        class="btn btn-outline-secondary"
+                        onclick="window.location.href = '/join/' + document.querySelector('input').value"
+                    >
+                        Join
+                    </button>
+                </div>
             </div>
         </div>
     </div>
-
-    <script type="module" src="dist/index.js"></script>
 </body>
 </html>
