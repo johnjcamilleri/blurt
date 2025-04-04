@@ -101,14 +101,17 @@ describe('Server Tests', () => {
     it('should join an existing room as student GET /:room', async () => {
         const res = await axios.get(`${serverUrl}/${roomName}`);
         assert.strictEqual(res.status, 200);
-        // TODO: assert we are served student page
+        assert.match(res.data as string, /dist\/student\.js/);
     });
 
     it('should join an existing room as teacher GET /:room', async () => {
-        // TODO add coookie info
-        const res = await axios.get(`${serverUrl}/${roomName}`);
+        const res = await axios.get(`${serverUrl}/${roomName}`, {
+            headers: {
+                cookie: cookie.serialize(roomName, roomSecret),
+            },
+        });
         assert.strictEqual(res.status, 200);
-        // TODO: assert we are served teacher page
+        assert.match(res.data as string, /dist\/teacher\.js/);
     });
 
     // it('should handle socket connection', async () => {
