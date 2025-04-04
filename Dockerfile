@@ -29,6 +29,7 @@ WORKDIR /app
 COPY --from=build /app/package*.json ./
 COPY --from=build /app/dist ./dist
 COPY --from=build /app/client/dist ./client/dist
+COPY --from=build /app/client/src/*.html ./client/src/
 COPY --from=build /app/client/*.html ./client/
 COPY --from=build /app/client/*.svg ./client/
 
