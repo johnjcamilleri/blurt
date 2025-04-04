@@ -155,9 +155,11 @@ io.on('connection', (socket: Socket) => {
 
 // Start the server
 const PORT = process.env.PORT ?? 3000; // eslint-disable-line @typescript-eslint/naming-convention
-server.listen(PORT, () => {
-    console.log(`server is running on port ${PORT}`);
-});
+if (process.env.NODE_ENV !== 'test') {
+    server.listen(PORT, () => {
+        console.log(`server is running on port ${PORT}`);
+    });
+}
 
 // Error handling
 server.on('error', (error: NodeJS.ErrnoException) => {

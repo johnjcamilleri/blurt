@@ -10,7 +10,7 @@
     "build:client": "esbuild client/src/student.ts client/src/teacher.ts --bundle --outdir=client/dist --format=esm --minify",
     "dev:client": "esbuild client/src/student.ts client/src/teacher.ts --bundle --outdir=client/dist --format=esm --sourcemap --watch",
     "sim": "tsx src/simulate-clients.ts",
-    "test": "tsx --test tests/*.test.ts"
+    "test": "NODE_ENV=test tsx --test tests/*.test.ts"
   },
   "dependencies": {
     "cookie-parser": "^1.4.7",
@@ -24,6 +24,8 @@
     "@types/js-cookie": "^3.0.6",
     "@types/qrcode": "^1.5.5",
     "alpinejs": "^3.14.9",
+    "axios": "^1.8.4",
+    "cookie": "^1.0.2",
     "esbuild": "^0.25.1",
     "js-cookie": "^3.0.5",
     "qrcode": "^1.5.1",
