@@ -5,7 +5,7 @@ import {
 } from 'node:test';
 import http from 'node:http';
 import {type AddressInfo} from 'node:net';
-import axios from 'axios';
+import axios, {type AxiosError, type AxiosResponse} from 'axios';
 import cookie from 'cookie';
 import {type Express} from 'express';
 import {io, type Socket} from 'socket.io-client';
@@ -35,7 +35,7 @@ describe('Server Tests', () => {
 
         // Create a room
         const res = await axios.get(`${serverUrl}/${roomName}`);
-        assert.strictEqual(res.status, 200);
+        assert.strictEqual(res.status, 201);
         const cookies = res.headers['set-cookie'];
         assert(cookies && cookies.length > 0, 'Expected cookies to be set');
         const cookiesObj = cookie.parse(cookies[0]);
@@ -44,7 +44,10 @@ describe('Server Tests', () => {
 
         // Connect clients
         teacherSocket = io(serverUrl, {query: {roomName, roomSecret}});
-        studentSockets.push(io(serverUrl, {query: {roomName}}));
+        studentSockets.push(
+            io(serverUrl, {query: {roomName}}),
+            io(serverUrl, {query: {roomName}}),
+        );
     });
 
     after(async () => {
@@ -62,9 +65,50 @@ describe('Server Tests', () => {
         });
     });
 
-    it('should respond to HTTP GET /', async () => {
+    it('should respond to GET /', async () => {
         const res = await axios.get(`${serverUrl}/`);
         assert.strictEqual(res.status, 200);
+    });
+
+    it('should create a new room GET /new', async () => {
+        const res = await axios.get(`${serverUrl}/new`, {maxRedirects: 0})
+            .catch((error: unknown) => (error as AxiosError).response as AxiosResponse);
+        assert.strictEqual(res.status, 302);
+        assert(res.headers.location, 'Expected a redirect location header');
+        const redirectUrl = res.headers.location as string;
+        assert.notStrictEqual(redirectUrl, `/${roomName}`);
+        assert.match(redirectUrl, /\/[a-z0-8]{5}/);
+    });
+
+    it('should join an existing room GET /join', async () => {
+        const res = await axios.get(`${serverUrl}/join/${roomName}`, {maxRedirects: 0})
+            .catch((error: unknown) => (error as AxiosError).response as AxiosResponse);
+        assert.strictEqual(res.status, 302);
+        assert(res.headers.location, 'Expected a redirect location header');
+        const redirectUrl = res.headers.location as string;
+        assert.strictEqual(redirectUrl, `/${roomName}`);
+    });
+
+    it('should not join a non-existant room GET /join', async () => {
+        const res = await axios.get(`${serverUrl}/join/junkyroom`, {maxRedirects: 0})
+            .catch((error: unknown) => (error as AxiosError).response as AxiosResponse);
+        assert.strictEqual(res.status, 302);
+        assert(res.headers.location, 'Expected a redirect location header');
+        const redirectUrl = res.headers.location as string;
+        assert.strictEqual(redirectUrl, '/');
+    });
+
+    it('should join an existing room as student GET /:room', async () => {
+        const res = await axios.get(`${serverUrl}/${roomName}`);
+        assert.strictEqual(res.status, 200);
+        // TODO: assert we are served student page
+    });
+
+    it('should join an existing room as teacher GET /:room', async () => {
+        // TODO add coookie info
+        const res = await axios.get(`${serverUrl}/${roomName}`);
+        assert.strictEqual(res.status, 200);
+        // TODO: assert we are served teacher page
     });
 
     // it('should handle socket connection', async () => {

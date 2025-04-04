@@ -64,7 +64,7 @@ app.get('/:room', (req, res) => {
         const room = createRoom(roomName);
         rooms.set(roomName, room);
         res.cookie(roomName, room.secret);
-        res.sendFile('teacher.html', {root: './client/src'});
+        res.status(201).sendFile('teacher.html', {root: './client/src'});
         // TODO: UI message that room was created
     }
 });
