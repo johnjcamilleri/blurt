@@ -21,7 +21,7 @@ const createRoom = (name: string): Room => ({
 });
 const rooms = new Map<string, Room>();
 
-const app = express();
+export const app = express();
 const server = http.createServer(app);
 const io = new Server(server, {
     maxHttpBufferSize: 128, // bytes or characters

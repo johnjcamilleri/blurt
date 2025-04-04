@@ -9,7 +9,8 @@
     "dev": "tsx watch src/server.ts",
     "build:client": "esbuild client/src/student.ts client/src/teacher.ts --bundle --outdir=client/dist --format=esm --minify",
     "dev:client": "esbuild client/src/student.ts client/src/teacher.ts --bundle --outdir=client/dist --format=esm --sourcemap --watch",
-    "sim": "tsx src/simulate-clients.ts"
+    "sim": "tsx src/simulate-clients.ts",
+    "test": "tsx --test tests/*.test.ts"
   },
   "dependencies": {
     "cookie-parser": "^1.4.7",
