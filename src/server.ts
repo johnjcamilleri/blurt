@@ -7,18 +7,25 @@ import {Server, type Socket} from 'socket.io';
 
 type StudentResponses = Map<string, string>;
 type Mode = 'free-text' | 'code' | 'yes-no-maybe';
-type Room = {
+export type Room = {
+    name: string;
     secret: string;
     studentResponses: StudentResponses;
     teacherSocket?: Socket;
     mode: Mode;
 };
-const createRoom = (name: string): Room => ({
-    secret: Math.random().toString(36).slice(2, 15),
-    studentResponses: new Map(),
-    teacherSocket: undefined,
-    mode: 'free-text',
-});
+export const createRoom = (roomName: string): Room => {
+    const room: Room = {
+        name: roomName,
+        secret: Math.random().toString(36).slice(2, 15),
+        studentResponses: new Map(),
+        teacherSocket: undefined,
+        mode: 'free-text',
+    };
+    rooms.set(roomName, room);
+    return room;
+};
+
 const rooms = new Map<string, Room>();
 
 export const app = express();
@@ -62,7 +69,6 @@ app.get('/:room', (req, res) => {
         // Room doesn't exist, create as teacher
         console.log(`[${roomName}] create room`);
         const room = createRoom(roomName);
-        rooms.set(roomName, room);
         res.cookie(roomName, room.secret);
         res.status(201).sendFile('teacher.html', {root: './client/src'});
         // TODO: UI message that room was created

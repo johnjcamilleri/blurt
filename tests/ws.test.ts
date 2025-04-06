@@ -10,7 +10,7 @@ import cookie from 'cookie';
 import {type Express} from 'express';
 import {io, type Socket} from 'socket.io-client';
 import {Server} from 'socket.io';
-import {app} from '../src/server.js';
+import {app, createRoom, type Room} from '../src/server.js';
 
 describe('Web Socket tests', () => {
     let httpServer: http.Server;
@@ -18,8 +18,7 @@ describe('Web Socket tests', () => {
     let teacherSocket: Socket;
     const studentSockets: Socket[] = [];
     let serverUrl: string;
-    const roomName = 'testroom';
-    let roomSecret: string;
+    let room: Room;
 
     before(async () => {
         // Start the server
@@ -34,19 +33,13 @@ describe('Web Socket tests', () => {
         });
 
         // Create a room
-        const res = await axios.get(`${serverUrl}/${roomName}`);
-        assert.strictEqual(res.status, 201);
-        const cookies = res.headers['set-cookie'];
-        assert(cookies && cookies.length > 0, 'Expected cookies to be set');
-        const cookiesObj = cookie.parse(cookies[0]);
-        roomSecret = cookiesObj[roomName]!;
-        assert(roomSecret, 'Expected roomName and roomSecret in cookies');
+        room = createRoom('testroom');
 
         // Connect clients
-        teacherSocket = io(serverUrl, {query: {roomName, roomSecret}});
+        teacherSocket = io(serverUrl, {query: {roomName: room.name, roomSecret: room.secret}});
         studentSockets.push(
-            io(serverUrl, {query: {roomName}}),
-            io(serverUrl, {query: {roomName}}),
+            io(serverUrl, {query: {roomName: room.name}}),
+            io(serverUrl, {query: {roomName: room.name}}),
         );
     });
 
@@ -65,20 +58,18 @@ describe('Web Socket tests', () => {
         });
     });
 
-    // it('should handle socket connection', async () => {
-    //     clientSocket.emit('get responses');
-    //     await new Promise<void>(resolve => {
-    //         clientSocket.on('all responses', responses => {
-    //             assert.deepStrictEqual(responses, []); // Expect no responses initially
-    //             resolve();
-    //         });
-    //     });
-    // });
-
-    // it('should handle student response', () => {
-    //     clientSocket.emit('respond', 'yes');
-    //     clientSocket.on('update response', (socketId, response) => {
-    //         assert.strictEqual(response, 'yes');
-    //     });
-    // });
+    it('handles student response', async () => {
+        // TODO: not working
+        studentSockets[0].emit('respond', 'yes');
+        await new Promise<void>(resolve => {
+            teacherSocket.on('update response', (socketId, response) => {
+                assert.strictEqual(socketId, studentSockets[0].id);
+                assert.strictEqual(response, 'yes');
+                resolve();
+            });
+            setTimeout(() => {
+                throw new Error('Test timed out');
+            }, 3000);
+        });
+    });
 });
