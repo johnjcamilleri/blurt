@@ -3,27 +3,25 @@ import assert from 'node:assert';
 import {
     describe, it, before, after,
 } from 'node:test';
-import http from 'node:http';
 import {type AddressInfo} from 'node:net';
 import axios, {type AxiosError, type AxiosResponse} from 'axios';
 import cookie from 'cookie';
-import {type Express} from 'express';
-import {Server} from 'socket.io';
-import {app, createRoom, type Room} from '../src/server.js';
+import {
+    httpServer,
+    createRoom,
+    type Room,
+} from '../src/server.js';
 
 describe('HTTP tests', () => {
-    let httpServer: http.Server;
-    let socketServer: Server;
     let serverUrl: string;
     let room: Room;
 
     before(async () => {
         // Start the server
-        httpServer = http.createServer(app as Express);
-        socketServer = new Server(httpServer);
         await new Promise<void>(resolve => {
             httpServer.listen(() => {
                 const {port} = httpServer.address() as AddressInfo;
+                console.log(`server is running on port ${port}`);
                 serverUrl = `http://localhost:${port}`;
                 resolve();
             });
@@ -35,7 +33,6 @@ describe('HTTP tests', () => {
 
     after(async () => {
         // Clean up after tests
-        await socketServer.close();
         await new Promise<void>(resolve => {
             httpServer.close(() => {
                 resolve();

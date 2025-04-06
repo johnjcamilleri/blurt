@@ -3,7 +3,7 @@
 import http from 'node:http';
 import cookieParser from 'cookie-parser';
 import express from 'express';
-import {Server, type Socket} from 'socket.io';
+import {Server as SocketServer, type Socket} from 'socket.io';
 
 type StudentResponses = Map<string, string>;
 type Mode = 'free-text' | 'code' | 'yes-no-maybe';
@@ -28,9 +28,9 @@ export const createRoom = (roomName: string): Room => {
 
 const rooms = new Map<string, Room>();
 
-export const app = express();
-const server = http.createServer(app);
-const io = new Server(server, {
+const app = express();
+export const httpServer = http.createServer(app);
+export const socketServer = new SocketServer(httpServer, {
     maxHttpBufferSize: 128, // bytes or characters
 });
 
@@ -76,7 +76,7 @@ app.get('/:room', (req, res) => {
 });
 
 // Socket.IO setup
-io.on('connection', (socket: Socket) => {
+socketServer.on('connection', (socket: Socket) => {
     const roomName = socket.handshake.query.roomName; // should always be present
     const roomSecret = socket.handshake.query.roomSecret; // only present for teacher
 
@@ -99,7 +99,7 @@ io.on('connection', (socket: Socket) => {
         console.log(`[${roomName}] ${socket.id} teacher connect`);
         room.teacherSocket = socket;
     } else {
-        console.log(`[${roomName}] ${socket.id} student connected`);
+        console.log(`[${roomName}] ${socket.id} student connect`);
         room.studentResponses.set(socket.id, '');
         socket.emit('set mode', room.mode);
     }
@@ -126,7 +126,7 @@ io.on('connection', (socket: Socket) => {
         console.log(`[${roomName}] ${socket.id} set mode: ${newMode}`);
         room.mode = newMode;
         for (const socketId of room.studentResponses.keys()) {
-            const socket = io.sockets.sockets.get(socketId);
+            const socket = socketServer.sockets.sockets.get(socketId);
             if (socket) {
                 socket.emit('set mode', newMode);
             }
@@ -144,7 +144,7 @@ io.on('connection', (socket: Socket) => {
     socket.on('clear responses', () => {
         console.log(`[${roomName}] ${socket.id} clear responses`);
         for (const socketId of room.studentResponses.keys()) {
-            const socket = io.sockets.sockets.get(socketId);
+            const socket = socketServer.sockets.sockets.get(socketId);
             if (socket) {
                 socket.emit('clear response');
             }
@@ -162,20 +162,20 @@ io.on('connection', (socket: Socket) => {
 // Start the server
 const PORT = process.env.PORT ?? 3000; // eslint-disable-line @typescript-eslint/naming-convention
 if (process.env.NODE_ENV !== 'test') {
-    server.listen(PORT, () => {
+    httpServer.listen(PORT, () => {
         console.log(`server is running on port ${PORT}`);
     });
 }
 
 // Error handling
-server.on('error', (error: NodeJS.ErrnoException) => {
+httpServer.on('error', (error: NodeJS.ErrnoException) => {
     console.error(`server error: ${error.message}`);
 });
 
 // Graceful shutdown
 const gracefulShutdown = async () => {
     console.log('received shutdown signal, shutting down gracefully...');
-    void io.close(() => {
+    void socketServer.close(() => {
         console.log('closed out remaining connections');
         process.exit(0);
     });
