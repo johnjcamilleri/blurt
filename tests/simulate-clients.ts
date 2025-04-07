@@ -1,5 +1,6 @@
 /* eslint-disable array-element-newline */
 /* eslint-disable @typescript-eslint/naming-convention */
+import axios from 'axios';
 import {io, type Socket} from 'socket.io-client';
 
 const SERVER_URL = 'http://localhost:3000';
@@ -27,8 +28,14 @@ const WORDS = [
 
 const clients: Socket[] = [];
 
+async function createTestRoom() {
+    await axios.get(`${SERVER_URL}/testroom`);
+}
+
+await createTestRoom();
+
 for (let i = 0; i < NUM_CLIENTS; i++) {
-    const socket = io(SERVER_URL);
+    const socket = io(SERVER_URL, {query: {roomName: 'testroom'}});
 
     socket.on('connect', () => {
         console.log(`${socket.id} connected`);
