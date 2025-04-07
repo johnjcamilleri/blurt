@@ -42,9 +42,10 @@
     "rules": {
       "capitalized-comments": "off",
       "curly": "off",
-      "unicorn/prevent-abbreviations": "off",
       "import/no-named-as-default": "off",
-      "n/prefer-global/process": "off"
+      "n/prefer-global/process": "off",
+      "no-warning-comments": "off",
+      "unicorn/prevent-abbreviations": "off"
     }
   }
 }

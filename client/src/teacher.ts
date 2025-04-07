@@ -2,7 +2,8 @@ import Alpine from 'alpinejs';
 import Cookies from 'js-cookie';
 import {io} from 'socket.io-client';
 import QRCode from 'qrcode';
-import {debounce, type ClientResponses, type Mode} from './common.js';
+import {type ClientResponses, type Mode} from './common.js';
+import cloud from './cloud.js';
 
 // Generate QR code for student view URL
 const studentViewUrl = `${globalThis.location.origin}${globalThis.location.pathname}`;
@@ -29,55 +30,6 @@ renderSmall(document.querySelector('#qrcodeSmall')!);
 renderBig(document.querySelector('#qrcodeBig')!);
 document.querySelector('#qrcodeText')!.textContent = studentViewUrl;
 
-const responsesDiv = document.querySelector('#responses')!;
-
-// Render the response cloud
-const renderResponseCloud = debounce((responses: ClientResponses) => {
-    responsesDiv.innerHTML = '';
-
-    // Count the frequency of each response
-    const responseCounts: Record<string, number> = {};
-    for (const response of responses.values()) {
-        if (!response) continue;
-        responseCounts[response] = (responseCounts[response] || 0) + 1;
-    }
-
-    // Create a cloud of responses
-    for (const [response, count] of Object.entries(responseCounts)) {
-        const responseElement = document.createElement('span');
-        responseElement.className = 'badge m-1';
-        switch (response) {
-            case 'yes': {
-                responseElement.className += ' bg-success';
-                break;
-            }
-
-            case 'maybe': {
-                responseElement.className += ' bg-warning';
-                break;
-            }
-
-            case 'no': {
-                responseElement.className += ' bg-danger';
-                break;
-            }
-
-            default: {
-                responseElement.className += ' bg-secondary';
-            }
-        }
-
-        responseElement.textContent = response;
-        responseElement.style.fontSize = `${10 + (count * 5)}px`; // Increase font size based on count
-        responsesDiv.append(responseElement);
-    }
-}, 200);
-
-// Clear the response cloud
-const clearResponseCloud = () => {
-    responsesDiv.innerHTML = '';
-};
-
 type State = {
     responses: ClientResponses;
     clearResponses: () => void;
@@ -90,7 +42,7 @@ const state = Alpine.reactive<State>({
     responses: new Map(),
     clearResponses() {
         socket.emit('clear responses');
-        clearResponseCloud();
+        cloud.clear();
     },
     get totalResponses(): number {
         return this.responses.size;
@@ -100,7 +52,7 @@ const state = Alpine.reactive<State>({
     },
     setMode(mode: Mode) {
         socket.emit('clear responses');
-        clearResponseCloud();
+        cloud.clear();
         socket.emit('set mode', mode);
     },
 });
@@ -125,15 +77,16 @@ socket.on('connect', () => {
 
 socket.on('all responses', (responses: Array<[string, string]>) => {
     state.responses = new Map(responses);
-    renderResponseCloud(state.responses);
+    cloud.render(state.responses);
 });
 
 socket.on('update response', (socketId: string, response: string) => {
+    const oldResponse = state.responses.get(socketId);
     if (response === undefined || response === null) {
         state.responses.delete(socketId);
     } else {
         state.responses.set(socketId, response);
     }
 
-    renderResponseCloud(state.responses);
+    cloud.update(oldResponse, response, state.responses);
 });
