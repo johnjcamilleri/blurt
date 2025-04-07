@@ -104,7 +104,7 @@ socketServer.on('connection', (socket: Socket) => {
         socket.emit('set mode', room.mode);
     }
 
-    // Handle client disconnect
+    // Client disconnect
     socket.on('disconnect', () => {
         if (socket === room.teacherSocket) {
             console.log(`[${roomName}] ${socket.id} teacher disconnect`);
@@ -121,7 +121,7 @@ socketServer.on('connection', (socket: Socket) => {
         }
     });
 
-    // Handle set mode
+    // Set mode
     socket.on('set mode', (newMode: Mode) => {
         console.log(`[${roomName}] ${socket.id} set mode: ${newMode}`);
         room.mode = newMode;
@@ -151,7 +151,7 @@ socketServer.on('connection', (socket: Socket) => {
         }
     });
 
-    // Handle student response
+    // Student response
     socket.on('respond', (response: string) => {
         console.log(`[${roomName}] ${socket.id} respond: ${response}`);
         room.studentResponses.set(socket.id, response);

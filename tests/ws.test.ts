@@ -41,16 +41,17 @@ describe('Web Socket tests', () => {
                 resolve();
             });
         });
-        // studentSockets.push(
-        //     io(serverUrl, {query: {roomName: room.name}}),
-        //     io(serverUrl, {query: {roomName: room.name}}),
-        // );
-        // await new Promise<void>(resolve => {
-        //     studentSockets[0].on('connect', resolve);
-        // });
-        // await new Promise<void>(resolve => {
-        //     studentSockets[1].on('connect', resolve);
-        // });
+        studentSockets.push(
+            io(serverUrl, {query: {roomName: room.name}}),
+            io(serverUrl, {query: {roomName: room.name}}),
+        );
+        await Promise.all(
+            studentSockets.map(async socket =>
+                new Promise<void>(resolve => {
+                    socket.on('connect', resolve);
+                }),
+            ),
+        );
     });
 
     after(async () => {
@@ -73,7 +74,62 @@ describe('Web Socket tests', () => {
         await new Promise<void>((resolve, reject) => {
             teacherSocket.on('all responses', data => {
                 try {
-                    assert.deepStrictEqual(data, []);
+                    assert.strictEqual(data.length, studentSockets.length);
+                    resolve();
+                } catch (error) {
+                    reject(error as Error);
+                }
+            });
+        });
+    });
+
+    it('handles clear all responses', async () => {
+        teacherSocket.emit('clear responses');
+        await new Promise<void>((resolve, reject) => {
+            const receivedByAll = new Set<Socket>();
+            for (const socket of studentSockets) {
+                socket.on('clear response', () => {
+                    try {
+                        receivedByAll.add(socket);
+                        if (receivedByAll.size === studentSockets.length) {
+                            resolve();
+                        }
+                    } catch (error) {
+                        reject(error as Error);
+                    }
+                });
+            }
+        });
+    });
+
+    it('handles set mode', async () => {
+        teacherSocket.emit('set mode', 'yes-no-maybe');
+        await new Promise<void>((resolve, reject) => {
+            const receivedByAll = new Set<Socket>();
+            for (const socket of studentSockets) {
+                socket.on('set mode', mode => {
+                    try {
+                        assert.strictEqual(mode, 'yes-no-maybe');
+                        receivedByAll.add(socket);
+                        if (receivedByAll.size === studentSockets.length) {
+                            resolve();
+                        }
+                    } catch (error) {
+                        reject(error as Error);
+                    }
+                });
+            }
+        });
+    });
+
+    it('handles student response', async () => {
+        const response0 = 'foo';
+        studentSockets[0].emit('respond', response0);
+        await new Promise<void>((resolve, reject) => {
+            teacherSocket.on('update response', (socketId, response) => {
+                try {
+                    assert.strictEqual(socketId, studentSockets[0].id);
+                    assert.strictEqual(response, response0);
                     resolve();
                 } catch (error) {
                     reject(error as Error);
