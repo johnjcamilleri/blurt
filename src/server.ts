@@ -35,6 +35,9 @@ export const socketServer = new SocketServer(httpServer, {
 });
 
 app.use(express.static('./client'));
+app.get('/favicon.ico', (req, res) => {
+    res.sendStatus(404);
+});
 app.use(cookieParser());
 
 app.get('/new', (req, res) => {
