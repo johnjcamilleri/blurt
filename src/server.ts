@@ -118,10 +118,12 @@ socketServer.on('connection', (socket: Socket) => {
             room.teacherSocket?.emit('update response', socket.id, undefined);
         }
 
-        if (room.teacherSocket === undefined && room.studentResponses.size === 0) {
-            console.log(`[${roomName}] close room`);
-            rooms.delete(roomName);
-        }
+        setTimeout(() => {
+            if (rooms.has(roomName) && room.teacherSocket === undefined && room.studentResponses.size === 0) {
+                console.log(`[${roomName}] close room`);
+                rooms.delete(roomName);
+            }
+        }, 5000);
     });
 
     // Set mode
