@@ -1,4 +1,5 @@
 #!/usr/bin/env node
+/* eslint-disable array-element-newline */
 
 import http from 'node:http';
 import cookieParser from 'cookie-parser';
@@ -40,9 +41,32 @@ app.get('/favicon.ico', (req, res) => {
 });
 app.use(cookieParser());
 
+const FRUITS = [
+    'apple', 'banana', 'cherry', 'date', 'elderberry', 'fig', 'grape', 'melon', 'kiwi', 'lemon',
+    'mango', 'nectarine', 'orange', 'papaya', 'quince', 'raspberry', 'strawberry', 'tangerine',
+    'apricot', 'blackberry', 'blueberry', 'feijoa', 'lime', 'peach', 'plum',
+];
+
 app.get('/new', (req, res) => {
-    // TODO: choose better name & check if taken
-    const newName = Math.random().toString(36).slice(2, 7);
+    let newName = '';
+    let attempts = 0;
+    while (attempts < 10 && !newName) {
+        const fruitName = FRUITS[Math.floor(Math.random() * FRUITS.length)];
+        if (!rooms.has(fruitName)) {
+            newName = fruitName;
+        }
+
+        attempts++;
+    }
+
+    if (!newName) {
+        newName = Math.random().toString(36).slice(2, 7);
+        if (rooms.has(newName)) {
+            res.status(404).send('Gave up generating room name');
+            return;
+        }
+    }
+
     res.redirect(`/${newName}`);
 });
 app.get('/join/:room', (req, res) => {
