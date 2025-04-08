@@ -42,5 +42,4 @@ git push origin main
 ## TODO
 
 - UI messages
-- Change visualisation of responses
 - Responsiveness, accessibility
