@@ -35,11 +35,11 @@ docker run --rm --publish 3000:3000 blurt:latest
 Fast-forward merge `dev` into `main` and push (from `dev`):
 
 ```sh
-git fetch . dev:main
+git fetch . dev:main && \
 git push origin main
 ```
 
 ## TODO
 
 - UI messages
-- Responsiveness, accessibility
+- Clear in yes/no mode doesn't work reliably on mobile devices
