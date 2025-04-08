@@ -1,5 +1,4 @@
 /* eslint-disable array-element-newline */
-/* eslint-disable @typescript-eslint/naming-convention */
 import readline from 'node:readline';
 import axios from 'axios';
 import {io, type Socket} from 'socket.io-client';

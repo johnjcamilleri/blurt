@@ -45,7 +45,8 @@
       "import/no-named-as-default": "off",
       "n/prefer-global/process": "off",
       "no-warning-comments": "off",
-      "unicorn/prevent-abbreviations": "off"
+      "unicorn/prevent-abbreviations": "off",
+      "@typescript-eslint/naming-convention": "off"
     }
   }
 }

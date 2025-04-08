@@ -12,8 +12,8 @@
     </style>
     <link rel="icon" href="icon.svg" sizes="any" type="image/svg+xml">
 </head>
-<body class="container mt-5" x-data="{ showResponses: true, showQRCode: false }">
-    <nav class="navbar navbar-expand-sm" x-data="state">
+<body class="container mt-5" x-data="state">
+    <nav class="navbar navbar-expand-sm">
         <div class="container-fluid">
             <span class="navbar-brand text-body-tertiary fs-2 fw-medium">
                 <img src="icon.svg" alt="blurt logo" style="height: 1em;">
@@ -76,7 +76,16 @@
             </div>
         </div>
     </nav>
-    <div id="responses" class="mt-4 text-center" x-show="showResponses"></div>
+    <div class="mt-4 d-flex flex-wrap align-items-center justify-content-center" :style="containerStyle" x-show="showResponses">
+        <template x-for="rc in responseCounts">
+            <span
+                x-text="rc.response"
+                :class="getBadgeClass(rc)"
+                :style="getBadgeStyle(rc)"
+                :data-count="rc.count"
+            ></span>
+        </template>
+    </div>
     <script type="module" src="dist/teacher.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
 </body>

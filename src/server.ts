@@ -165,7 +165,7 @@ socketServer.on('connection', (socket: Socket) => {
 });
 
 // Start the server
-const PORT = process.env.PORT ?? 3000; // eslint-disable-line @typescript-eslint/naming-convention
+const PORT = process.env.PORT ?? 3000;
 if (process.env.NODE_ENV !== 'test') {
     httpServer.listen(PORT, () => {
         console.log(`server is running on port ${PORT}`);

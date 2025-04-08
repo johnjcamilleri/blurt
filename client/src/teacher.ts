@@ -3,7 +3,6 @@ import Cookies from 'js-cookie';
 import {io} from 'socket.io-client';
 import QRCode from 'qrcode';
 import {type ClientResponses, type Mode} from './common.js';
-import cloud from './cloud.js';
 
 // Generate QR code for student view URL
 const studentViewUrl = `${globalThis.location.origin}${globalThis.location.pathname}`;
@@ -30,19 +29,57 @@ renderSmall(document.querySelector('#qrcodeSmall')!);
 renderBig(document.querySelector('#qrcodeBig')!);
 document.querySelector('#qrcodeText')!.textContent = studentViewUrl;
 
+type ResponseCount = {
+    response: string;
+    count: number;
+};
+
 type State = {
     responses: ClientResponses;
+    responseCounts: ResponseCount[];
     clearResponses: () => void;
     totalResponses: number;
     nonEmptyResponses: number;
-    setMode: (Mode) => void;
+    setMode: (mode: Mode) => void;
+    showResponses: boolean;
+    showQRCode: boolean;
+    getBadgeClass: (rc: ResponseCount) => string;
+    getBadgeStyle: (rc: ResponseCount) => string;
+    containerStyle: string;
 };
+
+function getBadgeClass(rc: ResponseCount): string {
+    let className = 'badge m-1';
+    switch (rc.response) {
+        case 'yes': {
+            className += ' text-bg-success';
+            break;
+        }
+
+        case 'maybe': {
+            className += ' text-bg-warning';
+            break;
+        }
+
+        case 'no': {
+            className += ' text-bg-danger';
+            break;
+        }
+
+        default: {
+            className += ' text-bg-secondary';
+        }
+    }
+
+    return className;
+}
 
 const state = Alpine.reactive<State>({
     responses: new Map(),
+    responseCounts: [],
     clearResponses() {
         socket.emit('clear responses');
-        cloud.clear();
+        state.responseCounts = [];
     },
     get totalResponses(): number {
         return this.responses.size;
@@ -52,8 +89,23 @@ const state = Alpine.reactive<State>({
     },
     setMode(mode: Mode) {
         socket.emit('clear responses');
-        cloud.clear();
+        state.responseCounts = [];
         socket.emit('set mode', mode);
+    },
+    showResponses: true,
+    showQRCode: false,
+    getBadgeClass,
+    getBadgeStyle(rc: ResponseCount) {
+        const c = document.createElement('span').style;
+        c.fontSize = `${Math.max(0.1, (rc.count / this.totalResponses))}em`;
+        return c.cssText;
+    },
+    get containerStyle(): string {
+        const c = document.createElement('span').style;
+        // const uniqueResponses = this.responseCounts.length;
+        const fontSize = Math.max(120, window.innerHeight - 240); // should be discounted for lower uniqueResponses
+        c.fontSize = `${fontSize}px`;
+        return c.cssText;
     },
 });
 Alpine.data('state', () => state);
@@ -77,16 +129,68 @@ socket.on('connect', () => {
 
 socket.on('all responses', (responses: Array<[string, string]>) => {
     state.responses = new Map(responses);
-    cloud.render(state.responses);
+
+    const responseCounts: ResponseCount[] = [];
+    for (const rv of responses.values()) {
+        const response = rv[1];
+        if (!response) continue;
+        let found = false;
+        for (const rc of responseCounts) {
+            if (rc.response === response) {
+                rc.count++;
+                found = true;
+                break;
+            }
+        }
+
+        if (!found) {
+            responseCounts.push({
+                response,
+                count: 1,
+            });
+        }
+    }
+
+    state.responseCounts = responseCounts;
 });
 
 socket.on('update response', (socketId: string, response: string) => {
     const oldResponse = state.responses.get(socketId);
+    if (oldResponse === response) return;
+
     if (response === undefined || response === null) {
         state.responses.delete(socketId);
     } else {
         state.responses.set(socketId, response);
     }
 
-    cloud.update(oldResponse, response, state.responses);
+    // Increment/Add
+    if (response) {
+        let foundNew = false;
+        for (const rc of state.responseCounts) {
+            if (rc.response === response) {
+                rc.count++;
+                foundNew = true;
+                break;
+            }
+        }
+
+        if (!foundNew) {
+            state.responseCounts.push({
+                response,
+                count: 1,
+            });
+        }
+    }
+
+    // Decrement/Remove
+    if (oldResponse) {
+        state.responseCounts = state.responseCounts.filter(rc => rc.response !== oldResponse || rc.count > 1);
+        for (const rc of state.responseCounts) {
+            if (rc.response === oldResponse) {
+                rc.count--;
+                break;
+            }
+        }
+    }
 });
