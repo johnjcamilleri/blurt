@@ -42,4 +42,3 @@ git push origin main
 ## TODO
 
 - UI messages
-- Clear in yes/no mode doesn't work reliably on mobile devices
