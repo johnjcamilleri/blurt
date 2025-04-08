@@ -104,8 +104,9 @@ socketServer.on('connection', (socket: Socket) => {
     } else {
         console.log(`[${roomName}] ${socket.id} student connect`);
         room.studentResponses.set(socket.id, '');
-        socket.emit('set mode', room.mode);
     }
+
+    socket.emit('set mode', room.mode);
 
     // Client disconnect
     socket.on('disconnect', () => {

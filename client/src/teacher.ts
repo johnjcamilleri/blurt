@@ -40,6 +40,7 @@ type State = {
     clearResponses: () => void;
     totalResponses: number;
     nonEmptyResponses: number;
+    mode: Mode;
     setMode: (mode: Mode) => void;
     showResponses: boolean;
     showQRCode: boolean;
@@ -87,6 +88,7 @@ const state = Alpine.reactive<State>({
     get nonEmptyResponses(): number {
         return Array.from(this.responses.values()).filter(response => response !== null && response !== '').length;
     },
+    mode: 'free-text',
     setMode(mode: Mode) {
         socket.emit('clear responses');
         state.responseCounts = [];
@@ -185,12 +187,21 @@ socket.on('update response', (socketId: string, response: string) => {
 
     // Decrement/Remove
     if (oldResponse) {
-        state.responseCounts = state.responseCounts.filter(rc => rc.response !== oldResponse || rc.count > 1);
+        let removeOld = false;
         for (const rc of state.responseCounts) {
             if (rc.response === oldResponse) {
                 rc.count--;
+                if (rc.count < 1) removeOld = true;
                 break;
             }
         }
+
+        if (removeOld) {
+            state.responseCounts = state.responseCounts.filter(rc => rc.count > 0);
+        }
     }
+});
+
+socket.on('set mode', (mode: Mode) => {
+    state.mode = mode;
 });

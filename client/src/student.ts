@@ -34,6 +34,5 @@ socket.on('clear response', () => {
 });
 
 socket.on('set mode', (mode: Mode) => {
-    console.log(`received mode: ${mode}`);
     state.mode = mode;
 });
