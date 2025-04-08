@@ -104,8 +104,7 @@ const state = Alpine.reactive<State>({
     },
     get containerStyle(): string {
         const c = document.createElement('span').style;
-        // const uniqueResponses = this.responseCounts.length;
-        const fontSize = Math.max(120, window.innerHeight - 240); // should be discounted for lower uniqueResponses
+        const fontSize = Math.max(80, window.innerHeight * 0.3);
         c.fontSize = `${fontSize}px`;
         return c.cssText;
     },
