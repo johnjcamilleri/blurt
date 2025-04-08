@@ -7,8 +7,8 @@
     "start": "node dist/server.js",
     "build": "tsc",
     "dev": "tsx watch src/server.ts",
-    "build:client": "esbuild client/src/student.ts client/src/teacher.ts --bundle --outdir=client/dist --format=esm --minify",
-    "dev:client": "esbuild client/src/student.ts client/src/teacher.ts --bundle --outdir=client/dist --format=esm --sourcemap --watch",
+    "build:client": "esbuild client/src/messages.ts client/src/student.ts client/src/teacher.ts --bundle --outdir=client/dist --format=esm --minify",
+    "dev:client": "esbuild client/src/messages.ts client/src/student.ts client/src/teacher.ts --bundle --outdir=client/dist --format=esm --sourcemap --watch",
     "sim": "tsx tests/simulate-clients.ts",
     "test": "NODE_ENV=test tsx --test tests/*.test.ts"
   },

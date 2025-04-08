@@ -50,7 +50,7 @@ app.get('/join/:room', (req, res) => {
     if (rooms.has(roomName)) {
         res.redirect(`/${roomName}`);
     } else {
-        // TODO: UI message that room not found
+        res.cookie('message', `Room '${roomName}' not found`);
         res.redirect('/');
     }
 });
@@ -73,8 +73,8 @@ app.get('/:room', (req, res) => {
         console.log(`[${roomName}] create room`);
         const room = createRoom(roomName);
         res.cookie(roomName, room.secret);
+        res.cookie('message', `Room '${roomName}' created`);
         res.status(201).sendFile('teacher.html', {root: './client/src'});
-        // TODO: UI message that room was created
     }
 });
 

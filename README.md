@@ -41,4 +41,4 @@ git push origin main
 
 ## TODO
 
-- UI messages
+- Better room name choosing
