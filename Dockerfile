@@ -34,7 +34,7 @@ COPY --from=build /app/client/*.html ./client/
 COPY --from=build /app/client/*.svg ./client/
 
 # Install only production dependencies
-RUN npm ci --only=production
+RUN npm ci --omit=dev
 
 # Expose the port the app runs on
 EXPOSE 3000
