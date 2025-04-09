@@ -47,7 +47,7 @@
                     aria-label="code input"
                 ></textarea>
             </div>
-            <div class="d-flex justify-content-center gap-2" x-show="mode == 'yes-no-maybe'">
+            <div class="d-flex justify-content-center gap-2" x-show.important="mode == 'yes-no-maybe'">
                 <button
                     class="btn btn-lg"
                     :class="response == 'yes' ? 'btn-success' : 'btn-outline-success'"
