@@ -47,17 +47,17 @@
                     aria-label="code input"
                 ></textarea>
             </div>
-            <div x-show="mode == 'yes-no-maybe'">
+            <div class="d-flex justify-content-center gap-2" x-show="mode == 'yes-no-maybe'">
                 <button
-                    class="btn btn-lg me-1"
+                    class="btn btn-lg"
                     :class="response == 'yes' ? 'btn-success' : 'btn-outline-success'"
                     @click="response = 'yes'">yes</button>
                 <button
-                    class="btn btn-lg me-1"
+                    class="btn btn-lg"
                     :class="response == 'maybe' ? 'btn-warning' : 'btn-outline-warning'"
                     @click="response = 'maybe'">maybe</button>
                 <button
-                    class="btn btn-lg me-1"
+                    class="btn btn-lg"
                     :class="response == 'no' ? 'btn-danger' : 'btn-outline-danger'"
                     @click="response = 'no'">no</button>
             </div>

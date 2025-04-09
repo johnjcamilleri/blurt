@@ -51,24 +51,28 @@ type State = {
 
 function getBadgeClass(rc: ResponseCount): string {
     let className = 'badge m-1';
-    switch (rc.response) {
-        case 'yes': {
-            className += ' text-bg-success';
-            break;
-        }
+    if (/^[\p{Emoji}]+$/u.test(rc.response)) {
+        className += ' text-bg-dark';
+    } else {
+        switch (rc.response) {
+            case 'yes': {
+                className += ' text-bg-success';
+                break;
+            }
 
-        case 'maybe': {
-            className += ' text-bg-warning';
-            break;
-        }
+            case 'maybe': {
+                className += ' text-bg-warning';
+                break;
+            }
 
-        case 'no': {
-            className += ' text-bg-danger';
-            break;
-        }
+            case 'no': {
+                className += ' text-bg-danger';
+                break;
+            }
 
-        default: {
-            className += ' text-bg-secondary';
+            default: {
+                className += ' text-bg-secondary';
+            }
         }
     }
 

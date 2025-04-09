@@ -12,65 +12,68 @@
     </style>
     <link rel="icon" href="icon.svg" sizes="any" type="image/svg+xml">
 </head>
-<body class="container mt-4" x-data="state">
-    <nav class="navbar navbar-expand">
+<body class="container mt-4 bg-black" x-data="state">
+    <nav class="navbar navbar-expand"><!-- never collapse -->
         <div class="container-fluid">
-            <div class="collapse navbar-collapse">
-                <ul class="navbar-nav ms-auto align-items-center gap-3">
-                    <li class="navbar-text me-2 text-secondary text-nowrap">
-                        <span x-text="nonEmptyResponses"></span>
-                        /
-                        <span x-text="totalResponses"></span>
-                    </li>
-                    <li class="nav-item">
-                        <button
-                            type="button"
-                            class="btn btn-outline-secondary border-0"
-                            @click="showResponses = !showResponses"
+            <ul class="navbar-nav ms-auto align-items-center gap-0 gap-sm-4">
+                <li class="navbar-text text-secondary text-nowrap">
+                    <span x-text="nonEmptyResponses" aria-label="non-empty response count"></span>
+                    /
+                    <span x-text="totalResponses" aria-label="total response count"></span>
+                </li>
+                <li class="nav-item">
+                    <button
+                        type="button"
+                        class="btn btn-outline-secondary border-0"
+                        @click="showResponses = !showResponses"
+                    >
+                        <span x-show="showResponses">hide</span>
+                        <span x-show="!showResponses">show</span>
+                    </button>
+                </li>
+                <li class="nav-item">
+                    <button
+                        type="button"
+                        class="btn btn-outline-secondary border-0"
+                        @click="clearResponses"
+                    >clear</button>
+                </li>
+                <li>
+                    <div class="form-check form-switch d-flex align-items-center gap-2 text-secondary">
+                        <input
+                            class="form-check-input bg-dark border-dark-subtle"
+                            type="checkbox"
+                            role="switch"
+                            id="switchMode"
+                            @change="(e) => setMode(e.target.checked ? 'yes-no-maybe' : 'free-text')"
+                            :checked="mode === 'yes-no-maybe'"
                         >
-                            <span x-show="showResponses">hide</span>
-                            <span x-show="!showResponses">show</span>
-                        </button>
-                    </li>
-                    <li class="nav-item">
-                        <button
-                            type="button"
-                            class="btn btn-outline-secondary border-0"
-                            @click="clearResponses"
-                        >clear</button>
-                    </li>
-                    <li>
-                        <div class="form-check form-switch d-flex align-items-center gap-2 text-secondary">
-                            <input
-                                class="form-check-input"
-                                type="checkbox"
-                                role="switch"
-                                id="switchMode"
-                                @change="(e) => setMode(e.target.checked ? 'yes-no-maybe' : 'free-text')"
-                                :checked="mode === 'yes-no-maybe'"
-                            >
-                            <label class="form-check-label" for="switchMode">yes/no</label>
-                        </div>
-                    </li>
-                    <li>
-                        <div
-                            class="cursor-pointer"
-                            x-show="!showQRCode"
-                            @click="showQRCode = true"
-                        >
-                            <canvas id="qrcodeSmall"></canvas>
-                        </div>
-                        <div
-                            class="cursor-pointer text-center font-monospace text-dark position-fixed bottom-0 end-0 bg-white w-100 h-100"
-                            x-show="showQRCode"
-                            @click="showQRCode = false"
-                        >
-                            <canvas id="qrcodeBig"></canvas>
-                            <p id="qrcodeText" class="m-0 fs-1"></p>
-                        </div>
-                    </li>
-                </ul>
-            </div>
+                        <label class="form-check-label" for="switchMode">yes/no</label>
+                    </div>
+                </li>
+                <li>
+                    <div
+                        class="cursor-pointer"
+                        x-show="!showQRCode"
+                        @click="showQRCode = true"
+                        aria-label="QR code (small)"
+                        title="click to enlarge"
+                    >
+                        <canvas id="qrcodeSmall" class="d-none d-sm-block"></canvas>
+                        <span class="d-block d-sm-none ms-3">QR</span>
+                    </div>
+                    <div
+                        class="cursor-pointer text-center font-monospace text-dark position-fixed bottom-0 end-0 bg-white w-100 h-100"
+                        x-show="showQRCode"
+                        @click="showQRCode = false"
+                        aria-label="QR code (big)"
+                        title="click to close"
+                    >
+                        <canvas id="qrcodeBig"></canvas>
+                        <p id="qrcodeText" class="m-0 fs-1" style="overflow-wrap: anywhere;"></p>
+                    </div>
+                </li>
+            </ul>
         </div>
     </nav>
     <div class="mt-4 d-flex flex-wrap align-items-center justify-content-center" :style="containerStyle" x-show="showResponses">
