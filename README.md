@@ -1,36 +1,48 @@
 # <img src="client/icon.svg" alt="logo" style="height: 1em; vertical-align: middle"> blurt
 
-An audience response system with minimal barrier to entry — just blurt out your answer.
+_An audience response system with minimal barrier to entry — just blurt out your answer._
 
 See it live at [blurt.lol](https://blurt.lol)
 
+## Usage
+
+- Visiting `/` will show two options:
+  - Create room and make you teacher (server chooses new room name)
+  - Join room as student (server checks if room exists)
+- Visiting `/room` will:
+  - Create `room` if it doesn't exist and make you the teacher
+  - Join `room` as a student if it exists
+- Teacher client saves room secret as cookie
+- A room has exactly one teacher, zero or more students
+- A room is destroyed if it has no students or teachers
+
 ## Running
 
-### Build with Docker
+### Build & run locally
+
+```sh
+npm run build
+npm run build:client
+npm run start
+```
+
+### Build & run with Docker
 
 ```sh
 docker build . --tag blurt:latest
-```
-
-### Run with Docker
-
-```sh
 docker run --rm --publish 3000:3000 blurt:latest
 ```
 
-## Usage
+## Development
 
-- Visiting <blurt.lol> will show two options:
-  - Create room (server chooses new name)
-  - Join room (server checks if name exists before redirecting)
-- Visiting <blurt.lol/room> will
-  - Create `room` if it doesn't exist and make you the teacher
-  - Join `room` as a student if it exists
-- Teacher saves room secret as cookie
-- A room has exactly one teacher
-- A room is destroyed if is has no students or teachers
+### Run in dev mode
 
-## Snippets
+```sh
+npm run dev
+npm run dev:client
+```
+
+### Snippets
 
 Fast-forward merge `dev` into `main` and push (from `dev`):
 
@@ -39,6 +51,7 @@ git fetch . dev:main && \
 git push origin main
 ```
 
-## TODO
+## Contributing
 
-- Better room name choosing
+Use blurt as you wish!  
+Bug reports, feature requests, and pull requests are welcome.
