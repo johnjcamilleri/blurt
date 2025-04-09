@@ -1,4 +1,5 @@
 import Alpine from 'alpinejs';
+import makeEmojiRegex from 'emoji-regex-xs';
 import Cookies from 'js-cookie';
 import {io} from 'socket.io-client';
 import QRCode from 'qrcode';
@@ -49,9 +50,11 @@ type State = {
     containerStyle: string;
 };
 
+const emojiRegex = makeEmojiRegex();
+
 function getBadgeClass(rc: ResponseCount): string {
     let className = 'badge m-1';
-    if (/^[\p{Emoji}]+$/u.test(rc.response)) {
+    if (rc.response.match(emojiRegex)?.join('') === rc.response) {
         className += ' text-bg-dark';
     } else {
         switch (rc.response) {

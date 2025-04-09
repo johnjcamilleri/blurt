@@ -26,6 +26,7 @@
     "alpinejs": "^3.14.9",
     "axios": "^1.8.4",
     "cookie": "^1.0.2",
+    "emoji-regex-xs": "^1.0.0",
     "esbuild": "^0.25.1",
     "js-cookie": "^3.0.5",
     "qrcode": "^1.5.1",
