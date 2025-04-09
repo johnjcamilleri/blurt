@@ -47,7 +47,7 @@ npm run dev:client
 Fast-forward merge `dev` into `main` and push (from `dev`):
 
 ```sh
-git fetch . dev:main && \
+git fetch . dev:main
 git push origin main
 ```
 
