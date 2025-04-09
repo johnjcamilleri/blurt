@@ -29,11 +29,12 @@
                         class="form-control"
                         placeholder="room name"
                         aria-label="room name"
+                        onkeydown="if (event.key === 'Enter') this.nextElementSibling.click()"
                     >
                     <button
                         type="button"
                         class="btn btn-outline-secondary"
-                        onclick="window.location.href = '/join/' + document.querySelector('input').value"
+                        onclick="window.location.href = '/join/' + this.previousElementSibling.value"
                     >
                         Join
                     </button>

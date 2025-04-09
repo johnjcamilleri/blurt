@@ -13,15 +13,11 @@
     <link rel="icon" href="icon.svg" sizes="any" type="image/svg+xml">
 </head>
 <body class="container mt-4" x-data="state">
-    <nav class="navbar navbar-expand-sm">
+    <nav class="navbar navbar-expand">
         <div class="container-fluid">
-            <span class="navbar-brand text-body-tertiary fs-2 fw-medium">
-                <img src="icon.svg" alt="blurt logo" style="height: 1em;">
-                blurt
-            </span>
-            <div class="collapse navbar-collapse" id="navbarNav">
+            <div class="collapse navbar-collapse">
                 <ul class="navbar-nav ms-auto align-items-center gap-3">
-                    <li class="navbar-text me-2 text-secondary">
+                    <li class="navbar-text me-2 text-secondary text-nowrap">
                         <span x-text="nonEmptyResponses"></span>
                         /
                         <span x-text="totalResponses"></span>
