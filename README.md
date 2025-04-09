@@ -42,7 +42,7 @@ npm run dev
 npm run dev:client
 ```
 
-### Snippets
+### Deploy
 
 Fast-forward merge `dev` into `main` and push (from `dev`):
 
