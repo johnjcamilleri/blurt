@@ -15,7 +15,7 @@
 <body class="container mt-4 bg-black" x-data="state">
     <nav class="navbar navbar-expand"><!-- never collapse -->
         <div class="container-fluid">
-            <ul class="navbar-nav ms-auto align-items-center gap-0 gap-sm-4">
+            <ul class="navbar-nav ms-auto align-items-center gap-1 gap-sm-4">
                 <li class="navbar-text text-secondary text-nowrap">
                     <span x-text="nonEmptyResponses" aria-label="non-empty response count"></span>
                     /
@@ -76,7 +76,7 @@
             </ul>
         </div>
     </nav>
-    <div class="mt-4 d-flex flex-wrap align-items-center justify-content-center" :style="containerStyle" x-show="showResponses">
+    <div class="mt-4 d-flex flex-wrap align-items-center justify-content-center" :style="containerStyle" x-show.important="showResponses">
         <template x-for="rc in responseCounts" :key="rc.response">
             <span
                 x-text="rc.response"
