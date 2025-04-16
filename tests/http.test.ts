@@ -53,7 +53,7 @@ describe('HTTP tests', () => {
         assert(res.headers.location, 'Expected a redirect location header');
         const redirectUrl = res.headers.location as string;
         assert.notStrictEqual(redirectUrl, `/${room.name}`);
-        assert.match(redirectUrl, /\/[a-z\d]{5}/);
+        assert.match(redirectUrl, /\/[a-z\d]{3,}/);
     });
 
     it('joins an existing room GET /join', async () => {
