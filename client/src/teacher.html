@@ -22,27 +22,50 @@
                     <span x-text="totalResponses" aria-label="total response count"></span>
                 </li>
                 <li class="nav-item">
-                    <button
-                        type="button"
-                        class="btn btn-dark"
-                        @click="showResponses = !showResponses"
-                    >
-                        <span x-show="showResponses">hide</span>
-                        <span x-show="!showResponses">show</span>
-                    </button>
-                </li>
-                <li class="nav-item">
-                    <button
-                        type="button"
-                        class="btn btn-dark"
-                        @click="clearResponses"
-                    >clear</button>
+                    <div class="btn-group">
+                        <button
+                            type="button"
+                            class="btn btn-dark"
+                            @click="showResponses = !showResponses"
+                        >
+                            <span x-show="showResponses">hide</span>
+                            <span x-show="!showResponses">show</span>
+                        </button>
+                        <button
+                            type="button"
+                            class="btn btn-dark"
+                            @click="clearResponses"
+                        >
+                            clear
+                        </button>
+                    </div>
                 </li>
                 <li class="nav-item">
                     <div class="btn-group">
-                        <button type="button" class="btn btn-dark" :class="mode === 'off' ? 'active' : ''" @click="setMode('off')">off</button>
-                        <button type="button" class="btn btn-dark" :class="mode === 'text' ? 'active' : ''" @click="setMode('text')">text</button>
-                        <button type="button" class="btn btn-dark" :class="mode === 'yes-no-maybe' ? 'active' : ''" @click="setMode('yes-no-maybe')">yes/no</button>
+                        <button
+                            type="button"
+                            class="btn btn-dark"
+                            :class="mode === 'off' ? 'active' : ''"
+                            @click="setMode('off')"
+                        >
+                            off
+                        </button>
+                        <button
+                            type="button"
+                            class="btn btn-dark"
+                            :class="mode === 'text' ? 'active' : ''"
+                            @click="setMode('text')"
+                        >
+                            text
+                        </button>
+                        <button
+                            type="button"
+                            class="btn btn-dark"
+                            :class="mode === 'yes-no-maybe' ? 'active' : ''"
+                            @click="setMode('yes-no-maybe')"
+                        >
+                            yes/no
+                        </button>
                     </div>
                 </li>
                 <li>

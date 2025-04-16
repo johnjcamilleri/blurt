@@ -97,8 +97,7 @@ const state = Alpine.reactive<State>({
     },
     mode: 'off',
     setMode(mode: Mode) {
-        socket.emit('clear responses');
-        state.responseCounts = [];
+        this.clearResponses();
         socket.emit('set mode', mode);
         state.mode = mode;
     },
