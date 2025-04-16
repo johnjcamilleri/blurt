@@ -25,7 +25,7 @@ type ResponseCount = {
 };
 
 type State = {
-    studentUrl: string,
+    studentUrl: string;
     responses: ClientResponses;
     responseCounts: ResponseCount[];
     clearResponses: () => void;

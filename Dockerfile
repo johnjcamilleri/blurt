@@ -28,10 +28,7 @@ WORKDIR /app
 # Copy only the necessary files from the build stage
 COPY --from=build /app/package*.json ./
 COPY --from=build /app/dist ./dist
-COPY --from=build /app/client/dist ./client/dist
-COPY --from=build /app/client/src/*.html ./client/src/
-COPY --from=build /app/client/*.html ./client/
-COPY --from=build /app/client/*.svg ./client/
+COPY --from=build /app/client ./client
 
 # Install only production dependencies
 RUN npm ci --omit=dev

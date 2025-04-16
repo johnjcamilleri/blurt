@@ -35,7 +35,7 @@ export const socketServer = new SocketServer(httpServer, {
     maxHttpBufferSize: 128, // bytes or characters
 });
 
-app.use(express.static('./client'));
+app.use(express.static('./client/public'));
 app.get('/favicon.ico', (req, res) => {
     res.sendStatus(404);
 });
