@@ -15,6 +15,17 @@
 <body class="container mt-1 bg-black" x-data="state">
     <nav class="navbar navbar-expand"><!-- never collapse -->
         <div class="container-fluid">
+            <div class="d-flex align-items-center gap-3">
+                <button
+                    type="button"
+                    @click="showQRCode = true"
+                    class="btn btn-dark"
+                    title="show QR code"
+                >
+                    QR
+                </button>
+                <span class="d-none d-md-block font-monospace text-secondary-emphasis" x-text="studentUrl"></span>
+            </div>
             <ul class="navbar-nav ms-auto align-items-center gap-1 gap-sm-3">
                 <li class="navbar-text text-secondary text-nowrap">
                     <span x-text="nonEmptyResponses" aria-label="non-empty response count"></span>
@@ -68,31 +79,19 @@
                         </button>
                     </div>
                 </li>
-                <li>
-                    <div
-                        class="cursor-pointer"
-                        x-show="!showQRCode"
-                        @click="showQRCode = true"
-                        aria-label="QR code (small)"
-                        title="click to enlarge"
-                    >
-                        <canvas id="qrcodeSmall" class="d-none d-sm-block"></canvas>
-                        <span class="d-block d-sm-none ms-3">QR</span>
-                    </div>
-                    <div
-                        class="cursor-pointer text-center font-monospace text-dark position-fixed bottom-0 end-0 bg-white w-100 h-100"
-                        x-show="showQRCode"
-                        @click="showQRCode = false"
-                        aria-label="QR code (big)"
-                        title="click to close"
-                    >
-                        <canvas id="qrcodeBig"></canvas>
-                        <p id="qrcodeText" class="m-0 fs-1" style="overflow-wrap: anywhere;"></p>
-                    </div>
-                </li>
             </ul>
         </div>
     </nav>
+    <div
+        class="cursor-pointer text-center font-monospace text-dark position-fixed bottom-0 end-0 bg-white w-100 h-100 z-1"
+        x-show="showQRCode"
+        @click="showQRCode = false"
+        aria-label="QR code (big)"
+        title="click to close"
+    >
+        <canvas id="qrcodeBig"></canvas>
+        <p x-text="studentUrl" class="m-0 fs-1" style="overflow-wrap: anywhere;"></p>
+    </div>
     <div class="mt-4 d-flex flex-wrap align-items-center justify-content-center" :style="containerStyle" x-show.important="showResponses">
         <template x-for="rc in responseCounts" :key="rc.response">
             <span

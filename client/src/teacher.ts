@@ -6,29 +6,18 @@ import QRCode from 'qrcode';
 import {type ClientResponses, type Mode} from './common.js';
 
 // Generate QR code for student view URL
-const studentViewUrl = `${globalThis.location.origin}${globalThis.location.pathname}`;
-function renderSmall(element: HTMLElement) {
-    const qrOptions = {
-        width: 80,
-        margin: 2,
-        color: {light: '#0000', dark: '#fffa'},
-    };
-    QRCode.toCanvas(element, studentViewUrl, qrOptions, error => {
-        if (error) console.error(error);
-    });
-}
+const studentUrl = `${globalThis.location.origin}${globalThis.location.pathname}`;
 
-function renderBig(element: HTMLElement) {
-    const width = Math.min(window.innerWidth, window.innerHeight) - 100;
-    const qrOptions = {margin: 2, width};
-    QRCode.toCanvas(element, studentViewUrl, qrOptions, error => {
-        if (error) console.error(error);
-    });
-}
-
-renderSmall(document.querySelector('#qrcodeSmall')!);
-renderBig(document.querySelector('#qrcodeBig')!);
-document.querySelector('#qrcodeText')!.textContent = studentViewUrl;
+const qrWidth = Math.min(window.innerWidth, window.innerHeight) - 100;
+const qrOptions = {
+    margin: 2,
+    width: qrWidth,
+    // color: {light: '#0000', dark: '#fffa'}, // inverted
+};
+const qrElement = document.querySelector('#qrcodeBig')!;
+QRCode.toCanvas(qrElement, studentUrl, qrOptions, error => {
+    if (error) console.error(error);
+});
 
 type ResponseCount = {
     response: string;
@@ -36,6 +25,7 @@ type ResponseCount = {
 };
 
 type State = {
+    studentUrl: string,
     responses: ClientResponses;
     responseCounts: ResponseCount[];
     clearResponses: () => void;
@@ -83,6 +73,7 @@ function getBadgeClass(rc: ResponseCount): string {
 }
 
 const state = Alpine.reactive<State>({
+    studentUrl,
     responses: new Map(),
     responseCounts: [],
     clearResponses() {
