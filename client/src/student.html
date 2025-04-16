@@ -21,7 +21,10 @@
 <body class="container">
     <div class="d-flex flex-column justify-content-center vh-100">
         <div x-data="state" class="mb-3">
-            <div class="input-group" x-show="mode == 'free-text'">
+            <div class="text-center" x-show="mode === 'off'">
+                ...
+            </div>
+            <div class="input-group" x-show="mode === 'text'">
                 <input
                     type="text"
                     spellcheck="false"
@@ -37,28 +40,18 @@
                     aria-label="clear input"
                 >✖</button>
             </div>
-            <div class="input-group" x-show="mode == 'code'">
-                <textarea
-                    spellcheck="false"
-                    class="form-control fs-3 px-4 py-4 border-secondary-subtle font-monospace text-secondary-emphasis"
-                    placeholder=""
-                    x-model="response"
-                    rows="3"
-                    aria-label="code input"
-                ></textarea>
-            </div>
-            <div class="d-flex justify-content-center gap-2" x-show.important="mode == 'yes-no-maybe'">
+            <div class="d-flex justify-content-center gap-2" x-show.important="mode === 'yes-no-maybe'">
                 <button
                     class="btn btn-lg"
-                    :class="response == 'yes' ? 'btn-success' : 'btn-outline-success'"
+                    :class="response === 'yes' ? 'btn-success' : 'btn-outline-success'"
                     @click="response = 'yes'">yes</button>
                 <button
                     class="btn btn-lg"
-                    :class="response == 'maybe' ? 'btn-warning' : 'btn-outline-warning'"
+                    :class="response === 'maybe' ? 'btn-warning' : 'btn-outline-warning'"
                     @click="response = 'maybe'">maybe</button>
                 <button
                     class="btn btn-lg"
-                    :class="response == 'no' ? 'btn-danger' : 'btn-outline-danger'"
+                    :class="response === 'no' ? 'btn-danger' : 'btn-outline-danger'"
                     @click="response = 'no'">no</button>
             </div>
         </div>

@@ -95,11 +95,12 @@ const state = Alpine.reactive<State>({
     get nonEmptyResponses(): number {
         return Array.from(this.responses.values()).filter(response => response !== null && response !== '').length;
     },
-    mode: 'free-text',
+    mode: 'off',
     setMode(mode: Mode) {
         socket.emit('clear responses');
         state.responseCounts = [];
         socket.emit('set mode', mode);
+        state.mode = mode;
     },
     showResponses: true,
     showQRCode: false,

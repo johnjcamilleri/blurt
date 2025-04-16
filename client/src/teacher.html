@@ -12,10 +12,10 @@
     </style>
     <link rel="icon" href="icon.svg" sizes="any" type="image/svg+xml">
 </head>
-<body class="container mt-4 bg-black" x-data="state">
+<body class="container mt-1 bg-black" x-data="state">
     <nav class="navbar navbar-expand"><!-- never collapse -->
         <div class="container-fluid">
-            <ul class="navbar-nav ms-auto align-items-center gap-1 gap-sm-4">
+            <ul class="navbar-nav ms-auto align-items-center gap-1 gap-sm-3">
                 <li class="navbar-text text-secondary text-nowrap">
                     <span x-text="nonEmptyResponses" aria-label="non-empty response count"></span>
                     /
@@ -24,7 +24,7 @@
                 <li class="nav-item">
                     <button
                         type="button"
-                        class="btn btn-outline-secondary border-0"
+                        class="btn btn-dark"
                         @click="showResponses = !showResponses"
                     >
                         <span x-show="showResponses">hide</span>
@@ -34,21 +34,15 @@
                 <li class="nav-item">
                     <button
                         type="button"
-                        class="btn btn-outline-secondary border-0"
+                        class="btn btn-dark"
                         @click="clearResponses"
                     >clear</button>
                 </li>
-                <li>
-                    <div class="form-check form-switch d-flex align-items-center gap-2 text-secondary">
-                        <input
-                            class="form-check-input bg-dark border-dark-subtle"
-                            type="checkbox"
-                            role="switch"
-                            id="switchMode"
-                            @change="(e) => setMode(e.target.checked ? 'yes-no-maybe' : 'free-text')"
-                            :checked="mode === 'yes-no-maybe'"
-                        >
-                        <label class="form-check-label" for="switchMode">yes/no</label>
+                <li class="nav-item">
+                    <div class="btn-group">
+                        <button type="button" class="btn btn-dark" :class="mode === 'off' ? 'active' : ''" @click="setMode('off')">off</button>
+                        <button type="button" class="btn btn-dark" :class="mode === 'text' ? 'active' : ''" @click="setMode('text')">text</button>
+                        <button type="button" class="btn btn-dark" :class="mode === 'yes-no-maybe' ? 'active' : ''" @click="setMode('yes-no-maybe')">yes/no</button>
                     </div>
                 </li>
                 <li>

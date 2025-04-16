@@ -7,7 +7,7 @@ import express from 'express';
 import {Server as SocketServer, type Socket} from 'socket.io';
 
 type StudentResponses = Map<string, string>;
-type Mode = 'free-text' | 'code' | 'yes-no-maybe';
+type Mode = 'off' | 'text' | 'yes-no-maybe';
 export type Room = {
     name: string;
     secret: string;
@@ -21,7 +21,7 @@ export const createRoom = (roomName: string): Room => {
         secret: Math.random().toString(36).slice(2, 15),
         studentResponses: new Map(),
         teacherSocket: undefined,
-        mode: 'free-text',
+        mode: 'off',
     };
     rooms.set(roomName, room);
     return room;

@@ -21,7 +21,7 @@ type State = {
 
 const state = Alpine.reactive<State>({
     response: '',
-    mode: 'free-text',
+    mode: 'off',
 });
 Alpine.data('state', () => state);
 Alpine.effect(() => {
