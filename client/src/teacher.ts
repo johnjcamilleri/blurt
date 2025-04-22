@@ -34,6 +34,7 @@ type State = {
     mode: Mode;
     setMode: (mode: Mode) => void;
     showResponses: boolean;
+    pauseUpdates: boolean;
     showQRCode: boolean;
     getBadgeClass: (rc: ResponseCount) => string;
     getBadgeStyle: (rc: ResponseCount) => string;
@@ -93,6 +94,7 @@ const state = Alpine.reactive<State>({
         state.mode = mode;
     },
     showResponses: true,
+    pauseUpdates: false,
     showQRCode: false,
     getBadgeClass,
     getBadgeStyle(rc: ResponseCount) {
@@ -104,6 +106,7 @@ const state = Alpine.reactive<State>({
         const c = document.createElement('span').style;
         const fontSize = Math.max(80, window.innerHeight * 0.3);
         c.fontSize = `${fontSize}px`;
+        c.height = '70vh';
         return c.cssText;
     },
 });
@@ -162,6 +165,9 @@ socket.on('update response', (socketId: string, response: string) => {
     } else {
         state.responses.set(socketId, response);
     }
+
+    if (state.pauseUpdates) return;
+    // TODO: check if counts are correctly resynced after unpausing
 
     // Increment/Add
     if (response) {

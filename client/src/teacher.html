@@ -13,11 +13,11 @@
         }
         nav {
             opacity: 50%;
-            transition: opacity 0.5s ease-out;
+            transition: opacity 1000ms ease-out;
         }
         nav:hover {
             opacity: 100%;
-            transition: opacity 0.05s ease-in;
+            transition: opacity 50ms ease-in;
         }
     </style>
 </head>
@@ -50,12 +50,26 @@
                             @click="showResponses = !showResponses"
                         >
                             <span x-show="showResponses">
-                                <i class="bi-eye-slash me-1"></i>
+                                <i class="bi-eye-slash me-md-1"></i>
                                 <span class="d-none d-md-inline">hide</span>
                             </span>
                             <span x-show="!showResponses">
-                                <i class="bi-eye me-1"></i>
+                                <i class="bi-eye me-md-1"></i>
                                 <span class="d-none d-md-inline">show</span>
+                            </span>
+                        </button>
+                        <button
+                            type="button"
+                            class="btn btn-dark"
+                            @click="pauseUpdates = !pauseUpdates"
+                        >
+                            <span x-show="!pauseUpdates">
+                                <i class="bi-pause me-md-1"></i>
+                                <span class="d-none d-md-inline">pause</span>
+                            </span>
+                            <span x-show="pauseUpdates">
+                                <i class="bi-play me-md-1"></i>
+                                <span class="d-none d-md-inline">play</span>
                             </span>
                         </button>
                         <button
@@ -63,7 +77,7 @@
                             class="btn btn-dark"
                             @click="clearResponses"
                         >
-                            <i class="bi-trash me-1"></i>
+                            <i class="bi-trash me-md-1"></i>
                             <span class="d-none d-md-inline">clear</span>
                         </button>
                     </div>
@@ -76,7 +90,7 @@
                             :class="mode === 'off' ? 'active' : ''"
                             @click="setMode('off')"
                         >
-                            <i class="bi-lightbulb-off me-1"></i>
+                            <i class="bi-lightbulb-off me-md-1"></i>
                             <span class="d-none d-md-inline">off</span>
                         </button>
                         <button
@@ -85,7 +99,7 @@
                             :class="mode === 'text' ? 'active' : ''"
                             @click="setMode('text')"
                         >
-                            <i class="bi-cursor-text me-1"></i>
+                            <i class="bi-cursor-text me-md-1"></i>
                             <span class="d-none d-md-inline">text</span>
                         </button>
                         <button
@@ -94,7 +108,7 @@
                             :class="mode === 'yes-no-maybe' ? 'active' : ''"
                             @click="setMode('yes-no-maybe')"
                         >
-                            <i class="bi-hand-thumbs-up me-1"></i>
+                            <i class="bi-hand-thumbs-up me-md-1"></i>
                             <span class="d-none d-md-inline">yes/no</span>
                         </button>
                     </div>
@@ -112,7 +126,11 @@
         <canvas id="qrcodeBig"></canvas>
         <p x-text="studentUrl" class="m-0 fs-1" style="overflow-wrap: anywhere;"></p>
     </div>
-    <div class="mt-4 d-flex flex-wrap align-items-center justify-content-center" :style="containerStyle" x-show.important="showResponses">
+    <div
+        class="mt-4 d-flex flex-wrap align-items-center align-content-center justify-content-center"
+        :style="containerStyle"
+        x-show.important="showResponses"
+    >
         <template x-for="rc in responseCounts" :key="rc.response">
             <span
                 x-text="rc.response"
