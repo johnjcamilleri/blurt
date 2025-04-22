@@ -1,4 +1,4 @@
-# <img src="client/icon.svg" alt="logo" style="height: 1em; vertical-align: middle"> blurt
+# <img src="client/public/blurt-icon.svg" alt="logo" style="height: 1em; vertical-align: middle"> blurt
 
 _An audience response system with minimal barrier to entry — just blurt out your answer._
 

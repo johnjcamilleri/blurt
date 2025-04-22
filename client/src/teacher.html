@@ -4,13 +4,22 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>blurt</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="icon" href="blurt-icon.svg" sizes="any" type="image/svg+xml">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
     <style>
         .cursor-pointer {
             cursor: pointer;
         }
+        nav {
+            opacity: 50%;
+            transition: opacity 0.5s ease-out;
+        }
+        nav:hover {
+            opacity: 100%;
+            transition: opacity 0.05s ease-in;
+        }
     </style>
-    <link rel="icon" href="icon.svg" sizes="any" type="image/svg+xml">
 </head>
 <body class="container mt-1 bg-black" x-data="state">
     <nav class="navbar navbar-expand"><!-- never collapse -->
@@ -21,45 +30,54 @@
                     @click="showQRCode = true"
                     class="btn btn-dark"
                     title="show QR code"
+                    style="font-size: x-large;"
                 >
-                    QR
+                    <i class="bi-qr-code-scan"></i>
                 </button>
                 <span class="d-none d-md-block font-monospace text-secondary-emphasis" x-text="studentUrl"></span>
             </div>
             <ul class="navbar-nav ms-auto align-items-center gap-1 gap-sm-3">
-                <li class="navbar-text text-secondary text-nowrap">
+                <li class="navbar-text text-secondary text-nowrap ms-2">
                     <span x-text="nonEmptyResponses" aria-label="non-empty response count"></span>
                     /
                     <span x-text="totalResponses" aria-label="total response count"></span>
                 </li>
                 <li class="nav-item">
-                    <div class="btn-group">
+                    <div class="btn-group" aria-label="response display controls">
                         <button
                             type="button"
                             class="btn btn-dark"
                             @click="showResponses = !showResponses"
                         >
-                            <span x-show="showResponses">hide</span>
-                            <span x-show="!showResponses">show</span>
+                            <span x-show="showResponses">
+                                <i class="bi-eye-slash me-1"></i>
+                                <span class="d-none d-md-inline">hide</span>
+                            </span>
+                            <span x-show="!showResponses">
+                                <i class="bi-eye me-1"></i>
+                                <span class="d-none d-md-inline">show</span>
+                            </span>
                         </button>
                         <button
                             type="button"
                             class="btn btn-dark"
                             @click="clearResponses"
                         >
-                            clear
+                            <i class="bi-trash me-1"></i>
+                            <span class="d-none d-md-inline">clear</span>
                         </button>
                     </div>
                 </li>
                 <li class="nav-item">
-                    <div class="btn-group">
+                    <div class="btn-group" aria-label="response mode controls">
                         <button
                             type="button"
                             class="btn btn-dark"
                             :class="mode === 'off' ? 'active' : ''"
                             @click="setMode('off')"
                         >
-                            off
+                            <i class="bi-lightbulb-off me-1"></i>
+                            <span class="d-none d-md-inline">off</span>
                         </button>
                         <button
                             type="button"
@@ -67,7 +85,8 @@
                             :class="mode === 'text' ? 'active' : ''"
                             @click="setMode('text')"
                         >
-                            text
+                            <i class="bi-cursor-text me-1"></i>
+                            <span class="d-none d-md-inline">text</span>
                         </button>
                         <button
                             type="button"
@@ -75,7 +94,8 @@
                             :class="mode === 'yes-no-maybe' ? 'active' : ''"
                             @click="setMode('yes-no-maybe')"
                         >
-                            yes/no
+                            <i class="bi-hand-thumbs-up me-1"></i>
+                            <span class="d-none d-md-inline">yes/no</span>
                         </button>
                     </div>
                 </li>
@@ -83,7 +103,7 @@
         </div>
     </nav>
     <div
-        class="cursor-pointer text-center font-monospace text-dark position-fixed bottom-0 end-0 bg-white w-100 h-100 z-1"
+        class="cursor-pointer text-center font-monospace position-fixed bottom-0 end-0 bg-black bg-opacity-75 w-100 h-100 pt-3 z-1"
         x-show="showQRCode"
         @click="showQRCode = false"
         aria-label="QR code (big)"
