@@ -137,4 +137,25 @@ describe('Web Socket tests', () => {
             });
         });
     });
+
+    [
+        [' foo', 'foo'],
+        ['bar ', 'bar'],
+        ['  hex zyx  ', 'hex zyx'],
+    ].forEach(([input, expected]) => { // eslint-disable-line unicorn/no-array-for-each
+        it(`cleans student responses ${input}`, async () => {
+            studentSockets[0].emit('respond', input);
+            await new Promise<void>((resolve, reject) => {
+                teacherSocket.on('update response', (socketId, response) => {
+                    try {
+                        assert.strictEqual(socketId, studentSockets[0].id);
+                        assert.strictEqual(response, expected);
+                        resolve();
+                    } catch (error) {
+                        reject(error as Error);
+                    }
+                });
+            });
+        });
+    });
 });

@@ -183,6 +183,7 @@ socketServer.on('connection', (socket: Socket) => {
 
     // Student response
     socket.on('respond', (response: string) => {
+        response = response.trim();
         console.log(`[${roomName}] ${socket.id} respond: ${response}`);
         room.studentResponses.set(socket.id, response);
         room.teacherSocket?.emit('update response', socket.id, response);
