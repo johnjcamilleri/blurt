@@ -33,9 +33,11 @@ type State = {
     nonEmptyResponses: number;
     mode: Mode;
     setMode: (mode: Mode) => void;
-    showResponses: boolean;
-    pauseUpdates: boolean;
-    showQRCode: boolean;
+    areResponsesShown: boolean;
+    areUpdatesPaused: boolean;
+    pauseUpdates: () => void;
+    resumeUpdates: () => void;
+    isQRCodeShown: boolean;
     getBadgeClass: (rc: ResponseCount) => string;
     getBadgeStyle: (rc: ResponseCount) => string;
     containerStyle: string;
@@ -93,12 +95,21 @@ const state = Alpine.reactive<State>({
         socket.emit('set mode', mode);
         state.mode = mode;
     },
-    showResponses: true,
-    pauseUpdates: false,
-    showQRCode: false,
+    areResponsesShown: true,
+    areUpdatesPaused: false,
+    pauseUpdates() {
+        state.areUpdatesPaused = true;
+    },
+    resumeUpdates() {
+        state.areUpdatesPaused = false;
+        socket.emit('get responses');
+    },
+    isQRCodeShown: false,
     getBadgeClass,
     getBadgeStyle(rc: ResponseCount) {
         const c = document.createElement('span').style;
+        // TODO: seems to be a race condition here, rc.count is not updated when this is called
+        console.debug(rc.response, rc.count, this.totalResponses);
         c.fontSize = `${Math.max(0.1, (rc.count / this.totalResponses))}em`;
         return c.cssText;
     },
@@ -157,6 +168,8 @@ socket.on('all responses', (responses: Array<[string, string]>) => {
 });
 
 socket.on('update response', (socketId: string, response: string) => {
+    if (state.areUpdatesPaused) return;
+
     const oldResponse = state.responses.get(socketId);
     if (oldResponse === response) return;
 
@@ -165,9 +178,6 @@ socket.on('update response', (socketId: string, response: string) => {
     } else {
         state.responses.set(socketId, response);
     }
-
-    if (state.pauseUpdates) return;
-    // TODO: check if counts are correctly resynced after unpausing
 
     // Increment/Add
     if (response) {

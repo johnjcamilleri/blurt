@@ -27,7 +27,7 @@
             <div class="d-flex align-items-center gap-3">
                 <button
                     type="button"
-                    @click="showQRCode = true"
+                    @click="isQRCodeShown = true"
                     class="btn btn-dark"
                     title="show QR code"
                     style="font-size: x-large;"
@@ -47,13 +47,13 @@
                         <button
                             type="button"
                             class="btn btn-dark"
-                            @click="showResponses = !showResponses"
+                            @click="areResponsesShown = !areResponsesShown"
                         >
-                            <span x-show="showResponses">
+                            <span x-show="areResponsesShown">
                                 <i class="bi-eye-slash me-md-1"></i>
                                 <span class="d-none d-md-inline">hide</span>
                             </span>
-                            <span x-show="!showResponses">
+                            <span x-show="!areResponsesShown">
                                 <i class="bi-eye me-md-1"></i>
                                 <span class="d-none d-md-inline">show</span>
                             </span>
@@ -61,16 +61,20 @@
                         <button
                             type="button"
                             class="btn btn-dark"
-                            @click="pauseUpdates = !pauseUpdates"
+                            @click="pauseUpdates"
+                            x-show="!areUpdatesPaused"
                         >
-                            <span x-show="!pauseUpdates">
-                                <i class="bi-pause me-md-1"></i>
-                                <span class="d-none d-md-inline">pause</span>
-                            </span>
-                            <span x-show="pauseUpdates">
-                                <i class="bi-play me-md-1"></i>
-                                <span class="d-none d-md-inline">play</span>
-                            </span>
+                            <i class="bi-pause me-md-1"></i>
+                            <span class="d-none d-md-inline">pause</span>
+                        </button>
+                        <button
+                            type="button"
+                            class="btn btn-dark"
+                            @click="resumeUpdates"
+                            x-show="areUpdatesPaused"
+                        >
+                            <i class="bi-play me-md-1"></i>
+                            <span class="d-none d-md-inline">resume</span>
                         </button>
                         <button
                             type="button"
@@ -118,8 +122,8 @@
     </nav>
     <div
         class="cursor-pointer text-center font-monospace position-fixed bottom-0 end-0 bg-black bg-opacity-75 w-100 h-100 pt-3 z-1"
-        x-show="showQRCode"
-        @click="showQRCode = false"
+        x-show="isQRCodeShown"
+        @click="isQRCodeShown = false"
         aria-label="QR code (big)"
         title="click to close"
     >
@@ -129,7 +133,7 @@
     <div
         class="mt-4 d-flex flex-wrap align-items-center align-content-center justify-content-center"
         :style="containerStyle"
-        x-show.important="showResponses"
+        x-show.important="areResponsesShown"
     >
         <template x-for="rc in responseCounts" :key="rc.response">
             <span
