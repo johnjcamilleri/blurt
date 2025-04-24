@@ -1,20 +1,41 @@
 # <img src="client/public/blurt-icon.svg" alt="logo" style="height: 1em; vertical-align: middle"> blurt
 
-_An audience response system with minimal barrier to entry — just blurt out your answer._
+_A minimal audience response system — just blurt out your answer!_
 
 See it live at [blurt.lol](https://blurt.lol)
 
-## Usage
+## About
+
+### Usage
 
 - Visiting `/` will show two options:
-  - Create room and make you teacher (server chooses new room name)
+  - Create room and make you the owner (server chooses new room name)
   - Join room as student (server checks if room exists)
 - Visiting `/room` will:
-  - Create `room` if it doesn't exist and make you the teacher
-  - Join `room` as a student if it exists
+  - Create `room` if it doesn't exist and make you the owner
+  - Join `room` as a participant if it exists
 - Teacher client saves room secret as cookie
-- A room has exactly one teacher, zero or more students
-- A room is destroyed if it has no students or teachers
+- A room has exactly one owner, zero or more participants
+- A room is destroyed if it has no participants or owner
+
+### Features
+
+- Responses are updated live in owner's view as participants type, sized according to frequency
+- Minimal, projector-friendly UI (dark background, no borders, content at top)
+- QR code for participants to scan
+- Show/hide responses
+- Pause/resume live updating
+- Clear all responses
+- Modes
+  - free-text (input field)
+  - yes/no/maybe
+
+### Intentionally missing features
+
+- Pre-prepared content
+- Users or registrations
+- History or statistics
+- Childish graphics or annoying animations
 
 ## Running
 
