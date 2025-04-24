@@ -10,11 +10,11 @@ See it live at [blurt.lol](https://blurt.lol)
 
 - Visiting `/` will show two options:
   - Create room and make you the owner (server chooses new room name)
-  - Join room as student (server checks if room exists)
+  - Join room as participant (server checks if room exists)
 - Visiting `/room` will:
   - Create `room` if it doesn't exist and make you the owner
   - Join `room` as a participant if it exists
-- Teacher client saves room secret as cookie
+- Owner client saves room secret as cookie
 - A room has exactly one owner, zero or more participants
 - A room is destroyed if it has no participants or owner
 
