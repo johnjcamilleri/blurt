@@ -135,7 +135,7 @@
         :style="$store.responses.containerStyle"
         x-show.important="$store.responses.show"
     >
-        <template x-for="rc in $store.responses.counts" :key="rc.response">
+        <template x-for="rc in $store.responses.counts" :key="rc.key">
             <span
                 x-text="rc.response"
                 :class="$store.responses.getBadgeClass(rc)"

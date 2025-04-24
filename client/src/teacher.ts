@@ -22,7 +22,13 @@ QRCode.toCanvas(qrElement, studentUrl, qrOptions, error => {
 type ResponseCount = {
     response: string;
     count: number;
+    key: string;
 };
+
+function generateKey(response: string): string {
+    const rand = Math.random().toString(36).slice(2);
+    return rand;
+}
 
 type ResponsesStore = {
     raw: ClientResponses;
@@ -78,9 +84,8 @@ function getBadgeClass(rc: ResponseCount): string {
     return className;
 }
 
-function getBadgeStyle(rc: ResponseCount) {
+function getBadgeStyle(rc: ResponseCount): string {
     const c = document.createElement('span').style;
-    console.debug(rc.response, rc.count, this.total);
     c.fontSize = `${Math.max(0.1, (rc.count / this.total))}em`;
     return c.cssText;
 }
@@ -171,19 +176,14 @@ socket.on('all responses', (responses: Array<[string, string]>) => {
             responseCounts.push({
                 response,
                 count: 1,
+                key: generateKey(response),
             });
         }
     }
 
-    console.debug('---');
-
     const rs = Alpine.store('responses') as ResponsesStore;
     rs.raw = new Map(responses);
     rs.counts = responseCounts;
-
-    // TODO: there is a reactivity bug when updating rs.counts
-    // When the length of the array changes, the x-for loop runs too soon
-    // and getBadgeStyle() is run with old data
 });
 
 socket.on('update response', (socketId: string, response: string) => {
@@ -216,6 +216,7 @@ socket.on('update response', (socketId: string, response: string) => {
             rs.counts.push({
                 response,
                 count: 1,
+                key: generateKey(response),
             });
         }
     }
