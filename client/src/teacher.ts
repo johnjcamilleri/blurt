@@ -24,23 +24,26 @@ type ResponseCount = {
     count: number;
 };
 
-type State = {
+type ResponsesStore = {
+    raw: ClientResponses;
+    counts: ResponseCount[];
+    clear: () => void;
+    total: number;
+    nonEmpty: number;
+    show: boolean;
+    getBadgeClass: (rc: ResponseCount) => string;
+    getBadgeStyle: (rc: ResponseCount) => string;
+    containerStyle: string;
+};
+
+type ControlsStore = {
     studentUrl: string;
-    responses: ClientResponses;
-    responseCounts: ResponseCount[];
-    clearResponses: () => void;
-    totalResponses: number;
-    nonEmptyResponses: number;
     mode: Mode;
     setMode: (mode: Mode) => void;
-    areResponsesShown: boolean;
     areUpdatesPaused: boolean;
     pauseUpdates: () => void;
     resumeUpdates: () => void;
     isQRCodeShown: boolean;
-    getBadgeClass: (rc: ResponseCount) => string;
-    getBadgeStyle: (rc: ResponseCount) => string;
-    containerStyle: string;
 };
 
 const emojiRegex = makeEmojiRegex();
@@ -75,44 +78,29 @@ function getBadgeClass(rc: ResponseCount): string {
     return className;
 }
 
-const state = Alpine.reactive<State>({
-    studentUrl,
-    responses: new Map(),
-    responseCounts: [],
-    clearResponses() {
+function getBadgeStyle(rc: ResponseCount) {
+    const c = document.createElement('span').style;
+    console.debug(rc.response, rc.count, this.total);
+    c.fontSize = `${Math.max(0.1, (rc.count / this.total))}em`;
+    return c.cssText;
+}
+
+const _responsesStore: ResponsesStore = {
+    raw: new Map(),
+    counts: [],
+    clear() {
         socket.emit('clear responses');
-        state.responseCounts = [];
+        this.counts = [];
     },
-    get totalResponses(): number {
-        return this.responses.size;
+    get total(): number {
+        return this.raw.size;
     },
-    get nonEmptyResponses(): number {
-        return Array.from(this.responses.values()).filter(response => response !== null && response !== '').length;
+    get nonEmpty(): number {
+        return Array.from(this.raw.values()).filter(response => response !== null && response !== '').length;
     },
-    mode: 'off',
-    setMode(mode: Mode) {
-        this.clearResponses();
-        socket.emit('set mode', mode);
-        state.mode = mode;
-    },
-    areResponsesShown: true,
-    areUpdatesPaused: false,
-    pauseUpdates() {
-        state.areUpdatesPaused = true;
-    },
-    resumeUpdates() {
-        state.areUpdatesPaused = false;
-        socket.emit('get responses');
-    },
-    isQRCodeShown: false,
+    show: true,
     getBadgeClass,
-    getBadgeStyle(rc: ResponseCount) {
-        const c = document.createElement('span').style;
-        // TODO: seems to be a race condition here, rc.count is not updated when this is called
-        console.debug(rc.response, rc.count, this.totalResponses);
-        c.fontSize = `${Math.max(0.1, (rc.count / this.totalResponses))}em`;
-        return c.cssText;
-    },
+    getBadgeStyle,
     get containerStyle(): string {
         const c = document.createElement('span').style;
         const fontSize = Math.max(80, window.innerHeight * 0.3);
@@ -120,8 +108,29 @@ const state = Alpine.reactive<State>({
         c.height = '70vh';
         return c.cssText;
     },
-});
-Alpine.data('state', () => state);
+};
+
+const _controlsStore: ControlsStore = {
+    studentUrl,
+    mode: 'off',
+    setMode(mode: Mode) {
+        (Alpine.store('responses') as ResponsesStore).clear();
+        socket.emit('set mode', mode);
+        this.mode = mode;
+    },
+    isQRCodeShown: false,
+    areUpdatesPaused: false,
+    pauseUpdates() {
+        this.areUpdatesPaused = true;
+    },
+    resumeUpdates() {
+        this.areUpdatesPaused = false;
+        socket.emit('get responses');
+    },
+};
+
+Alpine.store('responses', _responsesStore);
+Alpine.store('controls', _controlsStore);
 Alpine.start();
 
 // Get room name from URL path and secret from cookie
@@ -140,9 +149,11 @@ socket.on('connect', () => {
     socket.emit('get responses');
 });
 
-socket.on('all responses', (responses: Array<[string, string]>) => {
-    state.responses = new Map(responses);
+socket.on('set mode', (mode: Mode) => {
+    (Alpine.store('controls') as ControlsStore).mode = mode;
+});
 
+socket.on('all responses', (responses: Array<[string, string]>) => {
     const responseCounts: ResponseCount[] = [];
     for (const rv of responses.values()) {
         const response = rv[1];
@@ -164,25 +175,36 @@ socket.on('all responses', (responses: Array<[string, string]>) => {
         }
     }
 
-    state.responseCounts = responseCounts;
+    console.debug('---');
+
+    const rs = Alpine.store('responses') as ResponsesStore;
+    rs.raw = new Map(responses);
+    rs.counts = responseCounts;
+
+    // TODO: there is a reactivity bug when updating rs.counts
+    // When the length of the array changes, the x-for loop runs too soon
+    // and getBadgeStyle() is run with old data
 });
 
 socket.on('update response', (socketId: string, response: string) => {
-    if (state.areUpdatesPaused) return;
+    const rs = Alpine.store('responses') as ResponsesStore;
+    const cs = Alpine.store('controls') as ControlsStore;
 
-    const oldResponse = state.responses.get(socketId);
+    if (cs.areUpdatesPaused) return;
+
+    const oldResponse = rs.raw.get(socketId);
     if (oldResponse === response) return;
 
     if (response === undefined || response === null) {
-        state.responses.delete(socketId);
+        rs.raw.delete(socketId);
     } else {
-        state.responses.set(socketId, response);
+        rs.raw.set(socketId, response);
     }
 
     // Increment/Add
     if (response) {
         let foundNew = false;
-        for (const rc of state.responseCounts) {
+        for (const rc of rs.counts) {
             if (rc.response === response) {
                 rc.count++;
                 foundNew = true;
@@ -191,7 +213,7 @@ socket.on('update response', (socketId: string, response: string) => {
         }
 
         if (!foundNew) {
-            state.responseCounts.push({
+            rs.counts.push({
                 response,
                 count: 1,
             });
@@ -201,7 +223,7 @@ socket.on('update response', (socketId: string, response: string) => {
     // Decrement/Remove
     if (oldResponse) {
         let removeOld = false;
-        for (const rc of state.responseCounts) {
+        for (const rc of rs.counts) {
             if (rc.response === oldResponse) {
                 rc.count--;
                 if (rc.count < 1) removeOld = true;
@@ -210,11 +232,7 @@ socket.on('update response', (socketId: string, response: string) => {
         }
 
         if (removeOld) {
-            state.responseCounts = state.responseCounts.filter(rc => rc.count > 0);
+            rs.counts = rs.counts.filter(rc => rc.count > 0);
         }
     }
-});
-
-socket.on('set mode', (mode: Mode) => {
-    state.mode = mode;
 });

@@ -21,39 +21,39 @@
         }
     </style>
 </head>
-<body class="container mt-1 bg-black" x-data="state">
+<body class="container mt-1 bg-black" x-data>
     <nav class="navbar navbar-expand"><!-- never collapse -->
         <div class="container-fluid">
             <div class="d-flex align-items-center gap-3">
                 <button
                     type="button"
-                    @click="isQRCodeShown = true"
+                    @click="$store.controls.isQRCodeShown = true"
                     class="btn btn-dark"
                     title="show QR code"
                     style="font-size: x-large;"
                 >
                     <i class="bi-qr-code-scan"></i>
                 </button>
-                <span class="d-none d-md-block font-monospace text-secondary-emphasis" x-text="studentUrl"></span>
+                <span class="d-none d-md-block font-monospace text-secondary-emphasis" x-text="$store.controls.studentUrl"></span>
             </div>
             <ul class="navbar-nav ms-auto align-items-center gap-1 gap-sm-3">
                 <li class="navbar-text text-secondary text-nowrap ms-2">
-                    <span x-text="nonEmptyResponses" aria-label="non-empty response count"></span>
+                    <span x-text="$store.responses.nonEmpty" aria-label="non-empty response count"></span>
                     /
-                    <span x-text="totalResponses" aria-label="total response count"></span>
+                    <span x-text="$store.responses.total" aria-label="total response count"></span>
                 </li>
                 <li class="nav-item">
                     <div class="btn-group" aria-label="response display controls">
                         <button
                             type="button"
                             class="btn btn-dark"
-                            @click="areResponsesShown = !areResponsesShown"
+                            @click="$store.responses.show = !$store.responses.show"
                         >
-                            <span x-show="areResponsesShown">
+                            <span x-show="$store.responses.show">
                                 <i class="bi-eye-slash me-md-1"></i>
                                 <span class="d-none d-md-inline">hide</span>
                             </span>
-                            <span x-show="!areResponsesShown">
+                            <span x-show="!$store.responses.show">
                                 <i class="bi-eye me-md-1"></i>
                                 <span class="d-none d-md-inline">show</span>
                             </span>
@@ -61,8 +61,8 @@
                         <button
                             type="button"
                             class="btn btn-dark"
-                            @click="pauseUpdates"
-                            x-show="!areUpdatesPaused"
+                            @click="$store.controls.pauseUpdates()"
+                            x-show="!$store.controls.areUpdatesPaused"
                         >
                             <i class="bi-pause me-md-1"></i>
                             <span class="d-none d-md-inline">pause</span>
@@ -70,8 +70,8 @@
                         <button
                             type="button"
                             class="btn btn-dark"
-                            @click="resumeUpdates"
-                            x-show="areUpdatesPaused"
+                            @click="$store.controls.resumeUpdates()"
+                            x-show="$store.controls.areUpdatesPaused"
                         >
                             <i class="bi-play me-md-1"></i>
                             <span class="d-none d-md-inline">resume</span>
@@ -79,7 +79,7 @@
                         <button
                             type="button"
                             class="btn btn-dark"
-                            @click="clearResponses"
+                            @click="$store.responses.clear()"
                         >
                             <i class="bi-trash me-md-1"></i>
                             <span class="d-none d-md-inline">clear</span>
@@ -91,8 +91,8 @@
                         <button
                             type="button"
                             class="btn btn-dark"
-                            :class="mode === 'off' ? 'active' : ''"
-                            @click="setMode('off')"
+                            :class="$store.controls.mode === 'off' ? 'active' : ''"
+                            @click="$store.controls.setMode('off')"
                         >
                             <i class="bi-lightbulb-off me-md-1"></i>
                             <span class="d-none d-md-inline">off</span>
@@ -100,8 +100,8 @@
                         <button
                             type="button"
                             class="btn btn-dark"
-                            :class="mode === 'text' ? 'active' : ''"
-                            @click="setMode('text')"
+                            :class="$store.controls.mode === 'text' ? 'active' : ''"
+                            @click="$store.controls.setMode('text')"
                         >
                             <i class="bi-cursor-text me-md-1"></i>
                             <span class="d-none d-md-inline">text</span>
@@ -109,8 +109,8 @@
                         <button
                             type="button"
                             class="btn btn-dark"
-                            :class="mode === 'yes-no-maybe' ? 'active' : ''"
-                            @click="setMode('yes-no-maybe')"
+                            :class="$store.controls.mode === 'yes-no-maybe' ? 'active' : ''"
+                            @click="$store.controls.setMode('yes-no-maybe')"
                         >
                             <i class="bi-hand-thumbs-up me-md-1"></i>
                             <span class="d-none d-md-inline">yes/no</span>
@@ -122,24 +122,24 @@
     </nav>
     <div
         class="cursor-pointer text-center font-monospace position-fixed bottom-0 end-0 bg-black bg-opacity-75 w-100 h-100 pt-3 z-1"
-        x-show="isQRCodeShown"
-        @click="isQRCodeShown = false"
+        x-show="$store.controls.isQRCodeShown"
+        @click="$store.controls.isQRCodeShown = false"
         aria-label="QR code (big)"
         title="click to close"
     >
         <canvas id="qrcodeBig"></canvas>
-        <p x-text="studentUrl" class="m-0 fs-1" style="overflow-wrap: anywhere;"></p>
+        <p x-text="$store.controls.studentUrl" class="m-0 fs-1" style="overflow-wrap: anywhere;"></p>
     </div>
     <div
         class="mt-4 d-flex flex-wrap align-items-center align-content-center justify-content-center"
-        :style="containerStyle"
-        x-show.important="areResponsesShown"
+        :style="$store.responses.containerStyle"
+        x-show.important="$store.responses.show"
     >
-        <template x-for="rc in responseCounts" :key="rc.response">
+        <template x-for="rc in $store.responses.counts" :key="rc.response">
             <span
                 x-text="rc.response"
-                :class="getBadgeClass(rc)"
-                :style="getBadgeStyle(rc)"
+                :class="$store.responses.getBadgeClass(rc)"
+                :style="$store.responses.getBadgeStyle(rc)"
                 :data-count="rc.count"
             ></span>
         </template>
