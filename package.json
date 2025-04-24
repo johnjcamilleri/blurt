@@ -1,6 +1,6 @@
 {
   "name": "blurt",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "main": "dist/server.js",
   "type": "module",
   "scripts": {
@@ -37,6 +37,7 @@
   },
   "author": "John J. Camilleri",
   "license": "MIT",
+  "repository": "github:johnjcamilleri/blurt",
   "xo": {
     "space": 4,
     "semicolon": true,

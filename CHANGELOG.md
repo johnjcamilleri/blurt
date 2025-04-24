@@ -9,30 +9,40 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+### Changed
+
+### Deprecated
+
+### Removed
+
+### Fixed
+
+### Security
+
+---
+
+## [1.1.0] - 2025-04-24
+
+### Added
+
 - Off mode
 - Icons in teacher view
-- Pause/play function
-- Normalise responses
+- Pause/resume function
+- Normalise whitespace in responses
 
 ### Changed
 
 - Folder structure in client
 - Use Alpine store instead of data (teacher view)
 
-### Deprecated
-
 ### Removed
 
-- Remove small QR code
+- Small QR code
 
 ### Fixed
 
-- Fix show/hide button
-- Fix rendering bug
-
-### Security
-
----
+- Show/hide button
+- Rendering bug
 
 ## [1.0.0] - 2025-04-11
 
