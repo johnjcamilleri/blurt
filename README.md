@@ -63,7 +63,7 @@ npm run dev
 npm run dev:client
 ```
 
-### Deploy
+### Update `main` branch
 
 Fast-forward merge `dev` into `main` and push (from `dev`):
 
@@ -72,14 +72,13 @@ git fetch . dev:main
 git push origin main
 ```
 
-Commits to `main` are deployed via webhook.
-
 ### Release
 
 - CHANGELOG: move items from unreleased into new release
 - Update version number in `package.json`
 - Commit to `dev` with commit message "Release x.y.z"
 - Merge to `main`
+- Trigger deployment
 
 ## Contributing
 
