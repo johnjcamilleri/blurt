@@ -16,11 +16,14 @@
                 color: var(--bs-btn-color);
             }
         }
+        .bg-pink {
+            background-color: #f86284;
+        }
     </style>
 </head>
-<body class="container">
+<body x-data="state" class="container" :class="picked ? 'bg-pink' : ''">
     <div class="d-flex flex-column justify-content-center vh-100">
-        <div x-data="state" class="mb-3">
+        <div class="mb-3">
             <div class="text-center text-secondary" x-show="mode === 'off'">
                 waiting...
             </div>
@@ -28,7 +31,7 @@
                 <input
                     type="text"
                     spellcheck="false"
-                    class="form-control fs-1 p-4 border-secondary-subtle border-end-0"
+                    class="form-control fs-1 p-4 bg-transparent border-secondary-subtle border-end-0"
                     placeholder=""
                     x-model="response"
                     aria-label="free text input"

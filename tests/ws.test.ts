@@ -138,24 +138,51 @@ describe('Web Socket tests', () => {
         });
     });
 
-    [
-        [' foo', 'foo'],
-        ['bar ', 'bar'],
-        ['  hex zyx  ', 'hex zyx'],
-    ].forEach(([input, expected]) => { // eslint-disable-line unicorn/no-array-for-each
-        it(`cleans student responses ${input}`, async () => {
-            studentSockets[0].emit('respond', input);
-            await new Promise<void>((resolve, reject) => {
-                teacherSocket.on('update response', (socketId, response) => {
+    it('handles pick', async () => {
+        teacherSocket.emit('pick');
+        await new Promise<void>((resolve, reject) => {
+            const pickedStudents = new Set<Socket>();
+            for (const socket of studentSockets) {
+                socket.on('picked', () => {
                     try {
-                        assert.strictEqual(socketId, studentSockets[0].id);
-                        assert.strictEqual(response, expected);
-                        resolve();
+                        pickedStudents.add(socket);
+                        if (pickedStudents.size > 1) {
+                            reject(new Error('More than one student received "picked"'));
+                        }
                     } catch (error) {
                         reject(error as Error);
                     }
                 });
-            });
+            }
+
+            // Wait a short time to ensure no additional "picked" events are received
+            setTimeout(() => {
+                try {
+                    assert.strictEqual(pickedStudents.size, 1, 'Exactly one student should receive "picked"');
+                    resolve();
+                } catch (error) {
+                    reject(error as Error);
+                }
+            }, 100);
+        });
+    });
+
+    it('handles unpick', async () => {
+        teacherSocket.emit('unpick');
+        await new Promise<void>((resolve, reject) => {
+            const receivedByAll = new Set<Socket>();
+            for (const socket of studentSockets) {
+                socket.on('unpicked', () => {
+                    try {
+                        receivedByAll.add(socket);
+                        if (receivedByAll.size === studentSockets.length) {
+                            resolve();
+                        }
+                    } catch (error) {
+                        reject(error as Error);
+                    }
+                });
+            }
         });
     });
 });

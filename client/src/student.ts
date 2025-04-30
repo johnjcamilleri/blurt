@@ -17,11 +17,13 @@ const sendResponse = debounce((response: string) => {
 type State = {
     response: string;
     mode: Mode;
+    picked: boolean;
 };
 
 const state = Alpine.reactive<State>({
     response: '',
     mode: 'off',
+    picked: false,
 });
 Alpine.data('state', () => state);
 Alpine.effect(() => {
@@ -35,4 +37,12 @@ socket.on('clear response', () => {
 
 socket.on('set mode', (mode: Mode) => {
     state.mode = mode;
+});
+
+socket.on('picked', (mode: Mode) => {
+    state.picked = true;
+});
+
+socket.on('unpicked', (mode: Mode) => {
+    state.picked = false;
 });

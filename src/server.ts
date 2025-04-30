@@ -14,6 +14,7 @@ export type Room = {
     studentResponses: StudentResponses;
     teacherSocket?: Socket;
     mode: Mode;
+    pickedStudents: string[];
 };
 export const createRoom = (roomName: string): Room => {
     const room: Room = {
@@ -22,6 +23,7 @@ export const createRoom = (roomName: string): Room => {
         studentResponses: new Map(),
         teacherSocket: undefined,
         mode: 'off',
+        pickedStudents: [],
     };
     rooms.set(roomName, room);
     return room;
@@ -187,6 +189,55 @@ socketServer.on('connection', (socket: Socket) => {
         console.log(`[${roomName}] ${socket.id} respond: ${response}`);
         room.studentResponses.set(socket.id, response);
         room.teacherSocket?.emit('update response', socket.id, response);
+    });
+
+    // Teacher picks student randomly
+    socket.on('pick', () => {
+        console.log(`[${roomName}] ${socket.id} pick`);
+
+        // First unpick all
+        for (const socketId of room.studentResponses.keys()) {
+            const studentSocket = socketServer.sockets.sockets.get(socketId);
+            if (studentSocket) {
+                studentSocket.emit('unpicked');
+            }
+        }
+
+        // Trim remembered list to half size of all students
+        while (room.pickedStudents.length > room.studentResponses.size / 2) {
+            room.pickedStudents.shift();
+        }
+
+        // Get candidates for picking
+        const unpickedStudents = Array.from(room.studentResponses.keys()).filter(
+            id => !room.pickedStudents.includes(id),
+        );
+
+        if (unpickedStudents.length === 0) {
+            console.log(`[${roomName}] no students to pick`);
+            return;
+        }
+
+        // Pick random student
+        const randomIndex = Math.floor(Math.random() * unpickedStudents.length);
+        const pickedStudent = unpickedStudents[randomIndex];
+        const studentSocket = socketServer.sockets.sockets.get(pickedStudent);
+        if (studentSocket) {
+            console.log(`[${roomName}] picked: ${pickedStudent}`);
+            room.pickedStudents.push(pickedStudent);
+            studentSocket.emit('picked');
+        }
+    });
+
+    // Clear pick status
+    socket.on('unpick', () => {
+        console.log(`[${roomName}] ${socket.id} unpick`);
+        for (const socketId of room.studentResponses.keys()) {
+            const studentSocket = socketServer.sockets.sockets.get(socketId);
+            if (studentSocket) {
+                studentSocket.emit('unpicked');
+            }
+        }
     });
 });
 

@@ -26,6 +26,7 @@ See it live at [blurt.lol](https://blurt.lol)
 - Show/hide responses
 - Pause/resume live updating
 - Clear all responses
+- Pick a random participant
 - Modes
   - free-text (input field)
   - yes/no/maybe

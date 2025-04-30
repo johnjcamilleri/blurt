@@ -34,6 +34,8 @@ type ResponsesStore = {
     raw: ClientResponses;
     counts: ResponseCount[];
     clear: () => void;
+    pick: () => void;
+    unpick: () => void;
     total: number;
     nonEmpty: number;
     show: boolean;
@@ -44,12 +46,12 @@ type ResponsesStore = {
 
 type ControlsStore = {
     studentUrl: string;
+    isQRCodeShown: boolean;
     mode: Mode;
     setMode: (mode: Mode) => void;
     areUpdatesPaused: boolean;
     pauseUpdates: () => void;
     resumeUpdates: () => void;
-    isQRCodeShown: boolean;
 };
 
 const emojiRegex = makeEmojiRegex();
@@ -97,6 +99,12 @@ const _responsesStore: ResponsesStore = {
         socket.emit('clear responses');
         this.counts = [];
     },
+    pick() {
+        socket.emit('pick');
+    },
+    unpick() {
+        socket.emit('unpick');
+    },
     get total(): number {
         return this.raw.size;
     },
@@ -117,13 +125,13 @@ const _responsesStore: ResponsesStore = {
 
 const _controlsStore: ControlsStore = {
     studentUrl,
+    isQRCodeShown: false,
     mode: 'off',
     setMode(mode: Mode) {
         (Alpine.store('responses') as ResponsesStore).clear();
         socket.emit('set mode', mode);
         this.mode = mode;
     },
-    isQRCodeShown: false,
     areUpdatesPaused: false,
     pauseUpdates() {
         this.areUpdatesPaused = true;

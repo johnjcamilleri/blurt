@@ -84,6 +84,22 @@
                             <i class="bi-trash me-md-1"></i>
                             <span class="d-none d-md-inline">clear</span>
                         </button>
+                        <button
+                            type="button"
+                            class="btn btn-dark"
+                            @click="$store.responses.pick()"
+                        >
+                            <i class="bi-lightbulb me-md-1"></i>
+                            <span class="d-none d-md-inline">pick</span>
+                        </button>
+                        <button
+                            type="button"
+                            class="btn btn-dark"
+                            @click="$store.responses.unpick()"
+                        >
+                            <i class="bi-lightbulb-off me-md-1"></i>
+                            <span class="d-none d-md-inline">unpick</span>
+                        </button>
                     </div>
                 </li>
                 <li class="nav-item">
@@ -94,7 +110,7 @@
                             :class="$store.controls.mode === 'off' ? 'active' : ''"
                             @click="$store.controls.setMode('off')"
                         >
-                            <i class="bi-lightbulb-off me-md-1"></i>
+                            <i class="bi-power me-md-1"></i>
                             <span class="d-none d-md-inline">off</span>
                         </button>
                         <button
