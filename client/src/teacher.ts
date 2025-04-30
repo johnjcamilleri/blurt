@@ -34,7 +34,7 @@ type ResponsesStore = {
     raw: ClientResponses;
     counts: ResponseCount[];
     clear: () => void;
-    pick: () => void;
+    pick: (response?: string) => void;
     unpick: () => void;
     total: number;
     nonEmpty: number;
@@ -99,8 +99,8 @@ const _responsesStore: ResponsesStore = {
         socket.emit('clear responses');
         this.counts = [];
     },
-    pick() {
-        socket.emit('pick');
+    pick(response?: string) {
+        socket.emit('pick', response);
     },
     unpick() {
         socket.emit('unpick');

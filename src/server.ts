@@ -14,7 +14,7 @@ export type Room = {
     studentResponses: StudentResponses;
     teacherSocket?: Socket;
     mode: Mode;
-    pickedStudents: string[];
+    recentlyPickedStudents: string[];
 };
 export const createRoom = (roomName: string): Room => {
     const room: Room = {
@@ -23,7 +23,7 @@ export const createRoom = (roomName: string): Room => {
         studentResponses: new Map(),
         teacherSocket: undefined,
         mode: 'off',
-        pickedStudents: [],
+        recentlyPickedStudents: [],
     };
     rooms.set(roomName, room);
     return room;
@@ -192,8 +192,12 @@ socketServer.on('connection', (socket: Socket) => {
     });
 
     // Teacher picks student randomly
-    socket.on('pick', () => {
-        console.log(`[${roomName}] ${socket.id} pick`);
+    socket.on('pick', (response?: string) => {
+        if (response) {
+            console.log(`[${roomName}] ${socket.id} pick: "${response}"`);
+        } else {
+            console.log(`[${roomName}] ${socket.id} pick`);
+        }
 
         // First unpick all
         for (const socketId of room.studentResponses.keys()) {
@@ -203,28 +207,51 @@ socketServer.on('connection', (socket: Socket) => {
             }
         }
 
-        // Trim remembered list to half size of all students
-        while (room.pickedStudents.length > room.studentResponses.size / 2) {
-            room.pickedStudents.shift();
+        // Trim recently piced list to half size of all students
+        while (room.recentlyPickedStudents.length > room.studentResponses.size / 2) {
+            room.recentlyPickedStudents.shift();
         }
 
         // Get candidates for picking
-        const unpickedStudents = Array.from(room.studentResponses.keys()).filter(
-            id => !room.pickedStudents.includes(id),
-        );
+        let pickCandidates: string[] = [];
+        for (const [id, resp] of room.studentResponses.entries()) {
+            if (room.recentlyPickedStudents.includes(id)) {
+                // Skip recently picked students
+                continue;
+            }
 
-        if (unpickedStudents.length === 0) {
+            if (response) {
+                // Pick from students with a given response
+                if (response === resp) {
+                    pickCandidates.push(id);
+                }
+            } else {
+                // Pick any student
+                pickCandidates.push(id);
+            }
+        }
+
+        if (pickCandidates.length === 0 && response) {
+            // Ignore recently picked list in the hopes of finding a candidate
+            pickCandidates = [];
+            for (const [id, resp] of room.studentResponses.entries()) {
+                if (response === resp) {
+                    pickCandidates.push(id);
+                }
+            }
+        }
+
+        if (pickCandidates.length === 0) {
             console.log(`[${roomName}] no students to pick`);
             return;
         }
 
         // Pick random student
-        const randomIndex = Math.floor(Math.random() * unpickedStudents.length);
-        const pickedStudent = unpickedStudents[randomIndex];
+        const pickedStudent = pickCandidates[Math.floor(Math.random() * pickCandidates.length)];
         const studentSocket = socketServer.sockets.sockets.get(pickedStudent);
         if (studentSocket) {
             console.log(`[${roomName}] picked: ${pickedStudent}`);
-            room.pickedStudents.push(pickedStudent);
+            room.recentlyPickedStudents.push(pickedStudent);
             studentSocket.emit('picked');
         }
     });

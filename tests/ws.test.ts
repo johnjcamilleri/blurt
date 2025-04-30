@@ -167,6 +167,45 @@ describe('Web Socket tests', () => {
         });
     });
 
+    it('handles pick with response', async () => {
+        // Students respond with different values
+        const response0 = 'foo';
+        const response1 = 'bar';
+        studentSockets[0].emit('respond', response0);
+        studentSockets[1].emit('respond', response1);
+
+        await new Promise<void>((resolve, reject) => {
+            // Listen for the "update response" events to ensure responses are registered
+            const responsesReceived = new Set<string>();
+            teacherSocket.on('update response', (socketId, response) => {
+                try {
+                    responsesReceived.add(response as string);
+                    if (responsesReceived.size === 2) {
+                        // Once both responses are registered, emit "pick with response"
+                        teacherSocket.emit('pick', response1);
+                    }
+                } catch (error) {
+                    reject(error as Error);
+                }
+            });
+
+            // Listen for the "picked" event to verify the correct student is picked
+            for (const socket of studentSockets) {
+                socket.on('picked', () => {
+                    try {
+                        if (socket.id === studentSockets[1].id) {
+                            resolve();
+                        } else {
+                            reject(new Error('Incorrect student was picked'));
+                        }
+                    } catch (error) {
+                        reject(error as Error);
+                    }
+                });
+            }
+        });
+    });
+
     it('handles unpick', async () => {
         teacherSocket.emit('unpick');
         await new Promise<void>((resolve, reject) => {

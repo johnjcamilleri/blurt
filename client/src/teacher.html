@@ -154,9 +154,12 @@
         <template x-for="rc in $store.responses.counts" :key="rc.key">
             <span
                 x-text="rc.response"
+                class="cursor-pointer user-select-none"
                 :class="$store.responses.getBadgeClass(rc)"
                 :style="$store.responses.getBadgeStyle(rc)"
                 :data-count="rc.count"
+                @click="$store.responses.pick(rc.response)"
+                title="Click to pick a participant with this response"
             ></span>
         </template>
     </div>
