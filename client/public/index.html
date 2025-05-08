@@ -31,11 +31,12 @@
                         placeholder="room name"
                         aria-label="room name"
                         onkeydown="if (event.key === 'Enter') this.nextElementSibling.click()"
+                        required
                     >
                     <button
                         type="button"
                         class="btn btn-outline-secondary"
-                        onclick="window.location.href = '/join/' + this.previousElementSibling.value"
+                        onclick="if (this.previousElementSibling.value) window.location.href = '/join/' + this.previousElementSibling.value"
                     >
                         Join
                     </button>
@@ -45,12 +46,14 @@
         <a
             href="https://github.com/johnjcamilleri/blurt"
             target="_blank"
-            class="d-none d-sm-block m-4 position-absolute top-0 end-0"
+            class="d-none d-sm-flex align-items-center gap-2 m-4 position-absolute top-0 end-0 text-decoration-none text-secondary"
             title="GitHub repository"
         >
+            <span id="version"></span>
             <img src="github-mark-white.svg" alt="GitHub logo" style="height: 2em;">
         </a>
     </div>
+    <script type="module" src="dist/index.js"></script>
     <script type="module" src="dist/messages.js"></script>
 </body>
 </html>
