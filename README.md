@@ -92,7 +92,7 @@ git push origin main
 ### Release
 
 - CHANGELOG: move items from unreleased into new release
-- Update version number in `package.json`
+- Update version number in `package.json` (then run `npm i` to update `package-lock.json`)
 - Commit to `dev` with commit message "Release x.y.z"
 - Merge to `main`
 - Trigger deployment
