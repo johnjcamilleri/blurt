@@ -38,6 +38,22 @@ See it live at [blurt.lol](https://blurt.lol)
 - History or statistics
 - Childish graphics or annoying animations
 
+#### Keyboard shortcuts
+
+The following keyboard shortcuts are available for controlling the owner view:
+
+| Key(s)       | Action                                  |
+|--------------|-----------------------------------------|
+| `q`          | Toggle QR code visibility               |
+| `h` or `s`   | Toggle hide/show responses              |
+| `p` or `r`   | Pause or resume updates                 |
+| `c`          | Clear all responses                     |
+| `k`          | Pick a response                         |
+| `l`          | Unpick a response                       |
+| `0` or `o`   | Set mode to "off"                       |
+| `1` or `t`   | Set mode to "text"                      |
+| `2` or `y`   | Set mode to "yes-no-maybe"              |
+
 ## Running
 
 ### Build & run locally

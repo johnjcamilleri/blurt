@@ -245,3 +245,77 @@ socket.on('update response', (socketId: string, response: string) => {
         }
     }
 });
+
+// Add global keyboard shortcuts
+document.addEventListener('keydown', event => {
+    const cs = Alpine.store('controls') as ControlsStore;
+    const rs = Alpine.store('responses') as ResponsesStore;
+
+    switch (event.key) {
+        // Toggle QR code visibility
+        case 'q': {
+            cs.isQRCodeShown = !cs.isQRCodeShown;
+            break;
+        }
+
+        // Toggle hide/show
+        case 'h':
+        case 's': {
+            rs.show = !rs.show;
+            break;
+        }
+
+        // Toggle pause/resume updates
+        case 'p':
+        case 'r': {
+            if (cs.areUpdatesPaused) {
+                cs.resumeUpdates();
+            } else {
+                cs.pauseUpdates();
+            }
+
+            break;
+        }
+
+        // Clear responses
+        case 'c': {
+            rs.clear();
+            break;
+        }
+
+        // Pick response
+        case 'k': {
+            rs.pick();
+            break;
+        }
+
+        // Unpick response
+        case 'l': {
+            rs.unpick();
+            break;
+        }
+
+        // Change mode
+        case '0':
+        case 'o': {
+            cs.setMode('off');
+            break;
+        }
+
+        case '1':
+        case 't': {
+            cs.setMode('text');
+            break;
+        }
+
+        case '2':
+        case 'y': {
+            cs.setMode('yes-no-maybe');
+            break;
+        }
+
+        default: {
+            break;
+        }
+    }
+});
