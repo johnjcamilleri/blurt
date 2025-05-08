@@ -8,16 +8,23 @@ import {type ClientResponses, type Mode} from './common.js';
 // Generate QR code for student view URL
 const studentUrl = `${globalThis.location.origin}${globalThis.location.pathname}`;
 
-const qrWidth = Math.min(window.innerWidth, window.innerHeight) - 100;
-const qrOptions = {
-    margin: 2,
-    width: qrWidth,
-    // color: {light: '#0000', dark: '#fffa'}, // inverted
-};
-const qrElement = document.querySelector('#qrcodeBig')!;
-QRCode.toCanvas(qrElement, studentUrl, qrOptions, error => {
-    if (error) console.error(error);
-});
+function generateQRCode() {
+    const qrWidth = Math.min(window.innerWidth, window.innerHeight) - 100;
+    const qrOptions = {
+        margin: 2,
+        width: qrWidth,
+    };
+    const qrElement = document.querySelector('#qrcodeBig')!;
+    QRCode.toCanvas(qrElement, studentUrl, qrOptions, error => {
+        if (error) console.error(error);
+    });
+}
+
+// Generate QR code initially
+generateQRCode();
+
+// Adjust QR code on window resize
+window.addEventListener('resize', generateQRCode);
 
 type ResponseCount = {
     response: string;
@@ -166,7 +173,7 @@ socket.on('set mode', (mode: Mode) => {
     (Alpine.store('controls') as ControlsStore).mode = mode;
 });
 
-socket.on('all responses', (responses: Array<[string, string]>) => {
+function computeResponseCounts(responses: Array<[string, string]>): ResponseCount[] {
     const responseCounts: ResponseCount[] = [];
     for (const rv of responses.values()) {
         const response = rv[1];
@@ -189,9 +196,20 @@ socket.on('all responses', (responses: Array<[string, string]>) => {
         }
     }
 
+    return responseCounts;
+}
+
+socket.on('all responses', (responses: Array<[string, string]>) => {
     const rs = Alpine.store('responses') as ResponsesStore;
     rs.raw = new Map(responses);
-    rs.counts = responseCounts;
+    rs.counts = computeResponseCounts(responses);
+});
+
+// Redraw on window resize
+window.addEventListener('resize', () => {
+    const rs = Alpine.store('responses') as ResponsesStore;
+    const responses = Array.from(rs.raw.entries());
+    rs.counts = computeResponseCounts(responses);
 });
 
 socket.on('update response', (socketId: string, response: string) => {
