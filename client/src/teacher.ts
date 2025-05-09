@@ -64,7 +64,7 @@ type ControlsStore = {
 const emojiRegex = makeEmojiRegex();
 
 function getBadgeClass(rc: ResponseCount): string {
-    let className = 'badge m-1';
+    let className = 'badge m-1 transition';
     if (rc.response.match(emojiRegex)?.join('') === rc.response) {
         className += ' text-bg-dark';
     } else {
@@ -276,16 +276,15 @@ document.addEventListener('keydown', event => {
             break;
         }
 
-        // Toggle hide/show
+        // Hide/show
         case 'h':
         case 's': {
             rs.show = !rs.show;
             break;
         }
 
-        // Toggle pause/resume updates
-        case 'p':
-        case 'r': {
+        // Pause/resume updates
+        case ' ': {
             if (cs.areUpdatesPaused) {
                 cs.resumeUpdates();
             } else {
@@ -302,13 +301,13 @@ document.addEventListener('keydown', event => {
         }
 
         // Pick response
-        case 'k': {
+        case 'p': {
             rs.pick();
             break;
         }
 
         // Unpick response
-        case 'l': {
+        case 'u': {
             rs.unpick();
             break;
         }

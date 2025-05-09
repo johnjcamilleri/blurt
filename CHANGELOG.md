@@ -9,9 +9,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
-- Pick function
-- Keyboard shortcuts
-
 ### Changed
 
 ### Deprecated
@@ -20,11 +17,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
-- Redraw QR code and responses on window resize
-
 ### Security
 
 ---
+
+## [1.2.1] - 2025-05-09
+
+- Change keyboard shortcuts
+- Animate changes in response size
 
 ## [1.2.0] - 2025-05-08
 

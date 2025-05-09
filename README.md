@@ -42,17 +42,17 @@ See it live at [blurt.lol](https://blurt.lol)
 
 The following keyboard shortcuts are available for controlling the owner view:
 
-| Key(s)       | Action                                  |
-|--------------|-----------------------------------------|
-| `q`          | Toggle QR code visibility               |
-| `h` or `s`   | Toggle hide/show responses              |
-| `p` or `r`   | Pause or resume updates                 |
-| `c`          | Clear all responses                     |
-| `k`          | Pick a response                         |
-| `l`          | Unpick a response                       |
-| `0` or `o`   | Set mode to "off"                       |
-| `1` or `t`   | Set mode to "text"                      |
-| `2` or `y`   | Set mode to "yes-no-maybe"              |
+| Key(s)                       | Action                     |
+|------------------------------|----------------------------|
+| <kbd>q</kbd>                 | Toggle QR code visibility  |
+| <kbd>h</kbd> or <kbd>s</kbd> | Toggle hide/show responses |
+| <kbd>space</kbd>             | Pause or resume updates    |
+| <kbd>c</kbd>                 | Clear all responses        |
+| <kbd>p</kbd>                 | Pick a response            |
+| <kbd>u</kbd>                 | Unpick a response          |
+| <kbd>0</kbd> or <kbd>o</kbd> | Set mode to "off"          |
+| <kbd>1</kbd> or <kbd>t</kbd> | Set mode to "text"         |
+| <kbd>2</kbd> or <kbd>y</kbd> | Set mode to "yes-no-maybe" |
 
 ## Running
 
