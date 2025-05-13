@@ -21,6 +21,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [1.2.2] - 2025-05-13
+
+- Minor UI adjustments
+
 ## [1.2.1] - 2025-05-09
 
 - Change keyboard shortcuts

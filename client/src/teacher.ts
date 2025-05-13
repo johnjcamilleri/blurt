@@ -9,7 +9,7 @@ import {type ClientResponses, type Mode} from './common.js';
 const studentUrl = `${globalThis.location.origin}${globalThis.location.pathname}`;
 
 function generateQRCode() {
-    const qrWidth = Math.min(window.innerWidth, window.innerHeight) - 100;
+    const qrWidth = Math.min(window.innerWidth, window.innerHeight) - 120;
     const qrOptions = {
         margin: 2,
         width: qrWidth,

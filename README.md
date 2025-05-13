@@ -1,6 +1,6 @@
 # <img src="client/public/blurt-icon.svg" alt="logo" style="height: 1em; vertical-align: middle"> blurt
 
-_A minimal audience response system — just blurt out your answer!_
+_A minimal audience response tool — just blurt out your answer!_
 
 See it live at [blurt.lol](https://blurt.lol)
 
