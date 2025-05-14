@@ -9,11 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
-- Zen mode to completely hide controls in teacher view
-
 ### Changed
-
-- Move link to usage guide
 
 ### Deprecated
 
@@ -25,11 +21,25 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [1.3.0] - 2025-05-14
+
+### Added
+
+- Zen mode to completely hide controls in teacher view
+
+### Changed
+
+- Move link to usage guide
+
 ## [1.2.2] - 2025-05-13
+
+### Changed
 
 - Minor UI adjustments
 
 ## [1.2.1] - 2025-05-09
+
+### Changed
 
 - Change keyboard shortcuts
 - Animate changes in response size
