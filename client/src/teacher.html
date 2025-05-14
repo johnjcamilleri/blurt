@@ -25,7 +25,7 @@
     </style>
 </head>
 <body class="container mt-1 bg-black" x-data>
-    <nav class="navbar navbar-expand"><!-- never collapse -->
+    <nav class="navbar navbar-expand" x-show="!$store.controls.isZenMode"><!-- never collapse -->
         <div class="container-fluid">
             <div class="d-flex align-items-center gap-3">
                 <button

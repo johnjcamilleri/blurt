@@ -54,6 +54,7 @@ type ResponsesStore = {
 type ControlsStore = {
     studentUrl: string;
     isQRCodeShown: boolean;
+    isZenMode: boolean;
     mode: Mode;
     setMode: (mode: Mode) => void;
     areUpdatesPaused: boolean;
@@ -133,6 +134,7 @@ const _responsesStore: ResponsesStore = {
 const _controlsStore: ControlsStore = {
     studentUrl,
     isQRCodeShown: false,
+    isZenMode: false,
     mode: 'off',
     setMode(mode: Mode) {
         (Alpine.store('responses') as ResponsesStore).clear();
@@ -273,6 +275,12 @@ document.addEventListener('keydown', event => {
         // Toggle QR code visibility
         case 'q': {
             cs.isQRCodeShown = !cs.isQRCodeShown;
+            break;
+        }
+
+        // Toggle Zen mode
+        case 'z': {
+            cs.isZenMode = !cs.isZenMode;
             break;
         }
 

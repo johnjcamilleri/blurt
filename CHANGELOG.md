@@ -9,6 +9,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- Zen mode to completely hide controls in teacher view
+
 ### Changed
 
 - Move link to usage guide
