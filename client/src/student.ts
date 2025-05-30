@@ -4,6 +4,8 @@ import {debounce, type Mode} from './common.js';
 
 const roomName = globalThis.location.pathname.slice(1);
 
+const pickSound = new Audio('notification.mp3');
+
 const socket = io({
     query: {
         roomName,
@@ -41,6 +43,9 @@ socket.on('set mode', (mode: Mode) => {
 
 socket.on('picked', (mode: Mode) => {
     state.picked = true;
+    pickSound.play().catch((error: unknown) => {
+        console.error('Failed to play pick sound:', error);
+    });
 });
 
 socket.on('unpicked', (mode: Mode) => {
