@@ -334,6 +334,12 @@ document.addEventListener('keydown', event => {
         }
 
         case '2':
+        case 'n': {
+            cs.setMode('number');
+            break;
+        }
+
+        case '3':
         case 'y': {
             cs.setMode('yes-no-maybe');
             break;

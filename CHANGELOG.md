@@ -10,6 +10,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 - Play notification sound when picked
+- Add number mode
 
 ### Changed
 

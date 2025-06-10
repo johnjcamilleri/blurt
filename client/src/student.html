@@ -19,6 +19,9 @@
         .bg-pink {
             background-color: #f86284;
         }
+        .form-control::placeholder {
+            color: var(--bs-secondary-border-subtle);
+        }
     </style>
 </head>
 <body x-data="state" class="container" :class="picked ? 'bg-pink' : ''">
@@ -32,9 +35,9 @@
                     type="text"
                     spellcheck="false"
                     class="form-control fs-1 p-4 bg-transparent border-secondary-subtle border-end-0"
-                    placeholder=""
+                    placeholder="type a response"
                     x-model="response"
-                    aria-label="free text input"
+                    aria-label="response"
                 />
                 <button
                     type="button"
@@ -43,6 +46,15 @@
                     aria-label="clear input"
                 >✖</button>
             </div>
+                <input
+                    x-show="mode === 'number'"
+                    type="number"
+                    class="form-control fs-1 p-4 text-center font-monospace border-secondary-subtle mx-auto"
+                    style="max-width: 8em;"
+                    placeholder="3.142"
+                    x-model="response"
+                    aria-label="numeric input"
+                />
             <div class="d-flex justify-content-center gap-2" x-show.important="mode === 'yes-no-maybe'">
                 <button
                     class="btn btn-lg"

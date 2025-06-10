@@ -52,7 +52,8 @@ The following keyboard shortcuts are available for controlling the owner view:
 | <kbd>u</kbd>                 | Unpick a response          |
 | <kbd>0</kbd> or <kbd>o</kbd> | Set mode to "off"          |
 | <kbd>1</kbd> or <kbd>t</kbd> | Set mode to "text"         |
-| <kbd>2</kbd> or <kbd>y</kbd> | Set mode to "yes-no-maybe" |
+| <kbd>2</kbd> or <kbd>n</kbd> | Set mode to "number"       |
+| <kbd>3</kbd> or <kbd>y</kbd> | Set mode to "yes-no-maybe" |
 
 ## Running
 

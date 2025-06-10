@@ -7,7 +7,7 @@ import express from 'express';
 import {Server as SocketServer, type Socket} from 'socket.io';
 
 type StudentResponses = Map<string, string>;
-type Mode = 'off' | 'text' | 'yes-no-maybe';
+type Mode = 'off' | 'text' | 'number' | 'yes-no-maybe';
 export type Room = {
     name: string;
     secret: string;

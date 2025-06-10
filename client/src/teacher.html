@@ -128,6 +128,15 @@
                         <button
                             type="button"
                             class="btn btn-dark"
+                            :class="$store.controls.mode === 'number' ? 'active' : ''"
+                            @click="$store.controls.setMode('number')"
+                        >
+                            <i class="bi-123 me-md-1"></i>
+                            <span class="d-none d-md-inline">number</span>
+                        </button>
+                        <button
+                            type="button"
+                            class="btn btn-dark"
                             :class="$store.controls.mode === 'yes-no-maybe' ? 'active' : ''"
                             @click="$store.controls.setMode('yes-no-maybe')"
                         >
