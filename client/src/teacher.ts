@@ -65,6 +65,9 @@ type ControlsStore = {
 const emojiRegex = makeEmojiRegex();
 
 function getBadgeClass(rc: ResponseCount): string {
+    const rs = Alpine.store('responses') as ResponsesStore;
+    const cs = Alpine.store('controls') as ControlsStore;
+
     let className = 'badge m-1 transition';
     if (rc.response.match(emojiRegex)?.join('') === rc.response) {
         className += ' text-bg-dark';
@@ -91,14 +94,24 @@ function getBadgeClass(rc: ResponseCount): string {
         }
     }
 
-    const mode = (Alpine.store('controls') as ControlsStore).mode;
-    if (mode === 'text') {
+    const opacities = [30, 50, 75, 100];
+    if (cs.mode === 'text') {
         // Deterministically pick opacity by hashing response string
-        const opacities = ['30', '50', '75', '100'];
         const hash = sdbm(rc.response);
-        const opacityIndex = hash % opacities.length;
+        const opacityIndex = Math.abs(hash) % opacities.length;
         const opacityLevel = opacities[opacityIndex];
         className += ` bg-opacity-${opacityLevel}`;
+    } else if (cs.mode === 'number' && rs.counts.length > 1) {
+        // Opacity depends on place in scale
+        const min = Number(rs.counts[0].response);
+        const max = Number((rs.counts.at(-1)!).response);
+        const val = Number(rc.response);
+        if (!Number.isNaN(min) && !Number.isNaN(max) && !Number.isNaN(val) && max !== min) {
+            const percent = (val - min) / (max - min);
+            const opacityIndex = Math.round(percent * (opacities.length - 1));
+            const opacityLevel = opacities[opacityIndex];
+            className += ` bg-opacity-${opacityLevel}`;
+        }
     }
 
     return className;
@@ -185,7 +198,10 @@ socket.on('set mode', (mode: Mode) => {
     (Alpine.store('controls') as ControlsStore).mode = mode;
 });
 
+// Recalculate all counts from full set of responses
 function computeResponseCounts(responses: Array<[string, string]>): ResponseCount[] {
+    const cs = Alpine.store('controls') as ControlsStore;
+
     const responseCounts: ResponseCount[] = [];
     for (const rv of responses.values()) {
         const response = rv[1];
@@ -200,11 +216,29 @@ function computeResponseCounts(responses: Array<[string, string]>): ResponseCoun
         }
 
         if (!found) {
-            responseCounts.push({
+            const newRC = {
                 response,
                 count: 1,
                 key: generateKey(response),
-            });
+            };
+            if (cs.mode === 'number') {
+                // insert in place for numeric mode
+                let inserted = false;
+                for (let i = 0; i < responseCounts.length; i++) {
+                    // eslint-disable-next-line max-depth
+                    if (Number(responseCounts[i].response) > Number(response)) { // Compare as numbers
+                        responseCounts.splice(i, 0, newRC);
+                        inserted = true;
+                        break;
+                    }
+                }
+
+                if (!inserted) {
+                    responseCounts.push(newRC);
+                }
+            } else {
+                responseCounts.push(newRC);
+            }
         }
     }
 
@@ -224,6 +258,7 @@ window.addEventListener('resize', () => {
     rs.counts = computeResponseCounts(responses);
 });
 
+// Update a single response in existing counts
 socket.on('update response', (socketId: string, response: string) => {
     const rs = Alpine.store('responses') as ResponsesStore;
     const cs = Alpine.store('controls') as ControlsStore;
@@ -239,7 +274,7 @@ socket.on('update response', (socketId: string, response: string) => {
         rs.raw.set(socketId, response);
     }
 
-    // Increment/Add
+    // Increment/Add new response
     if (response) {
         let foundNew = false;
         for (const rc of rs.counts) {
@@ -251,15 +286,33 @@ socket.on('update response', (socketId: string, response: string) => {
         }
 
         if (!foundNew) {
-            rs.counts.push({
+            const newRC = {
                 response,
                 count: 1,
                 key: generateKey(response),
-            });
+            };
+            if (cs.mode === 'number') {
+                // insert in place for numeric mode
+                let inserted = false;
+                for (let i = 0; i < rs.counts.length; i++) {
+                    // eslint-disable-next-line max-depth
+                    if (Number(rs.counts[i].response) > Number(response)) { // Compare as numbers
+                        rs.counts.splice(i, 0, newRC);
+                        inserted = true;
+                        break;
+                    }
+                }
+
+                if (!inserted) {
+                    rs.counts.push(newRC);
+                }
+            } else {
+                rs.counts.push(newRC);
+            }
         }
     }
 
-    // Decrement/Remove
+    // Decrement/Remove old response
     if (oldResponse) {
         let removeOld = false;
         for (const rc of rs.counts) {
