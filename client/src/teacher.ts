@@ -3,7 +3,7 @@ import makeEmojiRegex from 'emoji-regex-xs';
 import Cookies from 'js-cookie';
 import {io} from 'socket.io-client';
 import QRCode from 'qrcode';
-import {type ClientResponses, type Mode} from './common.js';
+import {type ClientResponses, type Mode, sdbm} from './common.js';
 
 // Generate QR code for student view URL
 const studentUrl = `${globalThis.location.origin}${globalThis.location.pathname}`;
@@ -89,6 +89,16 @@ function getBadgeClass(rc: ResponseCount): string {
                 className += ' text-bg-secondary';
             }
         }
+    }
+
+    const mode = (Alpine.store('controls') as ControlsStore).mode;
+    if (mode === 'text') {
+        // Deterministically pick opacity by hashing response string
+        const opacities = ['30', '50', '75', '100'];
+        const hash = sdbm(rc.response);
+        const opacityIndex = hash % opacities.length;
+        const opacityLevel = opacities[opacityIndex];
+        className += ` bg-opacity-${opacityLevel}`;
     }
 
     return className;
