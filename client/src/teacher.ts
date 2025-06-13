@@ -160,7 +160,9 @@ const _controlsStore: ControlsStore = {
     isZenMode: false,
     mode: 'off',
     setMode(mode: Mode) {
-        (Alpine.store('responses') as ResponsesStore).clear();
+        const rs = Alpine.store('responses') as ResponsesStore;
+        rs.clear();
+        rs.unpick();
         socket.emit('set mode', mode);
         this.mode = mode;
     },

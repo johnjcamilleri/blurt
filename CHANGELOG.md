@@ -23,6 +23,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
+- Collapse menu buttons more aggressively
+- Unpick on clear
+
 ### Security
 
 ---

@@ -61,7 +61,7 @@
                 >
                     <i class="bi-qr-code-scan"></i>
                 </button>
-                <span class="d-none d-md-block font-monospace text-secondary-emphasis" x-text="$store.controls.studentUrl"></span>
+                <span class="d-none d-lg-block font-monospace text-secondary-emphasis" x-text="$store.controls.studentUrl"></span>
             </div>
             <ul class="navbar-nav ms-auto align-items-center gap-1 gap-sm-3">
                 <li class="navbar-text text-secondary text-nowrap ms-2">
@@ -75,14 +75,15 @@
                             type="button"
                             class="btn btn-dark"
                             @click="$store.responses.show = !$store.responses.show"
+                            :title="$store.responses.show ? 'hide' : 'show'"
                         >
                             <span x-show="$store.responses.show">
-                                <i class="bi-eye-slash me-md-1"></i>
-                                <span class="d-none d-md-inline">hide</span>
+                                <i class="bi-eye-slash me-lg-1"></i>
+                                <span class="d-none d-lg-inline">hide</span>
                             </span>
                             <span x-show="!$store.responses.show">
-                                <i class="bi-eye me-md-1"></i>
-                                <span class="d-none d-md-inline">show</span>
+                                <i class="bi-eye me-lg-1"></i>
+                                <span class="d-none d-lg-inline">show</span>
                             </span>
                         </button>
                         <button
@@ -90,42 +91,47 @@
                             class="btn btn-dark"
                             @click="$store.controls.pauseUpdates()"
                             x-show="!$store.controls.areUpdatesPaused"
+                            title="pause"
                         >
-                            <i class="bi-pause me-md-1"></i>
-                            <span class="d-none d-md-inline">pause</span>
+                            <i class="bi-pause me-lg-1"></i>
+                            <span class="d-none d-lg-inline">pause</span>
                         </button>
                         <button
                             type="button"
                             class="btn btn-dark"
                             @click="$store.controls.resumeUpdates()"
                             x-show="$store.controls.areUpdatesPaused"
+                            title="resume"
                         >
-                            <i class="bi-play me-md-1"></i>
-                            <span class="d-none d-md-inline">resume</span>
+                            <i class="bi-play me-lg-1"></i>
+                            <span class="d-none d-lg-inline">resume</span>
                         </button>
                         <button
                             type="button"
                             class="btn btn-dark"
                             @click="$store.responses.clear()"
+                            title="clear"
                         >
-                            <i class="bi-trash me-md-1"></i>
-                            <span class="d-none d-md-inline">clear</span>
+                            <i class="bi-trash me-lg-1"></i>
+                            <span class="d-none d-lg-inline">clear</span>
                         </button>
                         <button
                             type="button"
                             class="btn btn-dark"
                             @click="$store.responses.pick()"
+                            title="pick"
                         >
-                            <i class="bi-lightbulb me-md-1"></i>
-                            <span class="d-none d-md-inline">pick</span>
+                            <i class="bi-lightbulb me-lg-1"></i>
+                            <span class="d-none d-lg-inline">pick</span>
                         </button>
                         <button
                             type="button"
                             class="btn btn-dark"
                             @click="$store.responses.unpick()"
+                            title="unpick"
                         >
-                            <i class="bi-lightbulb-off me-md-1"></i>
-                            <span class="d-none d-md-inline">unpick</span>
+                            <i class="bi-lightbulb-off me-lg-1"></i>
+                            <span class="d-none d-lg-inline">unpick</span>
                         </button>
                     </div>
                 </li>
@@ -136,36 +142,40 @@
                             class="btn btn-dark"
                             :class="$store.controls.mode === 'off' ? 'active' : ''"
                             @click="$store.controls.setMode('off')"
+                            title="set mode: off"
                         >
-                            <i class="bi-power me-md-1"></i>
-                            <span class="d-none d-md-inline">off</span>
+                            <i class="bi-power me-lg-1"></i>
+                            <span class="d-none d-lg-inline">off</span>
                         </button>
                         <button
                             type="button"
                             class="btn btn-dark"
                             :class="$store.controls.mode === 'text' ? 'active' : ''"
                             @click="$store.controls.setMode('text')"
+                            title="set mode: text"
                         >
-                            <i class="bi-cursor-text me-md-1"></i>
-                            <span class="d-none d-md-inline">text</span>
+                            <i class="bi-cursor-text me-lg-1"></i>
+                            <span class="d-none d-lg-inline">text</span>
                         </button>
                         <button
                             type="button"
                             class="btn btn-dark"
                             :class="$store.controls.mode === 'number' ? 'active' : ''"
                             @click="$store.controls.setMode('number')"
+                            title="set mode: number"
                         >
-                            <i class="bi-123 me-md-1"></i>
-                            <span class="d-none d-md-inline">number</span>
+                            <i class="bi-123 me-lg-1"></i>
+                            <span class="d-none d-lg-inline">number</span>
                         </button>
                         <button
                             type="button"
                             class="btn btn-dark"
                             :class="$store.controls.mode === 'yes-no-maybe' ? 'active' : ''"
                             @click="$store.controls.setMode('yes-no-maybe')"
+                            title="set mode: yes/no/maybe"
                         >
-                            <i class="bi-hand-thumbs-up me-md-1"></i>
-                            <span class="d-none d-md-inline">yes/no</span>
+                            <i class="bi-hand-thumbs-up me-lg-1"></i>
+                            <span class="d-none d-lg-inline">yes/no</span>
                         </button>
                     </div>
                 </li>
