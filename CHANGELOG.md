@@ -9,6 +9,22 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+### Changed
+
+### Deprecated
+
+### Removed
+
+### Fixed
+
+### Security
+
+---
+
+## [1.4.0] - 2025-06-17
+
+### Added
+
 - Play notification sound when picked
 - Add number mode
 
@@ -17,18 +33,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Show icon instead of "waiting"
 - Vary background opacity by hashing response
 
-### Deprecated
-
-### Removed
-
 ### Fixed
 
 - Collapse menu buttons more aggressively
 - Unpick on clear
-
-### Security
-
----
 
 ## [1.3.0] - 2025-05-14
 
