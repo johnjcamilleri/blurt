@@ -20,15 +20,17 @@ See it live at [blurt.lol](https://blurt.lol)
 
 ### Features
 
-- Responses are updated live in owner's view as participants type, sized according to frequency
+- Responses updated live in owner view as participants type, sized according to frequency
 - Minimal, projector-friendly UI (dark background, no borders, content at top)
+- Zen mode (hides controls completely)
 - QR code for participants to scan
 - Show/hide responses
 - Pause/resume live updating
 - Clear all responses
-- Pick a random participant
+- Pick a random participant, optionally with a certain response
 - Modes
-  - free-text (input field)
+  - free text
+  - numeric (responses sorted by value)
   - yes/no/maybe
 
 ### Intentionally missing features
@@ -45,11 +47,12 @@ The following keyboard shortcuts are available for controlling the owner view:
 | Key(s)                       | Action                     |
 |------------------------------|----------------------------|
 | <kbd>q</kbd>                 | Toggle QR code visibility  |
-| <kbd>h</kbd> or <kbd>s</kbd> | Toggle hide/show responses |
-| <kbd>space</kbd>             | Pause or resume updates    |
+| <kbd>h</kbd> or <kbd>s</kbd> | Hide/show responses        |
+| <kbd>z</kbd>                 | Toggle Zen mode            |
+| <kbd>space</kbd>             | Pause/resume updates       |
 | <kbd>c</kbd>                 | Clear all responses        |
-| <kbd>p</kbd>                 | Pick a response            |
-| <kbd>u</kbd>                 | Unpick a response          |
+| <kbd>p</kbd>                 | Pick participant           |
+| <kbd>u</kbd>                 | Unpick all participants    |
 | <kbd>0</kbd> or <kbd>o</kbd> | Set mode to "off"          |
 | <kbd>1</kbd> or <kbd>t</kbd> | Set mode to "text"         |
 | <kbd>2</kbd> or <kbd>n</kbd> | Set mode to "number"       |
@@ -92,11 +95,11 @@ git push origin main
 
 ### Release
 
-- CHANGELOG: move items from unreleased into new release
-- Update version number in `package.json` (then run `npm i` to update `package-lock.json`)
-- Commit to `dev` with commit message "Release x.y.z"
-- Merge to `main`
-- Trigger deployment
+1. CHANGELOG: move items from unreleased into new release
+2. Update version number in `package.json` (then run `npm i` to update `package-lock.json`)
+3. Commit to `dev` with commit message "Release x.y.z"
+4. Merge to `main`
+5. Trigger deployment
 
 ## Contributing
 
