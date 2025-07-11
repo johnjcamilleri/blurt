@@ -45,7 +45,6 @@ type ResponsesStore = {
     unpick: () => void;
     total: number;
     nonEmpty: number;
-    show: boolean;
     getBadgeClass: (rc: ResponseCount) => string;
     getBadgeStyle: (rc: ResponseCount) => string;
     containerStyle: string;
@@ -55,6 +54,8 @@ type ControlsStore = {
     studentUrl: string;
     isQRCodeShown: boolean;
     isZenMode: boolean;
+    areResponsesShown: boolean;
+    areCountsShown: boolean;
     mode: Mode;
     setMode: (mode: Mode) => void;
     areUpdatesPaused: boolean;
@@ -142,7 +143,6 @@ const _responsesStore: ResponsesStore = {
     get nonEmpty(): number {
         return Array.from(this.raw.values()).filter(response => response !== null && response !== '').length;
     },
-    show: true,
     getBadgeClass,
     getBadgeStyle,
     get containerStyle(): string {
@@ -158,6 +158,8 @@ const _controlsStore: ControlsStore = {
     studentUrl,
     isQRCodeShown: false,
     isZenMode: false,
+    areResponsesShown: true,
+    areCountsShown: false,
     mode: 'off',
     setMode(mode: Mode) {
         const rs = Alpine.store('responses') as ResponsesStore;
@@ -349,10 +351,16 @@ document.addEventListener('keydown', event => {
             break;
         }
 
-        // Hide/show
+        // Hide/show responses
         case 'h':
         case 's': {
-            rs.show = !rs.show;
+            cs.areResponsesShown = !cs.areResponsesShown;
+            break;
+        }
+
+        // Hide/show counts
+        case '/': {
+            cs.areCountsShown = !cs.areCountsShown;
             break;
         }
 

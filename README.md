@@ -49,6 +49,7 @@ The following keyboard shortcuts are available for controlling the owner view:
 | <kbd>q</kbd>                 | Toggle QR code visibility  |
 | <kbd>h</kbd> or <kbd>s</kbd> | Hide/show responses        |
 | <kbd>z</kbd>                 | Toggle Zen mode            |
+| <kbd>/</kbd>                 | Toggle response counts     |
 | <kbd>space</kbd>             | Pause/resume updates       |
 | <kbd>c</kbd>                 | Clear all responses        |
 | <kbd>p</kbd>                 | Pick participant           |

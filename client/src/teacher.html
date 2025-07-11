@@ -74,18 +74,33 @@
                         <button
                             type="button"
                             class="btn btn-dark"
-                            @click="$store.responses.show = !$store.responses.show"
-                            :title="$store.responses.show ? 'hide' : 'show'"
+                            @click="$store.controls.areResponsesShown = !$store.controls.areResponsesShown"
+                            :title="$store.controls.areResponsesShown ? 'hide' : 'show'"
                         >
-                            <span x-show="$store.responses.show">
+                            <span x-show="$store.controls.areResponsesShown">
                                 <i class="bi-eye-slash me-lg-1"></i>
                                 <span class="d-none d-lg-inline">hide</span>
                             </span>
-                            <span x-show="!$store.responses.show">
+                            <span x-show="!$store.controls.areResponsesShown">
                                 <i class="bi-eye me-lg-1"></i>
                                 <span class="d-none d-lg-inline">show</span>
                             </span>
                         </button>
+                        <!--button
+                            type="button"
+                            class="btn btn-dark"
+                            @click="$store.controls.areCountsShown = !$store.controls.areCountsShown"
+                            :title="$store.controls.areCountsShown ? 'no counts' : 'counts'"
+                        >
+                            <span>
+                                <i class="bi-percent me-lg-1"></i>
+                                <span
+                                    class="d-none d-lg-inline"
+                                    x-text="$store.controls.areCountsShown ? 'no counts' : 'counts'"
+                                >
+                                </span>
+                            </span>
+                        </button-->
                         <button
                             type="button"
                             class="btn btn-dark"
@@ -195,18 +210,28 @@
     <div
         class="mt-4 d-flex flex-wrap align-items-center align-content-center justify-content-center"
         :style="$store.responses.containerStyle"
-        x-show.important="$store.responses.show"
+        x-show.important="$store.controls.areResponsesShown"
     >
         <template x-for="rc in $store.responses.counts" :key="rc.key">
-            <span
-                x-text="rc.response"
+            <div
                 class="cursor-pointer user-select-none"
                 :class="$store.responses.getBadgeClass(rc)"
                 :style="$store.responses.getBadgeStyle(rc)"
                 :data-count="rc.count"
                 @click="$store.responses.pick(rc.response)"
                 title="Click to pick a participant with this response"
-            ></span>
+            >
+                <div x-text="rc.response"></div>
+                <div
+                    class="opacity-25 mt-1"
+                    style="font-size: initial;"
+                    x-show="$store.controls.areCountsShown"
+                >
+                    <span x-text="rc.count"></span>/<span x-text="$store.responses.nonEmpty"></span>
+                    &middot;
+                    <span x-text="Math.round(100 * rc.count / $store.responses.nonEmpty)"></span>%
+                </div>
+            </div>
         </template>
     </div>
     <script type="module" src="dist/teacher.js"></script>
