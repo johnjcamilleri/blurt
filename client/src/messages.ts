@@ -4,10 +4,10 @@ const message = Cookies.get('message');
 if (message) {
     // Create a Bootstrap alert element
     const alertDiv = document.createElement('div');
-    alertDiv.className = 'alert alert-info position-fixed fade show text-nowrap z-3';
-    alertDiv.style.top = '1em';
+    alertDiv.className = 'alert alert-info position-fixed fade show text-nowrap fs-5 z-1';
+    alertDiv.style.top = '50%';
     alertDiv.style.left = '50%';
-    alertDiv.style.transform = 'translateX(-50%)';
+    alertDiv.style.transform = 'translate(-50%, -50%)';
     alertDiv.role = 'alert';
     alertDiv.innerHTML = message;
 
