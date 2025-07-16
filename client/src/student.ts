@@ -34,10 +34,12 @@ Alpine.effect(() => {
 Alpine.start();
 
 socket.on('clear response', () => {
+    state.picked = false;
     state.response = '';
 });
 
 socket.on('set mode', (mode: Mode) => {
+    state.picked = false;
     state.mode = mode;
 });
 

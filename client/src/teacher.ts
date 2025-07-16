@@ -164,7 +164,6 @@ const _controlsStore: ControlsStore = {
     setMode(mode: Mode) {
         const rs = Alpine.store('responses') as ResponsesStore;
         rs.clear();
-        rs.unpick();
         socket.emit('set mode', mode);
         this.mode = mode;
     },

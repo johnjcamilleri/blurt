@@ -13,14 +13,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
+- Do no autocapitalize text responses
+
 ### Deprecated
 
 ### Removed
 
 ### Fixed
 
-- Do no autocapitalize text responses
 - Improve responsiveness of navbar
+- Automatically unpick on clear/mode change
 
 ### Security
 
