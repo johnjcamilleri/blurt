@@ -147,9 +147,11 @@ const _responsesStore: ResponsesStore = {
     getBadgeStyle,
     get containerStyle(): string {
         const c = document.createElement('span').style;
-        const fontSize = Math.max(80, window.innerHeight * 0.3);
+        const area = window.innerWidth * window.innerHeight;
+        const fontSize = Math.max(24, Math.ceil(area / 2500));
         c.fontSize = `${fontSize}px`;
-        c.height = '70vh';
+        const navHeight = document.querySelector('nav')?.getBoundingClientRect().height;
+        c.height = `calc(100vh - ${navHeight}px - 24px - 24px)`;
         return c.cssText;
     },
 };
