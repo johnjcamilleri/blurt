@@ -73,7 +73,7 @@ npm run start
 
 ```sh
 docker build . --tag blurt:latest
-docker run --rm --publish 3000:3000 blurt:latest
+docker run --rm --publish 3001:3000 blurt:latest
 ```
 
 ## Development

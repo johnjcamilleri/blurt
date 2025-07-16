@@ -49,26 +49,39 @@
     </style>
 </head>
 <body class="container mt-1 bg-black" x-data>
-    <nav class="navbar navbar-expand" x-show="!$store.controls.isZenMode"><!-- never collapse -->
+    <nav class="navbar navbar-expand-sm" x-show="!$store.controls.isZenMode">
         <div class="container-fluid">
-            <div class="d-flex align-items-center gap-3">
-                <button
-                    type="button"
-                    @click="$store.controls.isQRCodeShown = true"
-                    class="btn btn-dark"
-                    title="show QR code"
-                    style="font-size: x-large;"
-                >
-                    <i class="bi-qr-code-scan"></i>
-                </button>
-                <span class="d-none d-lg-block font-monospace text-secondary-emphasis" x-text="$store.controls.studentUrl"></span>
-            </div>
-            <ul class="navbar-nav ms-auto align-items-center gap-1 gap-sm-3">
-                <li class="navbar-text text-secondary text-nowrap ms-2">
+            <ul class="navbar-nav mx-auto align-items-center gap-1 gap-sm-3">
+                <!-- QR code button -->
+                <li class="nav-item">
+                    <button
+                        type="button"
+                        @click="$store.controls.isQRCodeShown = true"
+                        class="btn btn-dark"
+                        title="show QR code"
+                        style="font-size: x-large;"
+                    >
+                        <i class="bi-qr-code-scan"></i>
+                    </button>
+                </li>
+
+                <!-- URL -->
+                <li class="nav-item d-none d-lg-block">
+                    <span
+                        class="font-monospace text-secondary-emphasis"
+                        style="overflow-wrap: anywhere;"
+                        x-text="$store.controls.studentUrl"
+                    ></span>
+                </li>
+
+                <!-- Response counts -->
+                <li class="navbar-text text-secondary text-nowrap">
                     <span x-text="$store.responses.nonEmpty" aria-label="non-empty response count"></span>
                     /
                     <span x-text="$store.responses.total" aria-label="total response count"></span>
                 </li>
+
+                <!-- Response display controls -->
                 <li class="nav-item">
                     <div class="btn-group" aria-label="response display controls">
                         <button
@@ -78,29 +91,31 @@
                             :title="$store.controls.areResponsesShown ? 'hide' : 'show'"
                         >
                             <span x-show="$store.controls.areResponsesShown">
-                                <i class="bi-eye-slash me-lg-1"></i>
-                                <span class="d-none d-lg-inline">hide</span>
+                                <i class="bi-eye-slash me-xxl-1"></i>
+                                <span class="d-none d-xxl-inline">hide</span>
                             </span>
                             <span x-show="!$store.controls.areResponsesShown">
-                                <i class="bi-eye me-lg-1"></i>
-                                <span class="d-none d-lg-inline">show</span>
+                                <i class="bi-eye me-xxl-1"></i>
+                                <span class="d-none d-xxl-inline">show</span>
                             </span>
                         </button>
-                        <!--button
+                        <button
                             type="button"
                             class="btn btn-dark"
                             @click="$store.controls.areCountsShown = !$store.controls.areCountsShown"
                             :title="$store.controls.areCountsShown ? 'no counts' : 'counts'"
                         >
                             <span>
-                                <i class="bi-percent me-lg-1"></i>
-                                <span
-                                    class="d-none d-lg-inline"
-                                    x-text="$store.controls.areCountsShown ? 'no counts' : 'counts'"
-                                >
+                                <span x-show="$store.controls.areCountsShown">
+                                    <i class="bi-slash-lg me-xxl-1"></i>
+                                    <span class="d-none d-xxl-inline">no counts</span>
+                                </span>
+                                <span x-show="!$store.controls.areCountsShown">
+                                    <i class="bi-percent me-xxl-1"></i>
+                                    <span class="d-none d-xxl-inline">counts</span>
                                 </span>
                             </span>
-                        </button-->
+                        </button>
                         <button
                             type="button"
                             class="btn btn-dark"
@@ -108,8 +123,8 @@
                             x-show="!$store.controls.areUpdatesPaused"
                             title="pause"
                         >
-                            <i class="bi-pause me-lg-1"></i>
-                            <span class="d-none d-lg-inline">pause</span>
+                            <i class="bi-pause me-xxl-1"></i>
+                            <span class="d-none d-xxl-inline">pause</span>
                         </button>
                         <button
                             type="button"
@@ -118,8 +133,8 @@
                             x-show="$store.controls.areUpdatesPaused"
                             title="resume"
                         >
-                            <i class="bi-play me-lg-1"></i>
-                            <span class="d-none d-lg-inline">resume</span>
+                            <i class="bi-play me-xxl-1"></i>
+                            <span class="d-none d-xxl-inline">resume</span>
                         </button>
                         <button
                             type="button"
@@ -127,8 +142,8 @@
                             @click="$store.responses.clear()"
                             title="clear"
                         >
-                            <i class="bi-trash me-lg-1"></i>
-                            <span class="d-none d-lg-inline">clear</span>
+                            <i class="bi-trash me-xxl-1"></i>
+                            <span class="d-none d-xxl-inline">clear</span>
                         </button>
                         <button
                             type="button"
@@ -136,20 +151,22 @@
                             @click="$store.responses.pick()"
                             title="pick"
                         >
-                            <i class="bi-lightbulb me-lg-1"></i>
-                            <span class="d-none d-lg-inline">pick</span>
+                            <i class="bi-lightbulb me-xxl-1"></i>
+                            <span class="d-none d-xxl-inline">pick</span>
                         </button>
-                        <button
+                        <!--button
                             type="button"
                             class="btn btn-dark"
                             @click="$store.responses.unpick()"
                             title="unpick"
                         >
-                            <i class="bi-lightbulb-off me-lg-1"></i>
-                            <span class="d-none d-lg-inline">unpick</span>
-                        </button>
+                            <i class="bi-lightbulb-off me-xxl-1"></i>
+                            <span class="d-none d-xxl-inline">unpick</span>
+                        </button-->
                     </div>
                 </li>
+
+                <!-- Response mode controls -->
                 <li class="nav-item">
                     <div class="btn-group" aria-label="response mode controls">
                         <button
@@ -159,8 +176,8 @@
                             @click="$store.controls.setMode('off')"
                             title="set mode: off"
                         >
-                            <i class="bi-power me-lg-1"></i>
-                            <span class="d-none d-lg-inline">off</span>
+                            <i class="bi-power me-xl-1"></i>
+                            <span class="d-none d-xl-inline">off</span>
                         </button>
                         <button
                             type="button"
@@ -169,8 +186,8 @@
                             @click="$store.controls.setMode('text')"
                             title="set mode: text"
                         >
-                            <i class="bi-cursor-text me-lg-1"></i>
-                            <span class="d-none d-lg-inline">text</span>
+                            <i class="bi-cursor-text me-xl-1"></i>
+                            <span class="d-none d-xl-inline">text</span>
                         </button>
                         <button
                             type="button"
@@ -179,8 +196,8 @@
                             @click="$store.controls.setMode('number')"
                             title="set mode: number"
                         >
-                            <i class="bi-123 me-lg-1"></i>
-                            <span class="d-none d-lg-inline">number</span>
+                            <i class="bi-123 me-xl-1"></i>
+                            <span class="d-none d-xl-inline">number</span>
                         </button>
                         <button
                             type="button"
@@ -189,8 +206,8 @@
                             @click="$store.controls.setMode('yes-no-maybe')"
                             title="set mode: yes/no/maybe"
                         >
-                            <i class="bi-hand-thumbs-up me-lg-1"></i>
-                            <span class="d-none d-lg-inline">yes/no</span>
+                            <i class="bi-hand-thumbs-up me-xl-1"></i>
+                            <span class="d-none d-xl-inline">yes/no</span>
                         </button>
                     </div>
                 </li>
@@ -204,7 +221,7 @@
         aria-label="QR code (big)"
         title="click to close"
     >
-        <p x-text="$store.controls.studentUrl" class="fs-1" style="overflow-wrap: anywhere;"></p>
+        <p x-text="$store.controls.studentUrl" class="fs-1 px-3" style="overflow-wrap: anywhere;"></p>
         <canvas id="qrcodeBig"></canvas>
     </div>
     <div
