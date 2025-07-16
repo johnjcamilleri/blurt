@@ -95,15 +95,16 @@ function getBadgeClass(rc: ResponseCount): string {
         }
     }
 
-    const opacities = [30, 50, 75, 100];
     if (cs.mode === 'text') {
         // Deterministically pick opacity by hashing response string
+        const opacities = [30, 50, 75, 100];
         const hash = sdbm(rc.response);
         const opacityIndex = Math.abs(hash) % opacities.length;
         const opacityLevel = opacities[opacityIndex];
         className += ` bg-opacity-${opacityLevel}`;
     } else if (cs.mode === 'number' && rs.counts.length > 1) {
-        // Opacity depends on place in scale
+        // Scale opacity based on value rank
+        const opacities = [20, 30, 40, 50, 60, 70, 80, 90, 100];
         const min = Number(rs.counts[0].response);
         const max = Number((rs.counts.at(-1)!).response);
         const val = Number(rc.response);

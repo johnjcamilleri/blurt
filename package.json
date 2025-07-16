@@ -9,7 +9,8 @@
     "dev": "tsx watch src/server.ts",
     "build:client": "esbuild client/src/*.ts --bundle --outdir=client/public/dist --format=esm --minify",
     "dev:client": "esbuild client/src/*.ts --bundle --outdir=client/public/dist --format=esm --sourcemap --watch",
-    "sim": "tsx tests/simulate-clients.ts",
+    "sim": "tsx tests/simulate-clients.ts text",
+    "sim:number": "tsx tests/simulate-clients.ts number",
     "test": "NODE_ENV=test tsx --test tests/*.test.ts"
   },
   "dependencies": {
