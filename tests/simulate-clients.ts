@@ -2,12 +2,13 @@
 import axios from 'axios';
 import {io, type Socket} from 'socket.io-client';
 
-const MODE = process.argv[2] || 'text';
+// Usage: npm run sim [MODE] [NUM_CLIENTS] [NUM_RESPONSES]
 
 const SERVER_URL = 'http://localhost:3000';
 const ROOM_NAME = 'testroom';
-const NUM_CLIENTS = 20;
-const NUM_RESPONSES = 10;
+const MODE = process.argv[2] || 'text';
+const NUM_CLIENTS = Number(process.argv[3]) || 20;
+const NUM_RESPONSES = Number(process.argv[4]) || 10;
 const INTERVAL_MS = 2000; // delay between loop iterations
 const SEND_DELAY_MS = 1000; // delay sending by up to
 const NUM_MIN = -10;
