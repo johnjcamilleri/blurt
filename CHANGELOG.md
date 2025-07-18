@@ -24,6 +24,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Improve responsiveness of navbar
 - Automatically unpick on clear/mode change
 - Avoid messages overlapping QR code/URL
+- Recompute badge sizes on window resize
 
 ### Security
 

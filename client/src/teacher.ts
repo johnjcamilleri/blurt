@@ -3,7 +3,7 @@ import makeEmojiRegex from 'emoji-regex-xs';
 import Cookies from 'js-cookie';
 import {io} from 'socket.io-client';
 import QRCode from 'qrcode';
-import {type ClientResponses, type Mode, sdbm} from './common.js';
+import {type ClientResponses, type Mode, sdbm, debounce} from './common.js';
 
 // Generate QR code for student view URL
 const studentUrl = `${globalThis.location.origin}${globalThis.location.pathname}`;
@@ -24,7 +24,7 @@ function generateQRCode() {
 generateQRCode();
 
 // Adjust QR code on window resize
-window.addEventListener('resize', generateQRCode);
+window.addEventListener('resize', debounce(generateQRCode, 200));
 
 type ResponseCount = {
     response: string;
@@ -48,6 +48,7 @@ type ResponsesStore = {
     getBadgeClass: (rc: ResponseCount) => string;
     getBadgeStyle: (rc: ResponseCount) => string;
     containerStyle: string;
+    refreshKey: number; // dummy prop to trigger reactivity manually
 };
 
 type ControlsStore = {
@@ -147,14 +148,16 @@ const _responsesStore: ResponsesStore = {
     getBadgeClass,
     getBadgeStyle,
     get containerStyle(): string {
+        void this.refreshKey;
         const c = document.createElement('span').style;
         const area = window.innerWidth * window.innerHeight;
-        const fontSize = Math.max(24, Math.ceil(area / 2500));
+        const fontSize = Math.max(Math.ceil(area / 3500), 24); // 24px min font size
         c.fontSize = `${fontSize}px`;
         const navHeight = document.querySelector('nav')?.getBoundingClientRect().height;
         c.height = `calc(100vh - ${navHeight}px - 24px - 24px)`;
         return c.cssText;
     },
+    refreshKey: 0,
 };
 
 const _controlsStore: ControlsStore = {
@@ -258,11 +261,10 @@ socket.on('all responses', (responses: Array<[string, string]>) => {
 });
 
 // Redraw on window resize
-window.addEventListener('resize', () => {
+window.addEventListener('resize', debounce(() => {
     const rs = Alpine.store('responses') as ResponsesStore;
-    const responses = Array.from(rs.raw.entries());
-    rs.counts = computeResponseCounts(responses);
-});
+    rs.refreshKey++;
+}, 200));
 
 // Update a single response in existing counts
 socket.on('update response', (socketId: string, response: string) => {
