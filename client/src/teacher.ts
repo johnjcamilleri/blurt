@@ -3,7 +3,9 @@ import makeEmojiRegex from 'emoji-regex-xs';
 import Cookies from 'js-cookie';
 import {io} from 'socket.io-client';
 import QRCode from 'qrcode';
-import {type ClientResponses, type Mode, sdbm, debounce} from './common.js';
+import {
+    type ClientResponses, type Mode, sdbm, debounce,
+} from './common.js';
 
 // Generate QR code for student view URL
 const studentUrl = `${globalThis.location.origin}${globalThis.location.pathname}`;
@@ -338,9 +340,14 @@ socket.on('update response', (socketId: string, response: string) => {
 });
 
 // Add global keyboard shortcuts
+// eslint-disable-next-line complexity
 document.addEventListener('keydown', event => {
     const cs = Alpine.store('controls') as ControlsStore;
     const rs = Alpine.store('responses') as ResponsesStore;
+
+    if (event.altKey || event.ctrlKey || event.metaKey || event.shiftKey) {
+        return;
+    }
 
     switch (event.key) {
         // Toggle QR code visibility
