@@ -232,7 +232,6 @@
     <div
         class="mt-4 d-flex flex-wrap align-items-center align-content-center justify-content-center"
         :style="$store.responses.containerStyle"
-        x-show.important="$store.controls.areResponsesShown"
     >
         <template x-for="rc in $store.responses.counts" :key="rc.key">
             <div
@@ -243,7 +242,7 @@
                 @click="$store.responses.pick(rc.response)"
                 title="Click to pick a participant with this response"
             >
-                <div x-text="rc.response"></div>
+                <div x-text="$store.controls.areResponsesShown ? rc.response : '⋯'"></div>
                 <div
                     class="opacity-25 mt-1"
                     style="font-size: initial;"
