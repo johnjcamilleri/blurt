@@ -72,39 +72,43 @@ function getBadgeClass(rc: ResponseCount): string {
     const rs = Alpine.store('responses') as ResponsesStore;
     const cs = Alpine.store('controls') as ControlsStore;
 
-    let className = 'badge m-1 transition';
-    if (rc.response.match(emojiRegex)?.join('') === rc.response) {
-        className += ' text-bg-dark';
-    } else {
-        switch (rc.response) {
-            case 'yes': {
-                className += ' text-bg-success';
-                break;
-            }
+    const className = 'badge m-1 transition';
+    let bgClassName = 'text-bg-secondary';
+    if (cs.areResponsesShown) {
+        // Choose background colour
+        if (cs.mode === 'yes-no-maybe') {
+            switch (rc.response) {
+                case 'yes': {
+                    bgClassName = 'text-bg-success';
+                    break;
+                }
 
-            case 'maybe': {
-                className += ' text-bg-warning';
-                break;
-            }
+                case 'maybe': {
+                    bgClassName = 'text-bg-warning';
+                    break;
+                }
 
-            case 'no': {
-                className += ' text-bg-danger';
-                break;
-            }
+                case 'no': {
+                    bgClassName = 'text-bg-danger';
+                    break;
+                }
 
-            default: {
-                className += ' text-bg-secondary';
+                default:
             }
+        } else if (rc.response.match(emojiRegex)?.join('') === rc.response) {
+            bgClassName = 'text-bg-dark';
         }
     }
 
+    // Vary opacity
+    let bgOpacity = '';
     if (cs.mode === 'text') {
         // Deterministically pick opacity by hashing response string
         const opacities = [30, 50, 75, 100];
         const hash = sdbm(rc.response);
         const opacityIndex = Math.abs(hash) % opacities.length;
         const opacityLevel = opacities[opacityIndex];
-        className += ` bg-opacity-${opacityLevel}`;
+        bgOpacity = `bg-opacity-${opacityLevel}`;
     } else if (cs.mode === 'number' && rs.counts.length > 1) {
         // Scale opacity based on value rank
         const opacities = [20, 30, 40, 50, 60, 70, 80, 90, 100];
@@ -115,11 +119,11 @@ function getBadgeClass(rc: ResponseCount): string {
             const percent = (val - min) / (max - min);
             const opacityIndex = Math.round(percent * (opacities.length - 1));
             const opacityLevel = opacities[opacityIndex];
-            className += ` bg-opacity-${opacityLevel}`;
+            bgOpacity = ` bg-opacity-${opacityLevel}`;
         }
     }
 
-    return className;
+    return `${className} ${bgClassName} ${bgOpacity}`;
 }
 
 function getBadgeStyle(rc: ResponseCount): string {
