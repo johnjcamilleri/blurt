@@ -9,12 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
-- Optionally show response counts & percentages
-
 ### Changed
-
-- Do no autocapitalize text responses
-- Hiding responses still shows boxes, with ellipsis
 
 ### Deprecated
 
@@ -22,14 +17,27 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
+### Security
+
+---
+
+## [1.4.1] - 2025-08-30
+
+### Added
+
+- Optionally show response counts & percentages
+
+### Changed
+
+- Do no autocapitalize text responses
+- Hiding responses still shows boxes, with ellipsis
+
+### Fixed
+
 - Improve responsiveness of navbar
 - Automatically unpick on clear/mode change
 - Avoid messages overlapping QR code/URL
 - Recompute badge sizes on window resize
-
-### Security
-
----
 
 ## [1.4.0] - 2025-06-17
 
