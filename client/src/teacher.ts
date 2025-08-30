@@ -128,7 +128,7 @@ function getBadgeClass(rc: ResponseCount): string {
 
 function getBadgeStyle(rc: ResponseCount): string {
     const c = document.createElement('span').style;
-    c.fontSize = `${Math.max(0.1, (rc.count / this.total))}em`;
+    c.fontSize = `${Math.max(0.1, (rc.count / this.total))}em`; // min font size
     return c.cssText;
 }
 
