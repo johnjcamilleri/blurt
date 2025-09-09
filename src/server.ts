@@ -112,10 +112,17 @@ app.get('/:room', (req, res) => {
             res.sendFile('student.html', {root: './client/src'});
         }
     } else {
-        // Room doesn't exist, fail
-        console.log(`[${roomName}] room does not exist`);
-        res.cookie('message', `Room '${roomName}' does not exist`);
-        res.redirect('/');
+        // Room doesn't exist, fail nicely for navigation requests
+        const isNavigation = req.headers['sec-fetch-mode'] === 'navigate';
+        if (isNavigation) {
+            console.log(`[${roomName}] room does not exist`);
+            res.cookie('message', `Room '${roomName}' does not exist`);
+            res.redirect('/');
+            return;
+        }
+
+        // Fail crudely otherwise
+        res.sendStatus(404);
     }
 });
 
