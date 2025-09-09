@@ -110,7 +110,7 @@ socketServer.on('connection', (socket: Socket) => {
     const roomSecret = socket.handshake.query.roomSecret; // only present for teacher
 
     if (typeof roomName !== 'string') {
-        console.log(`${socket.id} invalid room name`);
+        console.log(`[] ${socket.id} invalid room name`);
         socket.disconnect();
         return;
     }
@@ -118,7 +118,7 @@ socketServer.on('connection', (socket: Socket) => {
     const room = rooms.get(roomName);
 
     if (!room) {
-        console.log(`${socket.id} room does not exist: ${roomName}`);
+        console.log(`[${roomName}] ${socket.id} room does not exist`);
         socket.disconnect();
         return;
     }
@@ -242,7 +242,7 @@ socketServer.on('connection', (socket: Socket) => {
         }
 
         if (pickCandidates.length === 0) {
-            console.log(`[${roomName}] no students to pick`);
+            console.log(`[${roomName}] ${socket.id} no students to pick`);
             return;
         }
 
@@ -250,7 +250,7 @@ socketServer.on('connection', (socket: Socket) => {
         const pickedStudent = pickCandidates[Math.floor(Math.random() * pickCandidates.length)];
         const studentSocket = socketServer.sockets.sockets.get(pickedStudent);
         if (studentSocket) {
-            console.log(`[${roomName}] picked: ${pickedStudent}`);
+            console.log(`[${roomName}] ${socket.id} picked: ${pickedStudent}`);
             room.recentlyPickedStudents.push(pickedStudent);
             studentSocket.emit('picked');
         }
