@@ -9,11 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
-- Add privacy policy
-
 ### Changed
-
-- Make server log messages consistent
 
 ### Deprecated
 
@@ -24,6 +20,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Security
 
 ---
+
+## [1.4.2] - 2025-09-09
+
+### Added
+
+- Add privacy policy
+
+### Changed
+
+- Make server log messages consistent
 
 ## [1.4.1] - 2025-08-30
 
