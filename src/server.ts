@@ -49,7 +49,7 @@ const FRUITS = [
     'apricot', 'blackberry', 'blueberry', 'feijoa', 'lime', 'peach', 'plum',
 ];
 
-app.get('/new', (req, res) => {
+app.get('/create', (req, res) => {
     let newName = '';
     let attempts = 0;
     while (attempts < 10 && !newName) {
@@ -64,35 +64,28 @@ app.get('/new', (req, res) => {
     if (!newName) {
         newName = Math.random().toString(36).slice(2, 7);
         if (rooms.has(newName)) {
-            res.status(404).send('Gave up generating room name');
+            res.status(409).send('Gave up generating room name');
             return;
         }
     }
 
-    res.redirect(`/${newName}`);
+    res.redirect(`/create/${newName}`);
 });
-app.get('/join/:room', (req, res) => {
+
+app.get('/create/:room', (req, res) => {
     const roomName = req.params.room;
     if (rooms.has(roomName)) {
-        res.redirect(`/${roomName}`);
-    } else {
-        res.cookie('message', `Room '${roomName}' not found`);
-        res.redirect('/');
-    }
-});
-app.get('/:room', (req, res) => {
-    const roomName = req.params.room;
-    if (rooms.has(roomName)) {
-        // Room exists
+        // Room exists, check if owner
         const room = rooms.get(roomName);
         const sentSecret = req.cookies[roomName] as string;
         if (sentSecret && room?.secret === sentSecret) {
-            // If sending secret which matches, re-join as teacher
-            res.sendFile('teacher.html', {root: './client/src'});
+            // If sending secret which matches, join as teacher
+            res.redirect(`/${roomName}`);
         } else {
-            // Otherwise join as student
+            // Otherwise fail
             res.clearCookie(roomName); // in case cookie is stale
-            res.sendFile('student.html', {root: './client/src'});
+            res.cookie('message', `Room '${roomName}' already exists`);
+            res.redirect('/');
         }
     } else {
         // Room doesn't exist, create as teacher
@@ -100,7 +93,29 @@ app.get('/:room', (req, res) => {
         const room = createRoom(roomName);
         res.cookie(roomName, room.secret);
         res.cookie('message', `Room '${roomName}' created`);
-        res.status(201).sendFile('teacher.html', {root: './client/src'});
+        res.redirect(`/${roomName}`);
+    }
+});
+
+app.get('/:room', (req, res) => {
+    const roomName = req.params.room;
+    if (rooms.has(roomName)) {
+        // Room exists
+        const room = rooms.get(roomName);
+        const sentSecret = req.cookies[roomName] as string;
+        if (sentSecret && room?.secret === sentSecret) {
+            // If sending secret which matches, join as teacher
+            res.sendFile('teacher.html', {root: './client/src'});
+        } else {
+            // Otherwise join as student
+            res.clearCookie(roomName); // in case cookie is stale
+            res.sendFile('student.html', {root: './client/src'});
+        }
+    } else {
+        // Room doesn't exist, fail
+        console.log(`[${roomName}] room does not exist`);
+        res.cookie('message', `Room '${roomName}' does not exist`);
+        res.redirect('/');
     }
 });
 

@@ -8,18 +8,22 @@ See it live at [blurt.lol](https://blurt.lol)
 
 ### Usage
 
-- Visiting `/` will show two options:
-  - Create room and make you the owner (server chooses new room name)
-  - Join room as participant (server checks if room exists)
-- Visiting `/room` will:
-  - Create `room` if it doesn't exist and make you the owner
-  - Join `room` as a participant if it exists
-- Owner client saves room secret as cookie
 - A room has exactly one owner, zero or more participants
+- Room ownership is saved as a random secret in a cookie
 - A room is destroyed if it has no participants or owner
+
+- Visiting `/` shows two options:
+  - Create a room with a specified name (or let the server choose one) and make you the owner
+  - Join a named room as participant (if it exists)
+- Visiting `/create` creates a room with a randomly chosen name and makes you the owner
+- Visiting `/create/:room` creates `room` (if it doesn't exist) and makes you the owner
+- Visiting `/:room` checks if `room` exists and joins it:
+  - as the owner if you have the room secret
+  - as a participant otherwise
 
 ### Features
 
+- Instantly create rooms with zero setup
 - Responses updated live in owner view as participants type, sized according to frequency
 - Minimal, projector-friendly UI (dark background, no borders, content at top)
 - Zen mode (hides controls completely)

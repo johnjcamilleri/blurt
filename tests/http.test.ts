@@ -43,48 +43,57 @@ describe('HTTP tests', () => {
     it('responds to GET /', async () => {
         const res = await axios.get(`${serverUrl}/`);
         assert.strictEqual(res.status, 200);
-        assert.match(res.data as string, /Create room/);
+        assert.match(res.data as string, /a minimal audience response tool/);
     });
 
-    it('creates a new room GET /new', async () => {
-        const res = await axios.get(`${serverUrl}/new`, {maxRedirects: 0})
+    it('creates an unnamed room GET /create', async () => {
+        const res = await axios.get(`${serverUrl}/create`, {maxRedirects: 0})
             .catch((error: unknown) => (error as AxiosError).response as AxiosResponse);
         assert.strictEqual(res.status, 302);
         assert(res.headers.location, 'Expected a redirect location header');
         const redirectUrl = res.headers.location as string;
         assert.notStrictEqual(redirectUrl, `/${room.name}`);
-        assert.match(redirectUrl, /\/[a-z\d]{3,}/);
+        assert.match(redirectUrl, /\/create\/[a-z\d]{3,}/);
     });
 
-    it('joins an existing room GET /join', async () => {
-        const res = await axios.get(`${serverUrl}/join/${room.name}`, {maxRedirects: 0})
-            .catch((error: unknown) => (error as AxiosError).response as AxiosResponse);
-        assert.strictEqual(res.status, 302);
-        assert(res.headers.location, 'Expected a redirect location header');
-        const redirectUrl = res.headers.location as string;
-        assert.strictEqual(redirectUrl, `/${room.name}`);
-    });
-
-    it('doesn\'t join a non-existant room GET /join', async () => {
-        const res = await axios.get(`${serverUrl}/join/junkyroom`, {maxRedirects: 0})
-            .catch((error: unknown) => (error as AxiosError).response as AxiosResponse);
-        assert.strictEqual(res.status, 302);
-        assert(res.headers.location, 'Expected a redirect location header');
-        const redirectUrl = res.headers.location as string;
-        assert.strictEqual(redirectUrl, '/');
-    });
-
-    it('creates a room as teacher GET /:room', async () => {
+    it('creates a named room GET /create/:room', async () => {
         const newRoomName = 'newroom';
-        const res = await axios.get(`${serverUrl}/${newRoomName}`);
-        assert.strictEqual(res.status, 201);
-        assert.match(res.data as string, /dist\/teacher\.js/);
+        const res = await axios.get(`${serverUrl}/create/${newRoomName}`, {maxRedirects: 0})
+            .catch((error: unknown) => (error as AxiosError).response as AxiosResponse);
+        assert.strictEqual(res.status, 302);
+        assert(res.headers.location, 'Expected a redirect location header');
+        const redirectUrl = res.headers.location as string;
+        assert.strictEqual(redirectUrl, `/${newRoomName}`);
 
         const cookies = res.headers['set-cookie'];
         assert(cookies && cookies.length > 0, 'Expected cookies to be set');
         const cookiesObj = cookie.parse(cookies[0]);
         const roomSecret = cookiesObj[newRoomName]!;
         assert(roomSecret, 'Expected room name and secret in cookies');
+    });
+
+    it('joins an existing room if owned GET /create/:room', async () => {
+        const res = await axios.get(`${serverUrl}/create/${room.name}`, {
+            headers: {
+                cookie: cookie.serialize(room.name, room.secret),
+            },
+            maxRedirects: 0,
+        })
+            .catch((error: unknown) => (error as AxiosError).response as AxiosResponse);
+
+        assert.strictEqual(res.status, 302);
+        assert(res.headers.location, 'Expected a redirect location header');
+        const redirectUrl = res.headers.location as string;
+        assert.strictEqual(redirectUrl, `/${room.name}`);
+    });
+
+    it('doesn\'t create an existing room if not owned GET /create/:room', async () => {
+        const res = await axios.get(`${serverUrl}/create/${room.name}`, {maxRedirects: 0})
+            .catch((error: unknown) => (error as AxiosError).response as AxiosResponse);
+        assert.strictEqual(res.status, 302);
+        assert(res.headers.location, 'Expected a redirect location header');
+        const redirectUrl = res.headers.location as string;
+        assert.strictEqual(redirectUrl, '/');
     });
 
     it('joins an existing room as teacher GET /:room', async () => {
@@ -101,5 +110,24 @@ describe('HTTP tests', () => {
         const res = await axios.get(`${serverUrl}/${room.name}`);
         assert.strictEqual(res.status, 200);
         assert.match(res.data as string, /dist\/student\.js/);
+    });
+
+    it('joins an existing room as student with wrong secret GET /:room', async () => {
+        const res = await axios.get(`${serverUrl}/${room.name}`, {
+            headers: {
+                cookie: cookie.serialize(room.name, 'junkysecret'),
+            },
+        });
+        assert.strictEqual(res.status, 200);
+        assert.match(res.data as string, /dist\/student\.js/);
+    });
+
+    it('doesn\'t join a non-existant room GET /:room', async () => {
+        const res = await axios.get(`${serverUrl}/junkyroom`, {maxRedirects: 0})
+            .catch((error: unknown) => (error as AxiosError).response as AxiosResponse);
+        assert.strictEqual(res.status, 302);
+        assert(res.headers.location, 'Expected a redirect location header');
+        const redirectUrl = res.headers.location as string;
+        assert.strictEqual(redirectUrl, '/');
     });
 });

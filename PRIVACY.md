@@ -3,7 +3,7 @@
 ## Cookies
 
 - When creating a room as an owner, a cookie is used to give you exclusive ownership.
-  It contains the room name and a random key, like this:
+  It contains the room name and a random secret, like this:
 
   ```plain
   Set-Cookie raspberry=jycx2ecka6k; Path=/

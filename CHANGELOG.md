@@ -11,6 +11,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
+- Rooms are now only created via the `/create` paths; `/:room` will only join existing rooms
+
 ### Deprecated
 
 ### Removed
