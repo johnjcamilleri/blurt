@@ -14,7 +14,7 @@ See it live at [blurt.lol](https://blurt.lol)
     - <kbd>t</kbd> for text
     - <kbd>n</kbd> for number
     - <kbd>y</kbd> for yes/no/maybe
-6. Optinonally pick a respondant with <kbd>p</kbd> or by clicking a response.
+6. Optionally pick a random respondent with <kbd>p</kbd> or by clicking a response.
 7. Clear responses (<kbd>c</kbd>) or change mode back to off (<kbd>0</kbd>), then repeat.
 
 See below for more [features](#features) and [keyboard shortcuts](#keyboard-shortcuts).
