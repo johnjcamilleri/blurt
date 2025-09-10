@@ -4,22 +4,36 @@ _A minimal audience response tool — just blurt out your answer!_
 
 See it live at [blurt.lol](https://blurt.lol)
 
+## Quick start
+
+1. Go to <https://blurt.lol>
+2. Enter a room name of your choice, or leave blank, and click "create".
+3. Show QR code (<kbd>q</kbd>) to get participants to join.
+4. Mode is initially off (<kbd>0</kbd>), i.e. participants can't respond.
+5. Ask a question out loud, then choose a mode to allow responses:
+    - <kbd>t</kbd> for text
+    - <kbd>n</kbd> for number
+    - <kbd>y</kbd> for yes/no/maybe
+6. Optinonally pick a respondant with <kbd>p</kbd> or by clicking a response.
+7. Clear responses (<kbd>c</kbd>) or change mode back to off (<kbd>0</kbd>), then repeat.
+
+See below for more [features](#features) and [keyboard shortcuts](#keyboard-shortcuts).
+
 ## About
 
-### Usage
+### Creating rooms
 
-- A room has exactly one owner, zero or more participants
-- Room ownership is saved as a random secret in a cookie
-- A room is destroyed if it has no participants or owner
-
+- A room has exactly one **owner**, and zero or more **participants**.
+- Room ownership is saved as a random secret in a cookie.
+- A room is destroyed if it has no participants or owner.
 - Visiting `/` shows two options:
-  - Create a room with a specified name (or let the server choose one) and make you the owner
-  - Join a named room as participant (if it exists)
-- Visiting `/create` creates a room with a randomly chosen name and makes you the owner
-- Visiting `/create/:room` creates `room` (if it doesn't exist) and makes you the owner
+  - Create a room with a specified name (or let the server choose one) and make you the owner.
+  - Join a named room as participant (if it exists).
+- Visiting `/create` creates a room with a randomly chosen name and makes you the owner.
+- Visiting `/create/:room` creates `room` (if it doesn't exist) and makes you the owner.
 - Visiting `/:room` checks if `room` exists and joins it:
-  - as the owner if you have the room secret
-  - as a participant otherwise
+  - as the owner if you have the room secret.
+  - as a participant otherwise.
 
 ### Features
 
@@ -44,7 +58,7 @@ See it live at [blurt.lol](https://blurt.lol)
 - History or statistics
 - Childish graphics or annoying animations
 
-#### Keyboard shortcuts
+### Keyboard shortcuts
 
 The following keyboard shortcuts are available for controlling the owner view:
 
@@ -63,7 +77,7 @@ The following keyboard shortcuts are available for controlling the owner view:
 | <kbd>2</kbd> or <kbd>n</kbd> | Set mode to "number"       |
 | <kbd>3</kbd> or <kbd>y</kbd> | Set mode to "yes-no-maybe" |
 
-## Running
+## Development
 
 ### Build & run locally
 
@@ -79,8 +93,6 @@ npm run start
 docker build . --tag blurt:latest
 docker run --rm --publish 3001:3000 blurt:latest
 ```
-
-## Development
 
 ### Run in dev mode
 
