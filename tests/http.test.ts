@@ -122,12 +122,23 @@ describe('HTTP tests', () => {
         assert.match(res.data as string, /dist\/student\.js/);
     });
 
-    it('doesn\'t join a non-existant room GET /:room', async () => {
-        const res = await axios.get(`${serverUrl}/junkyroom`, {maxRedirects: 0})
+    it('does not join a non-existant room (redirect) GET /:room', async () => {
+        const res = await axios.get(`${serverUrl}/junkyroom`, {
+            headers: {
+                'sec-fetch-mode': 'navigate',
+            },
+            maxRedirects: 0,
+        })
             .catch((error: unknown) => (error as AxiosError).response as AxiosResponse);
         assert.strictEqual(res.status, 302);
         assert(res.headers.location, 'Expected a redirect location header');
         const redirectUrl = res.headers.location as string;
         assert.strictEqual(redirectUrl, '/');
+    });
+
+    it('does not join a non-existant room (404) GET /:room', async () => {
+        const res = await axios.get(`${serverUrl}/junkyroom`)
+            .catch((error: unknown) => (error as AxiosError).response as AxiosResponse);
+        assert.strictEqual(res.status, 404);
     });
 });
