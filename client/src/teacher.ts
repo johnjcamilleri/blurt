@@ -366,10 +366,15 @@ document.addEventListener('keydown', event => {
             break;
         }
 
-        // Hide/show responses
-        case 'h':
+        // Hide responses
+        case 'h': {
+            cs.areResponsesShown = false;
+            break;
+        }
+
+        // Show responses
         case 's': {
-            cs.areResponsesShown = !cs.areResponsesShown;
+            cs.areResponsesShown = true;
             break;
         }
 
