@@ -47,15 +47,16 @@
                     aria-label="clear input"
                 >✖</button>
             </div>
-                <input
-                    x-show="mode === 'number'"
-                    type="number"
-                    class="form-control fs-1 p-4 text-center font-monospace bg-transparent border-secondary-subtle mx-auto"
-                    style="max-width: 8em;"
-                    placeholder="3.142"
-                    x-model="response"
-                    aria-label="numeric input"
-                />
+                <template x-if="mode === 'number'">
+                    <input
+                        type="number"
+                        class="form-control fs-1 p-4 text-center font-monospace bg-transparent border-secondary-subtle mx-auto"
+                        style="max-width: 8em;"
+                        placeholder="3.142"
+                        x-model="response"
+                        aria-label="numeric input"
+                    />
+                </template>
             <div class="d-flex justify-content-center gap-2" x-show.important="mode === 'yes-no-maybe'">
                 <button
                     class="btn btn-lg"
