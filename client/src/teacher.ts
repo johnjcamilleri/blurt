@@ -11,7 +11,7 @@ import {
 const studentUrl = `${globalThis.location.origin}${globalThis.location.pathname}`;
 
 function generateQRCode() {
-    const qrWidth = Math.min(window.innerWidth, window.innerHeight) - 120;
+    const qrWidth = Math.min(window.innerWidth, window.innerHeight) - 140;
     const qrOptions = {
         margin: 2,
         width: qrWidth,
