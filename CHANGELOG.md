@@ -9,9 +9,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
-- Add participant count to QR view
-- Indicate keyboard shortcuts with underline, in button titles
-
 ### Changed
 
 ### Deprecated
@@ -20,11 +17,20 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
-- Clearing of buttons in mobile browsers
-
 ### Security
 
 ---
+
+## [1.5.2] - 2025-09-27
+
+### Added
+
+- Add participant count to QR view
+- Indicate keyboard shortcuts with underline, in button titles
+
+### Fixed
+
+- Clearing of buttons in mobile browsers
 
 ## [1.5.1] - 2025-09-10
 
