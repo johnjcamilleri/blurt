@@ -17,11 +17,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
-- z-index of messages
-
 ### Security
 
 ---
+
+## [1.5.3] - 2025-10-10
+
+### Fixed
+
+- z-index of messages
 
 ## [1.5.2] - 2025-09-27
 
