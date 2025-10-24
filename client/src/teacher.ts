@@ -57,7 +57,7 @@ type ControlsStore = {
     studentUrl: string;
     isQRCodeShown: boolean;
     isLightTheme: boolean;
-    buttonClass: string;
+    getButtonClass: (isActive: boolean) => string;
     isZenMode: boolean;
     areResponsesShown: boolean;
     areCountsShown: boolean;
@@ -172,8 +172,12 @@ const _controlsStore: ControlsStore = {
     studentUrl,
     isQRCodeShown: false,
     isLightTheme: false,
-    get buttonClass() {
-        return this.isLightTheme ? 'btn btn-light' : 'btn btn-dark';
+    getButtonClass(isActive = false) {
+        const classList = ['btn'];
+        if (this.isLightTheme) classList.push('btn-light');
+        else classList.push('btn-dark');
+        if (isActive) classList.push('active');
+        return classList.join(' ');
     },
     isZenMode: false,
     areResponsesShown: true,

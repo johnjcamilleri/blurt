@@ -68,7 +68,7 @@
                     <button
                         type="button"
                         @click="$store.controls.isQRCodeShown = true"
-                        :class="$store.controls.buttonClass"
+                        :class="$store.controls.getButtonClass()"
                         title="show QR code (q)"
                         style="font-size: x-large;"
                     >
@@ -97,7 +97,7 @@
                     <div class="btn-group" aria-label="response display controls">
                         <!-- <button
                             type="button"
-                            :class="$store.controls.buttonClass"
+                            :class="$store.controls.getButtonClass()"
                             @click="$store.controls.isLightTheme = !$store.controls.isLightTheme"
                             :title="$store.controls.isLightTheme ? 'dark (d)' : 'light (l)'"
                         >
@@ -112,7 +112,7 @@
                         </button> -->
                         <button
                             type="button"
-                            :class="$store.controls.buttonClass"
+                            :class="$store.controls.getButtonClass()"
                             @click="$store.controls.areResponsesShown = !$store.controls.areResponsesShown"
                             :title="$store.controls.areResponsesShown ? 'hide (h)' : 'show (s)'"
                         >
@@ -127,7 +127,7 @@
                         </button>
                         <button
                             type="button"
-                            :class="$store.controls.buttonClass"
+                            :class="$store.controls.getButtonClass()"
                             @click="$store.controls.areCountsShown = !$store.controls.areCountsShown"
                             :title="$store.controls.areCountsShown ? 'no counts (/)' : 'counts (/)'"
                         >
@@ -144,7 +144,7 @@
                         </button>
                         <button
                             type="button"
-                            :class="$store.controls.buttonClass"
+                            :class="$store.controls.getButtonClass()"
                             @click="$store.controls.pauseUpdates()"
                             x-show="!$store.controls.areUpdatesPaused"
                             title="pause (space)"
@@ -154,7 +154,7 @@
                         </button>
                         <button
                             type="button"
-                            :class="$store.controls.buttonClass"
+                            :class="$store.controls.getButtonClass()"
                             @click="$store.controls.resumeUpdates()"
                             x-show="$store.controls.areUpdatesPaused"
                             title="resume (space)"
@@ -164,7 +164,7 @@
                         </button>
                         <button
                             type="button"
-                            :class="$store.controls.buttonClass"
+                            :class="$store.controls.getButtonClass()"
                             @click="$store.responses.clear()"
                             title="clear (c)"
                         >
@@ -173,7 +173,7 @@
                         </button>
                         <button
                             type="button"
-                            :class="$store.controls.buttonClass"
+                            :class="$store.controls.getButtonClass()"
                             @click="$store.responses.pick()"
                             title="pick (p)"
                         >
@@ -182,7 +182,7 @@
                         </button>
                         <!--button
                             type="button"
-                            :class="$store.controls.buttonClass"
+                            :class="$store.controls.getButtonClass()"
                             @click="$store.responses.unpick()"
                             title="unpick (u)"
                         >
@@ -197,8 +197,7 @@
                     <div class="btn-group" aria-label="response mode controls">
                         <button
                             type="button"
-                            :class="$store.controls.buttonClass"
-                            :class="$store.controls.mode === 'off' ? 'active' : ''"
+                            :class="$store.controls.getButtonClass($store.controls.mode === 'off')"
                             @click="$store.controls.setMode('off')"
                             title="set mode: off (o)"
                         >
@@ -207,8 +206,7 @@
                         </button>
                         <button
                             type="button"
-                            :class="$store.controls.buttonClass"
-                            :class="$store.controls.mode === 'text' ? 'active' : ''"
+                            :class="$store.controls.getButtonClass($store.controls.mode === 'text')"
                             @click="$store.controls.setMode('text')"
                             title="set mode: text (t)"
                         >
@@ -217,8 +215,7 @@
                         </button>
                         <button
                             type="button"
-                            :class="$store.controls.buttonClass"
-                            :class="$store.controls.mode === 'number' ? 'active' : ''"
+                            :class="$store.controls.getButtonClass($store.controls.mode === 'number')"
                             @click="$store.controls.setMode('number')"
                             title="set mode: number (n)"
                         >
@@ -227,8 +224,7 @@
                         </button>
                         <button
                             type="button"
-                            :class="$store.controls.buttonClass"
-                            :class="$store.controls.mode === 'yes-no-maybe' ? 'active' : ''"
+                            :class="$store.controls.getButtonClass($store.controls.mode === 'yes-no-maybe')"
                             @click="$store.controls.setMode('yes-no-maybe')"
                             title="set mode: yes/no/maybe (y)"
                         >
