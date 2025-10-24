@@ -10,6 +10,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 - Add light theme
+- Add multiple choice modes with 2-5 options
 
 ### Changed
 

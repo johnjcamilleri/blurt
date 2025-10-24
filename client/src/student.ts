@@ -18,12 +18,21 @@ const sendResponse = debounce((response: string) => {
 
 type State = {
     response: string;
+    toggleResponse: (response: string) => void;
     mode: Mode;
     picked: boolean;
 };
 
 const state = Alpine.reactive<State>({
     response: '',
+    toggleResponse(response) {
+        // eslint-disable-next-line unicorn/prefer-ternary
+        if (this.response === response) {
+            this.response = '';
+        } else {
+            this.response = response;
+        }
+    },
     mode: 'off',
     picked: false,
 });

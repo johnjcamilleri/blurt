@@ -12,7 +12,12 @@ export function debounce<T extends (...args: any[]) => void>(func: T, wait: numb
 
 export type ClientResponses = Map<string, string>;
 
-export type Mode = 'off' | 'text' | 'number' | 'yes-no-maybe';
+export type Mode
+    = 'off'
+    | 'text'
+    | 'number'
+    | 'yes-no-maybe'
+    | 'multi-2' | 'multi-3' | 'multi-4' | 'multi-5';
 
 // SDBM non-cryptographic hash function
 // Taken from: https://github.com/sindresorhus/sdbm

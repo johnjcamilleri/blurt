@@ -441,21 +441,39 @@ document.addEventListener('keydown', event => {
             break;
         }
 
-        case '1':
         case 't': {
             cs.setMode('text');
             break;
         }
 
-        case '2':
         case 'n': {
             cs.setMode('number');
             break;
         }
 
-        case '3':
         case 'y': {
             cs.setMode('yes-no-maybe');
+            break;
+        }
+
+        case '2': {
+            cs.setMode('multi-2');
+            break;
+        }
+
+        case '3': {
+            cs.setMode('multi-3');
+            break;
+        }
+
+        case 'm':
+        case '4': {
+            cs.setMode('multi-4');
+            break;
+        }
+
+        case '5': {
+            cs.setMode('multi-5');
             break;
         }
 

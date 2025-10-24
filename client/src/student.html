@@ -10,7 +10,8 @@
         /* make hover state look normal, as it seems to linger on touch devices */
         button.btn-outline-success:hover,
         button.btn-outline-warning:hover,
-        button.btn-outline-danger:hover {
+        button.btn-outline-danger:hover,
+        button.btn-outline-secondary:hover {
             background-color: unset;
             color: var(--bs-btn-color);
         }
@@ -45,29 +46,54 @@
                     aria-label="clear input"
                 >✖</button>
             </div>
-                <template x-if="mode === 'number'">
-                    <input
-                        type="number"
-                        class="form-control fs-1 p-4 text-center font-monospace bg-transparent border-secondary-subtle mx-auto"
-                        style="max-width: 8em;"
-                        placeholder="3.142"
-                        x-model="response"
-                        aria-label="numeric input"
-                    />
-                </template>
+            <template x-if="mode === 'number'">
+                <input
+                    type="number"
+                    class="form-control fs-1 p-4 text-center font-monospace bg-transparent border-secondary-subtle mx-auto"
+                    style="max-width: 8em;"
+                    placeholder="3.142"
+                    x-model="response"
+                    aria-label="numeric input"
+                />
+            </template>
             <div class="d-flex justify-content-center gap-2" x-show.important="mode === 'yes-no-maybe'">
                 <button
                     class="btn btn-lg"
                     :class="response === 'yes' ? 'btn-success' : 'btn-outline-success'"
-                    @click="response = 'yes'">yes</button>
+                    @click="toggleResponse('yes')">yes</button>
                 <button
                     class="btn btn-lg"
                     :class="response === 'maybe' ? 'btn-warning' : 'btn-outline-warning'"
-                    @click="response = 'maybe'">maybe</button>
+                    @click="toggleResponse('maybe')">maybe</button>
                 <button
                     class="btn btn-lg"
                     :class="response === 'no' ? 'btn-danger' : 'btn-outline-danger'"
-                    @click="response = 'no'">no</button>
+                    @click="toggleResponse('no')">no</button>
+            </div>
+            <div class="d-flex justify-content-center gap-2" x-show.important="mode.startsWith('multi-')">
+                <button
+                    class="btn btn-lg"
+                    :class="response === 'A' ? 'btn-secondary' : 'btn-outline-secondary'"
+                    @click="toggleResponse('A')">A</button>
+                <button
+                    class="btn btn-lg"
+                    :class="response === 'B' ? 'btn-secondary' : 'btn-outline-secondary'"
+                    @click="toggleResponse('B')">B</button>
+                <button
+                    x-show="mode[6] > 2"
+                    class="btn btn-lg"
+                    :class="response === 'C' ? 'btn-secondary' : 'btn-outline-secondary'"
+                    @click="toggleResponse('C')">C</button>
+                <button
+                    x-show="mode[6] > 3"
+                    class="btn btn-lg"
+                    :class="response === 'D' ? 'btn-secondary' : 'btn-outline-secondary'"
+                    @click="toggleResponse('D')">D</button>
+                <button
+                    x-show="mode[6] > 4"
+                    class="btn btn-lg"
+                    :class="response === 'E' ? 'btn-secondary' : 'btn-outline-secondary'"
+                    @click="toggleResponse('E')">E</button>
             </div>
         </div>
     </div>

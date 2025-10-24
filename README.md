@@ -60,7 +60,7 @@ See below for more [features](#features) and [keyboard shortcuts](#keyboard-shor
 
 ### Keyboard shortcuts
 
-The following keyboard shortcuts are available for controlling the owner view:
+#### Controlling owner view
 
 | Key(s)                       | Action                     |
 |------------------------------|----------------------------|
@@ -72,13 +72,22 @@ The following keyboard shortcuts are available for controlling the owner view:
 | <kbd>z</kbd>                 | Toggle Zen mode            |
 | <kbd>/</kbd>                 | Toggle response counts     |
 | <kbd>space</kbd>             | Pause/resume updates       |
-| <kbd>c</kbd>                 | Clear all responses        |
 | <kbd>p</kbd>                 | Pick participant           |
 | <kbd>u</kbd>                 | Unpick all participants    |
+
+#### Mode and responses
+
+| Key(s)                       | Action                     |
+|------------------------------|----------------------------|
+| <kbd>c</kbd>                 | Clear all responses        |
 | <kbd>0</kbd> or <kbd>o</kbd> | Set mode to "off"          |
-| <kbd>1</kbd> or <kbd>t</kbd> | Set mode to "text"         |
-| <kbd>2</kbd> or <kbd>n</kbd> | Set mode to "number"       |
-| <kbd>3</kbd> or <kbd>y</kbd> | Set mode to "yes-no-maybe" |
+| <kbd>t</kbd>                 | Set mode to "text"         |
+| <kbd>n</kbd>                 | Set mode to "number"       |
+| <kbd>y</kbd>                 | Set mode to "yes/no/maybe" |
+| <kbd>2</kbd>                 | Set mode to "multiple choice" with 2 options |
+| <kbd>3</kbd>                 | Set mode to "multiple choice" with 3 options |
+| <kbd>4</kbd> or <kbd>m</kbd> | Set mode to "multiple choice" with 4 options |
+| <kbd>5</kbd>                 | Set mode to "multiple choice" with 5 options |
 
 ## Development
 

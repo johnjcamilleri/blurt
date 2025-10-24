@@ -231,6 +231,15 @@
                             <i class="bi-hand-thumbs-up me-xl-1"></i>
                             <span class="d-none d-xl-inline"><u>y</u>es/no</span>
                         </button>
+                        <button
+                            type="button"
+                            :class="$store.controls.getButtonClass($store.controls.mode.startsWith('multi'))"
+                            @click="$store.controls.setMode('multi-4')"
+                            title="set mode: multiple choice 4 (m)"
+                        >
+                            <i class="bi-ui-radios-grid me-xl-1"></i>
+                            <span class="d-none d-xl-inline"><u>m</u>ulti</span>
+                        </button>
                     </div>
                 </li>
             </ul>
