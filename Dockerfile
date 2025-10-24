@@ -1,5 +1,5 @@
 # Stage 1: Build
-FROM node:lts-alpine AS build
+FROM node:22.21-alpine3.22 AS build
 
 # Set the working directory inside the container
 WORKDIR /app
@@ -20,7 +20,7 @@ RUN npm run build
 RUN npm run build:client
 
 # Stage 2: Production
-FROM node:lts-alpine AS production
+FROM node:22.21-alpine3.22 AS production
 
 # Set the working directory inside the container
 WORKDIR /app
