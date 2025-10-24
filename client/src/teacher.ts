@@ -56,6 +56,8 @@ type ResponsesStore = {
 type ControlsStore = {
     studentUrl: string;
     isQRCodeShown: boolean;
+    isLightTheme: boolean;
+    buttonClass: string;
     isZenMode: boolean;
     areResponsesShown: boolean;
     areCountsShown: boolean;
@@ -96,7 +98,7 @@ function getBadgeClass(rc: ResponseCount): string {
                 default:
             }
         } else if (rc.response.match(emojiRegex)?.join('') === rc.response) {
-            bgClassName = 'text-bg-dark';
+            bgClassName = cs.isLightTheme ? 'text-bg-light' : 'text-bg-dark';
         }
     }
 
@@ -169,6 +171,10 @@ const _responsesStore: ResponsesStore = {
 const _controlsStore: ControlsStore = {
     studentUrl,
     isQRCodeShown: false,
+    isLightTheme: false,
+    get buttonClass() {
+        return this.isLightTheme ? 'btn btn-light' : 'btn btn-dark';
+    },
     isZenMode: false,
     areResponsesShown: true,
     areCountsShown: false,
@@ -357,6 +363,17 @@ document.addEventListener('keydown', event => {
         // Toggle QR code visibility
         case 'q': {
             cs.isQRCodeShown = !cs.isQRCodeShown;
+            break;
+        }
+
+        // Light/dark theme
+        case 'l': {
+            cs.isLightTheme = true;
+            break;
+        }
+
+        case 'd': {
+            cs.isLightTheme = false;
             break;
         }
 

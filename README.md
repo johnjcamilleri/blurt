@@ -39,7 +39,7 @@ See below for more [features](#features) and [keyboard shortcuts](#keyboard-shor
 
 - Instantly create rooms with zero setup
 - Responses updated live in owner view as participants type, sized according to frequency
-- Minimal, projector-friendly UI (dark background, no borders, content at top)
+- Minimal, projector-friendly UI (dark by default, no borders, content at top)
 - Zen mode (hides controls completely)
 - QR code for participants to scan
 - Show/hide responses
@@ -67,6 +67,8 @@ The following keyboard shortcuts are available for controlling the owner view:
 | <kbd>q</kbd>                 | Toggle QR code visibility  |
 | <kbd>h</kbd>                 | Hide responses             |
 | <kbd>s</kbd>                 | Show responses             |
+| <kbd>l</kbd>                 | Light theme                |
+| <kbd>d</kbd>                 | Dark theme                 |
 | <kbd>z</kbd>                 | Toggle Zen mode            |
 | <kbd>/</kbd>                 | Toggle response counts     |
 | <kbd>space</kbd>             | Pause/resume updates       |
