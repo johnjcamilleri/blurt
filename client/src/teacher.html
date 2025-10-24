@@ -257,7 +257,8 @@
         <p x-text="`participants: ${$store.responses.total}`" class="mt-1 text-body-tertiary" aria-label="joined participants"></p>
     </div>
     <div
-        class="mt-4 d-flex flex-wrap align-items-center align-content-center justify-content-center"
+        class="mt-4 d-flex flex-wrap align-content-center justify-content-center"
+        :class="$store.controls.mode === 'number' ? 'align-items-end' : 'align-items-center'"
         :style="$store.responses.containerStyle"
     >
         <template x-for="rc in $store.responses.counts" :key="rc.key">
