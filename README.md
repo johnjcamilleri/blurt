@@ -14,6 +14,7 @@ See it live at [blurt.lol](https://blurt.lol)
     - <kbd>t</kbd> for text
     - <kbd>n</kbd> for number
     - <kbd>y</kbd> for yes/no/maybe
+    - <kbd>m</kbd> or <kbd>2</kbd>—<kbd>5</kbd> for multiple choice
 6. Optionally pick a random respondent with <kbd>p</kbd> or by clicking a response.
 7. Clear responses (<kbd>c</kbd>) or change mode back to off (<kbd>0</kbd>), then repeat.
 
@@ -50,6 +51,7 @@ See below for more [features](#features) and [keyboard shortcuts](#keyboard-shor
   - free text
   - numeric (responses sorted by value)
   - yes/no/maybe
+  - multiple choice (letters A–D)
 
 ### Intentionally missing features
 
@@ -75,7 +77,7 @@ See below for more [features](#features) and [keyboard shortcuts](#keyboard-shor
 | <kbd>p</kbd>                 | Pick participant           |
 | <kbd>u</kbd>                 | Unpick all participants    |
 
-#### Mode and responses
+#### Controlling mode and responses
 
 | Key(s)                       | Action                     |
 |------------------------------|----------------------------|
@@ -134,3 +136,7 @@ git push origin main
 
 Use blurt as you wish!  
 Bug reports, feature requests, and pull requests are welcome.
+
+## Credits
+
+blurt is conceived, built and maintained by [John J. Camilleri](https://www.chalmers.se/en/persons/cajohn/) at Chalmers University of Technology.
