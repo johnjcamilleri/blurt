@@ -13,6 +13,6 @@ docker run -d \
   -e EXTRA_DOMAINS=blurt.lol \
   -p 443:443 \
   -p 80:80 \
-  -v "$PWD"/swag.conf:/config \
+  -v "$PWD"/swag/config:/config \
   --restart unless-stopped \
   lscr.io/linuxserver/swag:5.1.0
