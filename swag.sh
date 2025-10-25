@@ -10,7 +10,6 @@ docker run -d \
   -e TZ=Etc/UTC \
   -e URL=blurt.cse.chalmers.se \
   -e VALIDATION=http \
-  -e EXTRA_DOMAINS=blurt.lol \
   -p 443:443 \
   -p 80:80 \
   -v "$PWD"/swag/config:/config \
