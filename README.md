@@ -101,12 +101,16 @@ npm run build:client
 npm run start
 ```
 
+See also `build.sh` and `serve.sh`.
+
 ### Build & run with Docker
 
 ```sh
 docker build . --tag blurt:latest
 docker run --rm --publish 3001:3000 blurt:latest
 ```
+
+See `build-image.sh` and `serve-image.sh`.
 
 ### Run in dev mode
 

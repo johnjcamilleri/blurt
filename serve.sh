@@ -1,8 +1,9 @@
 #!/usr/bin/env sh
 
-# Serve from Docker
+# Serve using Node inside Docker
+# current directory is mapped inside container (including node_modules)
 docker run \
-  --name "serve-blurt" \
+  --name "blurt" \
   --rm \
   --detach \
   --volume "$PWD":/app \

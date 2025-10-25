@@ -1,7 +1,7 @@
 #!/usr/bin/env sh
 
-# Build inside Docker
-# (note that node_modules is mapped from outside container)
+# Build using Node inside Docker
+# current directory is mapped inside container (including node_modules)
 docker run \
   --name "build-blurt" \
   --rm \
