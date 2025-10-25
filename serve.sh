@@ -6,6 +6,6 @@ docker run \
   --rm \
   --volume "$PWD":/app \
   --workdir /app \
-  --publish 80:3000 \
+  --publish 3000:3000 \
   node:22.21-alpine3.22 \
   npm start
