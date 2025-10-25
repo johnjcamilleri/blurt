@@ -4,6 +4,7 @@
 docker run \
   --name "serve-blurt" \
   --rm \
+  --detach \
   --volume "$PWD":/app \
   --workdir /app \
   --publish 3000:3000 \
