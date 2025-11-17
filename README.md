@@ -22,20 +22,6 @@ See below for more [features](#features) and [keyboard shortcuts](#keyboard-shor
 
 ## About
 
-### Creating rooms
-
-- A room has exactly one **owner**, and zero or more **participants**.
-- Room ownership is saved as a random secret in a cookie.
-- A room is destroyed if it has no participants or owner.
-- Visiting `/` shows two options:
-  - Create a room with a specified name (or let the server choose one) and make you the owner.
-  - Join a named room as participant (if it exists).
-- Visiting `/create` creates a room with a randomly chosen name and makes you the owner.
-- Visiting `/create/:room` creates `room` (if it doesn't exist) and makes you the owner.
-- Visiting `/:room` checks if `room` exists and joins it:
-  - as the owner if you have the room secret.
-  - as a participant otherwise.
-
 ### Features
 
 - Instantly create rooms with zero setup
@@ -59,6 +45,20 @@ See below for more [features](#features) and [keyboard shortcuts](#keyboard-shor
 - Users or registrations
 - History or statistics
 - Childish graphics or annoying animations
+
+### Creating rooms
+
+- A room has exactly one **owner**, and zero or more **participants**.
+- Room ownership is saved as a random secret in a cookie.
+- A room is destroyed if it has no participants or owner.
+- Visiting `/` shows two options:
+  - Create a room with a specified name (or let the server choose one) and make you the owner.
+  - Join a named room as participant (if it exists).
+- Visiting `/create` creates a room with a randomly chosen name and makes you the owner.
+- Visiting `/create/:room` creates `room` (if it doesn't exist) and makes you the owner.
+- Visiting `/:room` checks if `room` exists and joins it:
+  - as the owner if you have the room secret.
+  - as a participant otherwise.
 
 ### Keyboard shortcuts
 
