@@ -188,6 +188,7 @@ const _controlsStore: ControlsStore = {
         rs.clear();
         socket.emit('set mode', mode);
         this.mode = mode;
+        this.areUpdatesPaused = false;
     },
     areUpdatesPaused: false,
     pauseUpdates() {
