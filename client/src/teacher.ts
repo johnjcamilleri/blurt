@@ -59,6 +59,7 @@ type ControlsStore = {
     isLightTheme: boolean;
     getButtonClass: (isActive: boolean) => string;
     isZenMode: boolean;
+    autoHide: boolean;
     areResponsesShown: boolean;
     areCountsShown: boolean;
     mode: Mode;
@@ -180,6 +181,7 @@ const _controlsStore: ControlsStore = {
         return classList.join(' ');
     },
     isZenMode: false,
+    autoHide: false,
     areResponsesShown: true,
     areCountsShown: false,
     mode: 'off',
@@ -189,6 +191,9 @@ const _controlsStore: ControlsStore = {
         socket.emit('set mode', mode);
         this.mode = mode;
         this.areUpdatesPaused = false;
+        if (this.autoHide) {
+            this.areResponsesShown = false;
+        }
     },
     areUpdatesPaused: false,
     pauseUpdates() {
@@ -385,6 +390,12 @@ document.addEventListener('keydown', event => {
         // Toggle Zen mode
         case 'z': {
             cs.isZenMode = !cs.isZenMode;
+            break;
+        }
+
+        // Toggle auto-hide
+        case 'a': {
+            cs.autoHide = !cs.autoHide;
             break;
         }
 

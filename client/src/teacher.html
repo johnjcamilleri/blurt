@@ -113,6 +113,21 @@
                         <button
                             type="button"
                             :class="$store.controls.getButtonClass()"
+                            @click="$store.controls.autoHide = !$store.controls.autoHide"
+                            title="auto-hide (a)"
+                        >
+                            <span x-show="$store.controls.autoHide">
+                                <i class="bi-shield me-xxl-1"></i>
+                                <span class="d-none d-xxl-inline"><u>a</u>uto-ide</span>
+                            </span>
+                            <span x-show="!$store.controls.autoHide">
+                                <i class="bi-shield-slash me-xxl-1"></i>
+                                <span class="d-none d-xxl-inline"><u>a</u>uto-ide</span>
+                            </span>
+                        </button>
+                        <button
+                            type="button"
+                            :class="$store.controls.getButtonClass()"
                             @click="$store.controls.areResponsesShown = !$store.controls.areResponsesShown"
                             :title="$store.controls.areResponsesShown ? 'hide (h)' : 'show (s)'"
                         >

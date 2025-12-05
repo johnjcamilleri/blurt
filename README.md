@@ -67,6 +67,7 @@ See below for more [features](#features) and [keyboard shortcuts](#keyboard-shor
 | Key(s)                       | Action                     |
 |------------------------------|----------------------------|
 | <kbd>q</kbd>                 | Toggle QR code visibility  |
+| <kbd>a</kbd>                 | Toggle auto-hiding responses |
 | <kbd>h</kbd>                 | Hide responses             |
 | <kbd>s</kbd>                 | Show responses             |
 | <kbd>l</kbd>                 | Light theme                |
