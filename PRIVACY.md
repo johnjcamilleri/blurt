@@ -12,6 +12,7 @@
 - Cookies are also used to display user interface messages, like this:
 
   ```plain
+  Set-Cookie room=raspberry; Path=/
   Set-Cookie message=Room%20'raspberry'%20created; Path=/
   ```
 
