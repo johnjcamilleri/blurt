@@ -10,10 +10,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 - Add auto-hide feature
+- Add shortcut meta+enter to create room
 
 ### Changed
 
 - Always unpause when setting mode
+- Error messages do not float over content
 
 ### Deprecated
 

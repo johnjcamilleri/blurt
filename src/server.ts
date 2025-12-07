@@ -84,7 +84,8 @@ app.get('/create/:room', (req, res) => {
         } else {
             // Otherwise fail
             res.clearCookie(roomName); // in case cookie is stale
-            res.cookie('message', `Room '${roomName}' already exists`);
+            res.cookie('message', `room '${roomName}' already exists`);
+            res.cookie('room', roomName);
             res.redirect('/');
         }
     } else {
@@ -92,7 +93,6 @@ app.get('/create/:room', (req, res) => {
         console.log(`[${roomName}] create room`);
         const room = createRoom(roomName);
         res.cookie(roomName, room.secret);
-        res.cookie('message', `Room '${roomName}' created`);
         res.redirect(`/${roomName}`);
     }
 });
@@ -116,7 +116,8 @@ app.get('/:room', (req, res) => {
         const isNavigation = req.headers['sec-fetch-mode'] === 'navigate';
         if (isNavigation) {
             console.log(`[${roomName}] room does not exist`);
-            res.cookie('message', `Room '${roomName}' does not exist`);
+            res.cookie('message', `room '${roomName}' does not exist`);
+            res.cookie('room', roomName);
             res.redirect('/');
             return;
         }
