@@ -39,21 +39,21 @@
                         style="max-width: 8em"
                         placeholder="room name"
                         aria-label="room name"
-                        onkeydown="if (event.key === 'Enter') this.nextElementSibling.click()"
                         required
                         autofocus
+                        id="room"
                     >
                     <button
                         type="button"
                         class="btn btn-outline-secondary"
-                        onclick="if (this.previousElementSibling.value) window.location.href = '/' + this.previousElementSibling.value"
+                        id="join"
                     >
                         join
                     </button>
                     <button
                         type="button"
                         class="btn btn-outline-secondary"
-                        onclick="window.location.href = '/create/' + this.parentElement.querySelector('input').value"
+                        id="create"
                     >
                         create
                     </button>
