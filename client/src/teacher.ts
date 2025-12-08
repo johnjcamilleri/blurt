@@ -54,6 +54,7 @@ type ResponsesStore = {
 };
 
 type ControlsStore = {
+    isMenuShown: boolean;
     studentUrl: string;
     isQRCodeShown: boolean;
     isLightTheme: boolean;
@@ -130,8 +131,9 @@ function getBadgeClass(rc: ResponseCount): string {
 }
 
 function getBadgeStyle(rc: ResponseCount): string {
+    const rs = Alpine.store('responses') as ResponsesStore;
     const c = document.createElement('span').style;
-    c.fontSize = `${Math.max(0.1, (rc.count / this.total))}em`; // min font size
+    c.fontSize = `${Math.max(0.1, (rc.count / rs.total))}em`; // min font size
     return c.cssText;
 }
 
@@ -170,6 +172,7 @@ const _responsesStore: ResponsesStore = {
 };
 
 const _controlsStore: ControlsStore = {
+    isMenuShown: false,
     studentUrl,
     isQRCodeShown: false,
     isLightTheme: false,
@@ -370,6 +373,12 @@ document.addEventListener('keydown', event => {
     }
 
     switch (event.key) {
+        // Toggle menu
+        case 'Escape': {
+            cs.isMenuShown = !cs.isMenuShown;
+            break;
+        }
+
         // Toggle QR code visibility
         case 'q': {
             cs.isQRCodeShown = !cs.isQRCodeShown;

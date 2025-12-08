@@ -62,22 +62,6 @@ See below for more [features](#features) and [keyboard shortcuts](#keyboard-shor
 
 ### Keyboard shortcuts
 
-#### Controlling owner view
-
-| Key(s)                       | Action                     |
-|------------------------------|----------------------------|
-| <kbd>q</kbd>                 | Toggle QR code visibility  |
-| <kbd>a</kbd>                 | Toggle auto-hiding responses |
-| <kbd>h</kbd>                 | Hide responses             |
-| <kbd>s</kbd>                 | Show responses             |
-| <kbd>l</kbd>                 | Light theme                |
-| <kbd>d</kbd>                 | Dark theme                 |
-| <kbd>z</kbd>                 | Toggle Zen mode            |
-| <kbd>/</kbd>                 | Toggle response counts     |
-| <kbd>space</kbd>             | Pause/resume updates       |
-| <kbd>p</kbd>                 | Pick participant           |
-| <kbd>u</kbd>                 | Unpick all participants    |
-
 #### Controlling mode and responses
 
 | Key(s)                       | Action                     |
@@ -91,6 +75,23 @@ See below for more [features](#features) and [keyboard shortcuts](#keyboard-shor
 | <kbd>3</kbd>                 | Set mode to "multiple choice" with 3 options |
 | <kbd>4</kbd> or <kbd>m</kbd> | Set mode to "multiple choice" with 4 options |
 | <kbd>5</kbd>                 | Set mode to "multiple choice" with 5 options |
+
+#### Controlling owner view
+
+| Key(s)                       | Action                     |
+|------------------------------|----------------------------|
+| <kbd>escape</kbd>            | Toggle display menu        |
+| <kbd>q</kbd>                 | Toggle QR code             |
+| <kbd>a</kbd>                 | Toggle auto-hiding responses |
+| <kbd>h</kbd>                 | Hide responses             |
+| <kbd>s</kbd>                 | Show responses             |
+| <kbd>l</kbd>                 | Light theme                |
+| <kbd>d</kbd>                 | Dark theme                 |
+| <kbd>z</kbd>                 | Toggle Zen mode            |
+| <kbd>/</kbd>                 | Toggle response counts     |
+| <kbd>space</kbd>             | Pause/resume updates       |
+| <kbd>p</kbd>                 | Pick participant           |
+| <kbd>u</kbd>                 | Unpick all participants    |
 
 ## Development
 

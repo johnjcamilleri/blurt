@@ -16,6 +16,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Always unpause when setting mode
 - Error messages do not float over content
+- Move display buttons to separate menu
 
 ### Deprecated
 
