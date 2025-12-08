@@ -9,14 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
-- Add auto-hide feature
-- Add shortcut meta+enter to create room
-
 ### Changed
-
-- Always unpause when setting mode
-- Error messages do not float over content
-- Move display buttons to separate menu
 
 ### Deprecated
 
@@ -25,6 +18,21 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 
 ### Security
+
+---
+
+## [1.7.0] - 2025-12-08
+
+### Added
+
+- Add auto-hide feature
+- Add shortcut meta+enter to create room
+
+### Changed
+
+- Always unpause when setting mode
+- Error messages do not float over content
+- Move display buttons to separate menu
 
 ---
 
