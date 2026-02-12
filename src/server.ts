@@ -3,7 +3,7 @@
 
 import http from 'node:http';
 import cookieParser from 'cookie-parser';
-import express from 'express';
+import express, {type Request, type Response} from 'express';
 import {Server as SocketServer, type Socket} from 'socket.io';
 
 type StudentResponses = Map<string, string>;
@@ -49,6 +49,17 @@ const FRUITS = [
     'apricot', 'blackberry', 'blueberry', 'feijoa', 'lime', 'peach', 'plum',
 ];
 
+function isRoomNameValid(name: string): boolean {
+    return name.length > 0 // in practice always true because of routing
+        && name.length <= 32
+        && !name.includes('.');
+}
+
+function isNavigation(req: Request): boolean {
+    return req.headers['sec-fetch-mode'] === 'navigate';
+}
+
+// Create a room, server picks name
 app.get('/create', (req, res) => {
     let newName = '';
     let attempts = 0;
@@ -72,8 +83,23 @@ app.get('/create', (req, res) => {
     res.redirect(`/create/${newName}`);
 });
 
+// Create a room with a supplied name
 app.get('/create/:room', (req, res) => {
     const roomName = req.params.room;
+    if (!isRoomNameValid(roomName)) {
+        // Invalid room name, fail nicely for navigation requests
+        if (isNavigation(req)) {
+            res.cookie('message', 'invalid room name');
+            res.cookie('room', roomName);
+            res.redirect('/');
+            return;
+        }
+
+        // Fail crudely otherwise
+        res.sendStatus(400);
+        return;
+    }
+
     if (rooms.has(roomName)) {
         // Room exists, check if owner
         const room = rooms.get(roomName);
@@ -97,8 +123,23 @@ app.get('/create/:room', (req, res) => {
     }
 });
 
+// Join a room
 app.get('/:room', (req, res) => {
     const roomName = req.params.room;
+    if (!isRoomNameValid(roomName)) {
+        // Invalid room name, fail nicely for navigation requests
+        if (isNavigation(req)) {
+            res.cookie('message', 'invalid room name');
+            res.cookie('room', roomName);
+            res.redirect('/');
+            return;
+        }
+
+        // Fail crudely otherwise
+        res.sendStatus(400);
+        return;
+    }
+
     if (rooms.has(roomName)) {
         // Room exists
         const room = rooms.get(roomName);
@@ -113,8 +154,7 @@ app.get('/:room', (req, res) => {
         }
     } else {
         // Room doesn't exist, fail nicely for navigation requests
-        const isNavigation = req.headers['sec-fetch-mode'] === 'navigate';
-        if (isNavigation) {
+        if (isNavigation(req)) {
             console.log(`[${roomName}] room does not exist`);
             res.cookie('message', `room '${roomName}' does not exist`);
             res.cookie('room', roomName);

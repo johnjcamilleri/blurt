@@ -87,7 +87,7 @@ describe('HTTP tests', () => {
         assert.strictEqual(redirectUrl, `/${room.name}`);
     });
 
-    it('doesn\'t create an existing room if not owned GET /create/:room', async () => {
+    it('does not create an existing room if not owned GET /create/:room', async () => {
         const res = await axios.get(`${serverUrl}/create/${room.name}`, {maxRedirects: 0})
             .catch((error: unknown) => (error as AxiosError).response as AxiosResponse);
         assert.strictEqual(res.status, 302);
@@ -140,5 +140,29 @@ describe('HTTP tests', () => {
         const res = await axios.get(`${serverUrl}/junkyroom`)
             .catch((error: unknown) => (error as AxiosError).response as AxiosResponse);
         assert.strictEqual(res.status, 404);
+    });
+
+    it('does not create a room with invalid name: too long', async () => {
+        const res = await axios.get(`${serverUrl}/create/012345678901234567890123456789123`)
+            .catch((error: unknown) => (error as AxiosError).response as AxiosResponse);
+        assert.strictEqual(res.status, 400);
+    });
+
+    it('does not create a room with invalid name: contains .', async () => {
+        const res = await axios.get(`${serverUrl}/create/index.php`)
+            .catch((error: unknown) => (error as AxiosError).response as AxiosResponse);
+        assert.strictEqual(res.status, 400);
+    });
+
+    it('does not join a room with invalid name: too long', async () => {
+        const res = await axios.get(`${serverUrl}/012345678901234567890123456789123`)
+            .catch((error: unknown) => (error as AxiosError).response as AxiosResponse);
+        assert.strictEqual(res.status, 400);
+    });
+
+    it('does not join a room with invalid name: contains .', async () => {
+        const res = await axios.get(`${serverUrl}/index.php`)
+            .catch((error: unknown) => (error as AxiosError).response as AxiosResponse);
+        assert.strictEqual(res.status, 400);
     });
 });
