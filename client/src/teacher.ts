@@ -34,9 +34,22 @@ type ResponseCount = {
     key: string;
 };
 
+// Generate random room key
 function generateKey(response: string): string {
     const rand = Math.random().toString(36).slice(2);
     return rand;
+}
+
+// Show quick alert message
+let timer: ReturnType<typeof setTimeout>;
+function alert(message: string): void {
+    const cs = Alpine.store('controls') as ControlsStore;
+    if (cs.isZenMode) return;
+    cs.alertMessage = message;
+    globalThis.clearTimeout(timer);
+    timer = globalThis.setTimeout(() => {
+        cs.alertMessage = '';
+    }, 1500);
 }
 
 type ResponsesStore = {
@@ -61,6 +74,7 @@ type ControlsStore = {
     getButtonClass: (isActive: boolean) => string;
     isZenMode: boolean;
     autoHide: boolean;
+    toggleAutoHide: () => void;
     areResponsesShown: boolean;
     areCountsShown: boolean;
     mode: Mode;
@@ -68,6 +82,7 @@ type ControlsStore = {
     areUpdatesPaused: boolean;
     pauseUpdates: () => void;
     resumeUpdates: () => void;
+    alertMessage: string;
 };
 
 const emojiRegex = makeEmojiRegex();
@@ -143,12 +158,15 @@ const _responsesStore: ResponsesStore = {
     clear() {
         socket.emit('clear responses');
         this.counts = [];
+        alert('clear');
     },
     pick(response?: string) {
         socket.emit('pick', response);
+        alert('pick');
     },
     unpick() {
         socket.emit('unpick');
+        alert('unpick');
     },
     get total(): number {
         return this.raw.size;
@@ -185,6 +203,10 @@ const _controlsStore: ControlsStore = {
     },
     isZenMode: false,
     autoHide: false,
+    toggleAutoHide() {
+        this.autoHide = !this.autoHide;
+        alert(`autohide ${this.autoHide ? 'on' : 'off'}`);
+    },
     areResponsesShown: true,
     areCountsShown: false,
     mode: 'off',
@@ -197,15 +219,20 @@ const _controlsStore: ControlsStore = {
         if (this.autoHide) {
             this.areResponsesShown = false;
         }
+
+        alert(mode.toString());
     },
     areUpdatesPaused: false,
     pauseUpdates() {
         this.areUpdatesPaused = true;
+        alert('pause');
     },
     resumeUpdates() {
         this.areUpdatesPaused = false;
         socket.emit('get responses');
+        alert('resume');
     },
+    alertMessage: '',
 };
 
 Alpine.store('responses', _responsesStore);
@@ -404,7 +431,7 @@ document.addEventListener('keydown', event => {
 
         // Toggle auto-hide
         case 'a': {
-            cs.autoHide = !cs.autoHide;
+            cs.toggleAutoHide();
             break;
         }
 

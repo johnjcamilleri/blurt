@@ -177,7 +177,7 @@
                         <button
                             type="button"
                             :class="$store.controls.getButtonClass()"
-                            @click="$store.controls.autoHide = !$store.controls.autoHide"
+                            @click="$store.controls.toggleAutoHide()"
                             title="auto-hide (a)"
                         >
                             <span x-show="$store.controls.autoHide">
@@ -311,6 +311,13 @@
             </div>
         </template>
     </div>
+    <div
+        class="alert alert-info p-2 position-absolute top-50 start-50 opacity-75"
+        style="transform: translate(-50%, -50%);"
+        role="alert"
+        x-text="$store.controls.alertMessage"
+        x-show="$store.controls.alertMessage"
+    ></div>
     <script type="module" src="dist/teacher.js"></script>
 </body>
 </html>
