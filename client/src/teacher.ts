@@ -49,7 +49,7 @@ function alert(message: string): void {
     globalThis.clearTimeout(timer);
     timer = globalThis.setTimeout(() => {
         cs.alertMessage = '';
-    }, 1500);
+    }, 500);
 }
 
 type ResponsesStore = {
