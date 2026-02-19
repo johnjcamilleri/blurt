@@ -9,8 +9,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
-- Add alert messages for various commands
-
 ### Changed
 
 ### Deprecated
@@ -22,6 +20,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Security
 
 ---
+
+## [1.7.2] - 2026-02-19
+
+### Added
+
+- Add alert messages for UI controls
 
 ## [1.7.1] - 2026-02-12
 
