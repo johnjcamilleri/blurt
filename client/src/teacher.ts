@@ -46,9 +46,11 @@ function alert(message: string): void {
     const cs = Alpine.store('controls') as ControlsStore;
     if (cs.isZenMode) return;
     cs.alertMessage = message;
+    cs.isAlertShown = true;
     globalThis.clearTimeout(timer);
     timer = globalThis.setTimeout(() => {
-        cs.alertMessage = '';
+        // this will trigger fade-out animation
+        cs.isAlertShown = false;
     }, 500);
 }
 
@@ -74,7 +76,6 @@ type ControlsStore = {
     getButtonClass: (isActive: boolean) => string;
     isZenMode: boolean;
     autoHide: boolean;
-    toggleAutoHide: () => void;
     areResponsesShown: boolean;
     areCountsShown: boolean;
     mode: Mode;
@@ -83,6 +84,7 @@ type ControlsStore = {
     pauseUpdates: () => void;
     resumeUpdates: () => void;
     alertMessage: string;
+    isAlertShown: boolean;
 };
 
 const emojiRegex = makeEmojiRegex();
@@ -91,7 +93,7 @@ function getBadgeClass(rc: ResponseCount): string {
     const rs = Alpine.store('responses') as ResponsesStore;
     const cs = Alpine.store('controls') as ControlsStore;
 
-    const className = 'badge m-1 transition';
+    const className = 'badge m-1';
     let bgClassName = 'text-bg-secondary';
     if (cs.areResponsesShown) {
         // Choose background colour
@@ -158,15 +160,12 @@ const _responsesStore: ResponsesStore = {
     clear() {
         socket.emit('clear responses');
         this.counts = [];
-        alert('clear');
     },
     pick(response?: string) {
         socket.emit('pick', response);
-        alert('pick');
     },
     unpick() {
         socket.emit('unpick');
-        alert('unpick');
     },
     get total(): number {
         return this.raw.size;
@@ -203,10 +202,6 @@ const _controlsStore: ControlsStore = {
     },
     isZenMode: false,
     autoHide: false,
-    toggleAutoHide() {
-        this.autoHide = !this.autoHide;
-        alert(`autohide ${this.autoHide ? 'on' : 'off'}`);
-    },
     areResponsesShown: true,
     areCountsShown: false,
     mode: 'off',
@@ -219,20 +214,17 @@ const _controlsStore: ControlsStore = {
         if (this.autoHide) {
             this.areResponsesShown = false;
         }
-
-        alert(mode.toString());
     },
     areUpdatesPaused: false,
     pauseUpdates() {
         this.areUpdatesPaused = true;
-        alert('pause');
     },
     resumeUpdates() {
         this.areUpdatesPaused = false;
         socket.emit('get responses');
-        alert('resume');
     },
     alertMessage: '',
+    isAlertShown: false,
 };
 
 Alpine.store('responses', _responsesStore);
@@ -425,13 +417,27 @@ document.addEventListener('keydown', event => {
 
         // Toggle Zen mode
         case 'z': {
-            cs.isZenMode = !cs.isZenMode;
+            if (cs.isZenMode) {
+                cs.isZenMode = false;
+                alert('zen mode off');
+            } else {
+                alert('zen mode on');
+                cs.isZenMode = true;
+            }
+
             break;
         }
 
         // Toggle auto-hide
         case 'a': {
-            cs.toggleAutoHide();
+            if (cs.autoHide) {
+                cs.autoHide = false;
+                alert('autohide off');
+            } else {
+                cs.autoHide = true;
+                alert('autohide on');
+            }
+
             break;
         }
 
@@ -453,12 +459,14 @@ document.addEventListener('keydown', event => {
             break;
         }
 
-        // Pause/resume updates
+        // Pause/resume updates (spacebar)
         case ' ': {
             if (cs.areUpdatesPaused) {
                 cs.resumeUpdates();
+                alert('resume');
             } else {
                 cs.pauseUpdates();
+                alert('pause');
             }
 
             break;
@@ -467,18 +475,21 @@ document.addEventListener('keydown', event => {
         // Clear responses
         case 'c': {
             rs.clear();
+            alert('clear');
             break;
         }
 
         // Pick response
         case 'p': {
             rs.pick();
+            alert('pick');
             break;
         }
 
         // Unpick response
         case 'u': {
             rs.unpick();
+            alert('unpick');
             break;
         }
 
@@ -486,42 +497,50 @@ document.addEventListener('keydown', event => {
         case '0':
         case 'o': {
             cs.setMode('off');
+            alert('off');
             break;
         }
 
         case 't': {
             cs.setMode('text');
+            alert('text');
             break;
         }
 
         case 'n': {
             cs.setMode('number');
+            alert('number');
             break;
         }
 
         case 'y': {
             cs.setMode('yes-no-maybe');
+            alert('yes/no/maybe');
             break;
         }
 
         case '2': {
             cs.setMode('multi-2');
+            alert('multi (2)');
             break;
         }
 
         case '3': {
             cs.setMode('multi-3');
+            alert('multi (3)');
             break;
         }
 
         case 'm':
         case '4': {
             cs.setMode('multi-4');
+            alert('multi (4)');
             break;
         }
 
         case '5': {
             cs.setMode('multi-5');
+            alert('multi (5)');
             break;
         }
 

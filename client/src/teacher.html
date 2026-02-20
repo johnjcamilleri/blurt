@@ -19,14 +19,30 @@
         }
         nav {
             opacity: 50%;
-            transition: opacity 1000ms ease-out;
+            transition: opacity 800ms ease-out;
         }
         nav:hover {
             opacity: 100%;
             transition: opacity 50ms ease-in;
         }
-        .transition {
+        .badge {
             transition-duration: 250ms;
+        }
+        .badge:hover {
+            cursor: pointer;
+            opacity: 0.9;
+        }
+        .duration-50 {
+            transition-duration: 50ms;
+        }
+        .duration-100 {
+            transition-duration: 100ms;
+        }
+        .ease-in {
+            transition-timing-function: ease-in;
+        }
+        .ease-out {
+            transition-timing-function: ease-out;
         }
         @media (min-width: 576px) {
             .position-sm-relative {
@@ -177,7 +193,7 @@
                         <button
                             type="button"
                             :class="$store.controls.getButtonClass()"
-                            @click="$store.controls.toggleAutoHide()"
+                            @click="$store.controls.autoHide = !$store.controls.autoHide"
                             title="auto-hide (a)"
                         >
                             <span x-show="$store.controls.autoHide">
@@ -291,7 +307,7 @@
     >
         <template x-for="rc in $store.responses.counts" :key="rc.key">
             <div
-                class="cursor-pointer user-select-none"
+                class="user-select-none"
                 :class="$store.responses.getBadgeClass(rc)"
                 :style="$store.responses.getBadgeStyle(rc)"
                 :data-count="rc.count"
@@ -312,11 +328,15 @@
         </template>
     </div>
     <div
-        class="alert alert-info p-2 position-absolute top-50 start-50 opacity-75"
-        style="transform: translate(-50%, -50%);"
+        class="alert alert-info py-2 px-3 position-absolute top-50 start-50 text-center"
+        style="transform: translate(-50%, -50%); opacity: 0.75;"
         role="alert"
         x-text="$store.controls.alertMessage"
-        x-show="$store.controls.alertMessage"
+        x-show="$store.controls.isAlertShown"
+        x-transition:enter="ease-in duration-50"
+        x-transition:enter-start="opacity-0"
+        x-transition:leave="ease-out duration-100"
+        x-transition:leave-end="opacity-0"
     ></div>
     <script type="module" src="dist/teacher.js"></script>
 </body>
