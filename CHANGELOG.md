@@ -11,9 +11,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
-- Only show alerts when using keyboard shortcuts
-- Tweaks to transition animation
-
 ### Deprecated
 
 ### Removed
@@ -23,6 +20,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Security
 
 ---
+
+## [1.7.3] - 2026-02-23
+
+### Changed
+
+- Only show alerts when using keyboard shortcuts
+- Tweaks to transition animations
 
 ## [1.7.2] - 2026-02-19
 
