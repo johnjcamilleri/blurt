@@ -1,10 +1,19 @@
 #!/usr/bin/env node
-/* eslint-disable array-element-newline */
+/* eslint-disable @stylistic/array-element-newline */
 
 import http from 'node:http';
 import cookieParser from 'cookie-parser';
 import express, {type Request, type Response} from 'express';
 import {Server as SocketServer, type Socket} from 'socket.io';
+import winston from 'winston';
+
+const logger = winston.createLogger({
+    level: 'info',
+    format: winston.format.printf(({message}) => message as string),
+    transports: [
+        new winston.transports.Console(),
+    ],
+});
 
 type StudentResponses = Map<string, string>;
 type Mode = 'off' | 'text' | 'number' | 'yes-no-maybe';
@@ -116,7 +125,7 @@ app.get('/create/:room', (req, res) => {
         }
     } else {
         // Room doesn't exist, create as teacher
-        console.log(`[${roomName}] create room`);
+        logger.info(`[${roomName}] create room`);
         const room = createRoom(roomName);
         res.cookie(roomName, room.secret);
         res.redirect(`/${roomName}`);
@@ -155,7 +164,7 @@ app.get('/:room', (req, res) => {
     } else {
         // Room doesn't exist, fail nicely for navigation requests
         if (isNavigation(req)) {
-            console.log(`[${roomName}] room does not exist`);
+            logger.info(`[${roomName}] room does not exist`);
             res.cookie('message', `room '${roomName}' does not exist`);
             res.cookie('room', roomName);
             res.redirect('/');
@@ -169,11 +178,11 @@ app.get('/:room', (req, res) => {
 
 // Socket.IO setup
 socketServer.on('connection', (socket: Socket) => {
-    const roomName = socket.handshake.query.roomName; // should always be present
-    const roomSecret = socket.handshake.query.roomSecret; // only present for teacher
+    const {roomName} = socket.handshake.query; // should always be present
+    const {roomSecret} = socket.handshake.query; // only present for teacher
 
     if (typeof roomName !== 'string') {
-        console.log(`[] ${socket.id} invalid room name`);
+        logger.info(`[] ${socket.id} invalid room name`);
         socket.disconnect();
         return;
     }
@@ -181,17 +190,17 @@ socketServer.on('connection', (socket: Socket) => {
     const room = rooms.get(roomName);
 
     if (!room) {
-        console.log(`[${roomName}] ${socket.id} room does not exist`);
+        logger.info(`[${roomName}] ${socket.id} room does not exist`);
         socket.disconnect();
         return;
     }
 
     const isTeacher = room.secret === roomSecret;
     if (isTeacher) {
-        console.log(`[${roomName}] ${socket.id} teacher connect`);
+        logger.info(`[${roomName}] ${socket.id} teacher connect`);
         room.teacherSocket = socket;
     } else {
-        console.log(`[${roomName}] ${socket.id} student connect`);
+        logger.info(`[${roomName}] ${socket.id} student connect`);
         room.studentResponses.set(socket.id, '');
     }
 
@@ -200,17 +209,17 @@ socketServer.on('connection', (socket: Socket) => {
     // Client disconnect
     socket.on('disconnect', () => {
         if (socket === room.teacherSocket) {
-            console.log(`[${roomName}] ${socket.id} teacher disconnect`);
+            logger.info(`[${roomName}] ${socket.id} teacher disconnect`);
             room.teacherSocket = undefined;
         } else {
-            console.log(`[${roomName}] ${socket.id} student disconnect`);
+            logger.info(`[${roomName}] ${socket.id} student disconnect`);
             room.studentResponses.delete(socket.id);
             room.teacherSocket?.emit('update response', socket.id, undefined);
         }
 
         setTimeout(() => {
             if (rooms.has(roomName) && room.teacherSocket === undefined && room.studentResponses.size === 0) {
-                console.log(`[${roomName}] close room`);
+                logger.info(`[${roomName}] close room`);
                 rooms.delete(roomName);
             }
         }, 5000);
@@ -218,7 +227,7 @@ socketServer.on('connection', (socket: Socket) => {
 
     // Set mode
     socket.on('set mode', (newMode: Mode) => {
-        console.log(`[${roomName}] ${socket.id} set mode: ${newMode}`);
+        logger.info(`[${roomName}] ${socket.id} set mode: ${newMode}`);
         room.mode = newMode;
         for (const socketId of room.studentResponses.keys()) {
             const socket = socketServer.sockets.sockets.get(socketId);
@@ -230,14 +239,14 @@ socketServer.on('connection', (socket: Socket) => {
 
     // Send all responses
     socket.on('get responses', () => {
-        console.log(`[${roomName}] ${socket.id} get responses`);
-        const serialised: Array<[string, string]> = Array.from(room.studentResponses.entries());
+        logger.info(`[${roomName}] ${socket.id} get responses`);
+        const serialised: Array<[string, string]> = [...room.studentResponses.entries()];
         socket.emit('all responses', serialised);
     });
 
     // Clear all responses
     socket.on('clear responses', () => {
-        console.log(`[${roomName}] ${socket.id} clear responses`);
+        logger.info(`[${roomName}] ${socket.id} clear responses`);
         for (const socketId of room.studentResponses.keys()) {
             const socket = socketServer.sockets.sockets.get(socketId);
             if (socket) {
@@ -249,7 +258,7 @@ socketServer.on('connection', (socket: Socket) => {
     // Student response
     socket.on('respond', (response: string) => {
         response = response.trim();
-        console.log(`[${roomName}] ${socket.id} respond: ${response}`);
+        logger.info(`[${roomName}] ${socket.id} respond: ${response}`);
         room.studentResponses.set(socket.id, response);
         room.teacherSocket?.emit('update response', socket.id, response);
     });
@@ -257,9 +266,9 @@ socketServer.on('connection', (socket: Socket) => {
     // Teacher picks student randomly
     socket.on('pick', (response?: string) => {
         if (response) {
-            console.log(`[${roomName}] ${socket.id} pick: "${response}"`);
+            logger.info(`[${roomName}] ${socket.id} pick: "${response}"`);
         } else {
-            console.log(`[${roomName}] ${socket.id} pick`);
+            logger.info(`[${roomName}] ${socket.id} pick`);
         }
 
         // First unpick all
@@ -305,7 +314,7 @@ socketServer.on('connection', (socket: Socket) => {
         }
 
         if (pickCandidates.length === 0) {
-            console.log(`[${roomName}] ${socket.id} no students to pick`);
+            logger.info(`[${roomName}] ${socket.id} no students to pick`);
             return;
         }
 
@@ -313,7 +322,7 @@ socketServer.on('connection', (socket: Socket) => {
         const pickedStudent = pickCandidates[Math.floor(Math.random() * pickCandidates.length)];
         const studentSocket = socketServer.sockets.sockets.get(pickedStudent);
         if (studentSocket) {
-            console.log(`[${roomName}] ${socket.id} picked: ${pickedStudent}`);
+            logger.info(`[${roomName}] ${socket.id} picked: ${pickedStudent}`);
             room.recentlyPickedStudents.push(pickedStudent);
             studentSocket.emit('picked');
         }
@@ -321,7 +330,7 @@ socketServer.on('connection', (socket: Socket) => {
 
     // Clear pick status
     socket.on('unpick', () => {
-        console.log(`[${roomName}] ${socket.id} unpick`);
+        logger.info(`[${roomName}] ${socket.id} unpick`);
         for (const socketId of room.studentResponses.keys()) {
             const studentSocket = socketServer.sockets.sockets.get(socketId);
             if (studentSocket) {
@@ -335,7 +344,7 @@ socketServer.on('connection', (socket: Socket) => {
 const PORT = process.env.PORT ?? 3000;
 if (process.env.NODE_ENV !== 'test') {
     httpServer.listen(PORT, () => {
-        console.log(`server is running on port ${PORT}`);
+        logger.info(`server is running on port ${PORT}`);
     });
 }
 
@@ -346,9 +355,9 @@ httpServer.on('error', (error: NodeJS.ErrnoException) => {
 
 // Graceful shutdown
 const gracefulShutdown = async () => {
-    console.log('received shutdown signal, shutting down gracefully...');
+    logger.info('received shutdown signal, shutting down gracefully...');
     void socketServer.close(() => {
-        console.log('closed out remaining connections');
+        logger.info('closed out remaining connections');
         process.exit(0);
     });
 

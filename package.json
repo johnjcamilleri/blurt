@@ -15,7 +15,8 @@
   "dependencies": {
     "cookie-parser": "^1.4.7",
     "express": "^4.21.2",
-    "socket.io": "^4.8.1"
+    "socket.io": "^4.8.1",
+    "winston": "^3.19.0"
   },
   "devDependencies": {
     "@types/alpinejs": "^3.13.11",
