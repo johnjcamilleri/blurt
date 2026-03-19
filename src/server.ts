@@ -3,7 +3,7 @@
 
 import http from 'node:http';
 import cookieParser from 'cookie-parser';
-import express, {type Request, type Response} from 'express';
+import express, {type Request, type Response, type NextFunction} from 'express';
 import {Server as SocketServer, type Socket} from 'socket.io';
 import winston from 'winston';
 
@@ -173,6 +173,15 @@ app.get('/:room', (req, res) => {
 
         // Fail crudely otherwise
         res.sendStatus(404);
+    }
+});
+
+// Error handler
+app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
+    if (err instanceof URIError) {
+        res.sendStatus(400);
+    } else {
+        next();
     }
 });
 
