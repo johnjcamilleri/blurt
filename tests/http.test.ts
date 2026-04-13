@@ -148,8 +148,8 @@ describe('HTTP tests', () => {
         assert.strictEqual(res.status, 400);
     });
 
-    it('does not create a room with invalid name: contains .', async () => {
-        const res = await axios.get(`${serverUrl}/create/index.php`)
+    it('does not create a room with invalid name: contains space', async () => {
+        const res = await axios.get(`${serverUrl}/create/foo bar`)
             .catch((error: unknown) => (error as AxiosError).response as AxiosResponse);
         assert.strictEqual(res.status, 400);
     });
@@ -160,8 +160,8 @@ describe('HTTP tests', () => {
         assert.strictEqual(res.status, 400);
     });
 
-    it('does not join a room with invalid name: contains .', async () => {
-        const res = await axios.get(`${serverUrl}/index.php`)
+    it('does not join a room with invalid name: contains space', async () => {
+        const res = await axios.get(`${serverUrl}/foo bar`)
             .catch((error: unknown) => (error as AxiosError).response as AxiosResponse);
         assert.strictEqual(res.status, 400);
     });
