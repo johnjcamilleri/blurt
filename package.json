@@ -24,7 +24,7 @@
     "@types/js-cookie": "^3.0.6",
     "@types/qrcode": "^1.5.5",
     "alpinejs": "^3.15.8",
-    "axios": "^1.8.4",
+    "axios": "^1.15.0",
     "cookie": "^1.0.2",
     "emoji-regex-xs": "^1.0.0",
     "esbuild": "^0.25.1",
