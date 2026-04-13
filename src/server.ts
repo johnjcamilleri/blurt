@@ -60,9 +60,7 @@ const FRUITS = [
 ];
 
 function isRoomNameValid(name: string): boolean {
-    return name.length > 0 // in practice always true because of routing
-        && name.length <= 32
-        && !name.includes('.');
+    return (/^[\p{Letter}\d._-]{1,32}$/ui).test(name);
 }
 
 function isNavigation(req: Request): boolean {
