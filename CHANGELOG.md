@@ -11,8 +11,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
-- Use winston for logging
-
 ### Deprecated
 
 ### Removed
@@ -21,12 +19,20 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Security
 
+---
+
+## [1.7.4] - 2026-04-13
+
+### Changed
+
+- Use winston for logging
+
+### Security
+
 - Handle URI errors by sending 400 response
-- npm audit fix
 - Generate cryptographically-secure room secrets
 - Improve room name validation
-
----
+- npm audit fix
 
 ## [1.7.3] - 2026-02-23
 
