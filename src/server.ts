@@ -2,6 +2,7 @@
 /* eslint-disable @stylistic/array-element-newline */
 
 import http from 'node:http';
+import {randomBytes} from 'node:crypto';
 import cookieParser from 'cookie-parser';
 import express, {type Request, type Response, type NextFunction} from 'express';
 import {Server as SocketServer, type Socket} from 'socket.io';
@@ -28,7 +29,7 @@ export type Room = {
 export const createRoom = (roomName: string): Room => {
     const room: Room = {
         name: roomName,
-        secret: Math.random().toString(36).slice(2, 15),
+        secret: randomBytes(6).toString('hex'),
         studentResponses: new Map(),
         teacherSocket: undefined,
         mode: 'off',

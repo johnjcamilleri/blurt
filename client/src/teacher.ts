@@ -34,7 +34,7 @@ type ResponseCount = {
     key: string;
 };
 
-// Generate random room key
+// Generate random response key
 function generateKey(response: string): string {
     const rand = Math.random().toString(36).slice(2);
     return rand;
