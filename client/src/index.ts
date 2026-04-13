@@ -14,10 +14,15 @@ roomInput.addEventListener('keydown', (event: KeyboardEvent) => {
     }
 });
 
+function sanitizeRoomName(str: string): string {
+    return str.replaceAll(/[^\w._-]/gim, '').trim();
+}
+
 const joinButton: HTMLButtonElement = document.querySelector('#join')!;
 joinButton.addEventListener('click', () => {
-    if (roomInput.value) {
-        globalThis.location.href = '/' + roomInput.value;
+    const roomName = sanitizeRoomName(roomInput.value);
+    if (roomName) {
+        globalThis.location.href = '/' + roomName;
     } else {
         roomInput.focus();
     }
@@ -25,7 +30,8 @@ joinButton.addEventListener('click', () => {
 
 const createButton: HTMLButtonElement = document.querySelector('#create')!;
 createButton.addEventListener('click', () => {
-    globalThis.location.href = '/create/' + roomInput.value;
+    const roomName = sanitizeRoomName(roomInput.value);
+    globalThis.location.href = '/create/' + roomName;
 });
 
 const messageElem = document.querySelector('#message')!;

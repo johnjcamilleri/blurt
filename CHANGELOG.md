@@ -24,6 +24,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Handle URI errors by sending 400 response
 - npm audit fix
 - Generate cryptographically-secure room secrets
+- Sanitize room name input
 
 ---
 
