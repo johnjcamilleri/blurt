@@ -1,5 +1,5 @@
 # Stage 1: Build
-FROM node:22.21-alpine3.22 AS build
+FROM node:24.14.1-alpine3.22@sha256:4f33c7804fa7775b87875f512e25e515692210bfdeafd715eb8bc441c364e2f6 AS build
 
 # Set the working directory inside the container
 WORKDIR /app
@@ -20,7 +20,7 @@ RUN npm run build
 RUN npm run build:client
 
 # Stage 2: Production
-FROM node:22.21-alpine3.22 AS production
+FROM node:24.14.1-alpine3.22@sha256:4f33c7804fa7775b87875f512e25e515692210bfdeafd715eb8bc441c364e2f6 AS production
 
 # Set the working directory inside the container
 WORKDIR /app

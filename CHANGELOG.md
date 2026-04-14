@@ -19,6 +19,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Security
 
+- Pin Docker base images with SHA
+
 ---
 
 ## [1.7.4] - 2026-04-13
