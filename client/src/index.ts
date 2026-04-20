@@ -17,7 +17,7 @@ roomInput.addEventListener('keydown', (event: KeyboardEvent) => {
 const joinButton: HTMLButtonElement = document.querySelector('#join')!;
 joinButton.addEventListener('click', () => {
     if (roomInput.value) {
-        globalThis.location.href = '/' + encodeURIComponent(roomName);
+        globalThis.location.href = '/' + encodeURIComponent(roomInput.value);
     } else {
         roomInput.focus();
     }
