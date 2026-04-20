@@ -1,0 +1,16 @@
+:root {
+  --chalmers-light-purple: #9e92eb;
+  --chalmers-light-purple-25: rgb(158, 146, 235, .25);
+  --chalmers-purple: #6746eb;
+  --chalmers-dark-purple: #472dbe;
+}
+.form-control::placeholder {
+    color: var(--bs-secondary-border-subtle);
+}
+.form-control:focus {
+  border-color: var(--chalmers-light-purple);
+  box-shadow: 0 0 0 .25rem var(--chalmers-light-purple-25);
+}
+.alert {
+    z-index: 1090; /* $zindex-toast */
+}
