@@ -4,6 +4,11 @@
   --chalmers-purple: #6746eb;
   --chalmers-dark-purple: #472dbe;
 }
+
+.cursor-pointer {
+    cursor: pointer;
+}
+
 .form-control::placeholder {
     color: var(--bs-secondary-border-subtle);
 }
@@ -11,6 +16,13 @@
   border-color: var(--chalmers-light-purple);
   box-shadow: 0 0 0 .25rem var(--chalmers-light-purple-25);
 }
+
 .alert {
     z-index: 1090; /* $zindex-toast */
+
+    /* all alerts are Chalmers-themed */
+    --bs-alert-color: var(--chalmers-light-purple);
+    --bs-alert-link-color: var(--chalmers-light-purple);
+    --bs-alert-bg: var(--chalmers-light-purple-25);
+    --bs-alert-border-color: var(--chalmers-light-purple);
 }
