@@ -19,10 +19,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Security
 
+---
+
+## [1.7.5] - 2026-04-20
+
+### Fixed
+
+- Bug when hitting enter on homepage
+
+### Security
+
 - Pin Docker base images with SHA
 - Disallow period in room name
-
----
 
 ## [1.7.4] - 2026-04-13
 
