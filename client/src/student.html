@@ -15,15 +15,15 @@
             background-color: unset;
             color: var(--bs-btn-color);
         }
-        .bg-pink {
-            background-color: #f86284;
+        .bg-picked {
+            background-color: #9e92eb; /* Chalmers light purple */
         }
         .form-control::placeholder {
             color: var(--bs-secondary-border-subtle);
         }
     </style>
 </head>
-<body x-data="state" class="container" :class="picked ? 'bg-pink' : ''">
+<body x-data="state" class="container" :class="picked ? 'bg-picked' : ''">
     <div class="d-flex flex-column justify-content-center vh-100">
         <div class="mb-3">
             <div class="text-center text-secondary" x-show="mode === 'off'">
