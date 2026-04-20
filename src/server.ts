@@ -60,7 +60,7 @@ const FRUITS = [
 ];
 
 function isRoomNameValid(name: string): boolean {
-    return (/^[\p{Letter}\d._-]{1,32}$/ui).test(name);
+    return (/^[\p{Letter}\d_-]{1,32}$/ui).test(name);
 }
 
 function isNavigation(req: Request): boolean {

@@ -20,6 +20,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Security
 
 - Pin Docker base images with SHA
+- Disallow period in room name
 
 ---
 
