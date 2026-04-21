@@ -11,7 +11,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
-- Use Chalmers colours
+- Change logo and styling to use new Chalmers colours
 
 ### Deprecated
 
