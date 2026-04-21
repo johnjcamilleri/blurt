@@ -1,8 +1,16 @@
 :root {
   --chalmers-light-purple: #9e92eb;
-  --chalmers-light-purple-25: rgb(158, 146, 235, .25);
+  --chalmers-light-purple-rgb: 158, 146, 235;
+  --chalmers-light-purple-25: rgb(var(--chalmers-light-purple-rgb), .25);
+
   --chalmers-purple: #6746eb;
+  --chalmers-purple-rgb: 103, 70, 235;
+
   --chalmers-dark-purple: #472dbe;
+  --chalmers-dark-purple-rgb: 71, 45, 190;
+
+  --bs-link-color-rgb: var(--chalmers-light-purple-rgb);
+  --bs-link-hover-color-rgb: var(--chalmers-purple-rgb);
 }
 
 .cursor-pointer {
