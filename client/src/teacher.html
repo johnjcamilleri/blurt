@@ -68,12 +68,23 @@
         .bg-opacity-90 {
             --bs-bg-opacity: 0.9;
         }
+        .navbar-brand img {
+            filter: grayscale(1);
+        }
+        .navbar-brand:hover img {
+            filter: none;
+        }
     </style>
 </head>
 <body class="container mt-1">
     <nav class="navbar navbar-expand-sm d-block" x-show.important="!$store.controls.isZenMode">
         <div class="container-fluid">
             <ul class="navbar-nav mx-auto align-items-center gap-1 gap-sm-3">
+                <!-- App icon -->
+                <a class="navbar-brand me-2 d-none d-sm-block" href="/">
+                    <img src="blurt-icon-pixels.svg" alt="blurt" style="height: 2em;" />
+                </a>
+
                 <!-- QR code button -->
                 <li class="nav-item start-0 position-absolute position-sm-relative">
                     <button
