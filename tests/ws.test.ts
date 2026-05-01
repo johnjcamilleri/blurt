@@ -102,6 +102,26 @@ describe('Web Socket tests', () => {
         });
     });
 
+    it('ignores clear all responses from non-teacher', async () => {
+        studentSockets[0].emit('clear responses');
+        await new Promise<void>((resolve, reject) => {
+            for (const socket of studentSockets) {
+                socket.on('clear response', () => {
+                    try {
+                        reject(new Error('A student received "clear response" initiated by non-teacher'));
+                    } catch (error) {
+                        reject(error as Error);
+                    }
+                });
+            }
+
+            // Wait a short time to ensure no events are received
+            setTimeout(() => {
+                resolve();
+            }, 100);
+        });
+    });
+
     it('handles set mode', async () => {
         teacherSocket.emit('set mode', 'yes-no-maybe');
         await new Promise<void>((resolve, reject) => {
@@ -212,6 +232,25 @@ describe('Web Socket tests', () => {
             const receivedByAll = new Set<Socket>();
             for (const socket of studentSockets) {
                 socket.on('unpicked', () => {
+                    try {
+                        receivedByAll.add(socket);
+                        if (receivedByAll.size === studentSockets.length) {
+                            resolve();
+                        }
+                    } catch (error) {
+                        reject(error as Error);
+                    }
+                });
+            }
+        });
+    });
+
+    it('handles close room', async () => {
+        teacherSocket.emit('close room');
+        await new Promise<void>((resolve, reject) => {
+            const receivedByAll = new Set<Socket>();
+            for (const socket of studentSockets) {
+                socket.on('closed', () => {
                     try {
                         receivedByAll.add(socket);
                         if (receivedByAll.size === studentSockets.length) {

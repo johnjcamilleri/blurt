@@ -203,10 +203,11 @@ socketServer.on('connection', (socket: Socket) => {
         return;
     }
 
-    const isTeacher = room.secret === roomSecret;
-    if (isTeacher) {
+    let isTeacher = false;
+    if (room.secret === roomSecret) {
         logger.info(`[${roomName}] ${socket.id} teacher connect`);
         room.teacherSocket = socket;
+        isTeacher = true;
     } else {
         logger.info(`[${roomName}] ${socket.id} student connect`);
         room.studentResponses.set(socket.id, '');
@@ -216,7 +217,7 @@ socketServer.on('connection', (socket: Socket) => {
 
     // Client disconnect
     socket.on('disconnect', () => {
-        if (socket === room.teacherSocket) {
+        if (isTeacher) {
             logger.info(`[${roomName}] ${socket.id} teacher disconnect`);
             room.teacherSocket = undefined;
         } else {
@@ -235,6 +236,7 @@ socketServer.on('connection', (socket: Socket) => {
 
     // Set mode
     socket.on('set mode', (newMode: Mode) => {
+        if (!isTeacher) return;
         logger.info(`[${roomName}] ${socket.id} set mode: ${newMode}`);
         room.mode = newMode;
         for (const socketId of room.studentResponses.keys()) {
@@ -254,6 +256,7 @@ socketServer.on('connection', (socket: Socket) => {
 
     // Clear all responses
     socket.on('clear responses', () => {
+        if (!isTeacher) return;
         logger.info(`[${roomName}] ${socket.id} clear responses`);
         for (const socketId of room.studentResponses.keys()) {
             const socket = socketServer.sockets.sockets.get(socketId);
@@ -273,6 +276,7 @@ socketServer.on('connection', (socket: Socket) => {
 
     // Teacher picks student randomly
     socket.on('pick', (response?: string) => {
+        if (!isTeacher) return;
         if (response) {
             logger.info(`[${roomName}] ${socket.id} pick: "${response}"`);
         } else {
@@ -338,6 +342,7 @@ socketServer.on('connection', (socket: Socket) => {
 
     // Clear pick status
     socket.on('unpick', () => {
+        if (!isTeacher) return;
         logger.info(`[${roomName}] ${socket.id} unpick`);
         for (const socketId of room.studentResponses.keys()) {
             const studentSocket = socketServer.sockets.sockets.get(socketId);
@@ -346,6 +351,19 @@ socketServer.on('connection', (socket: Socket) => {
             }
         }
     });
+
+    // Explicitly close room
+    socket.on('close room', () => {
+        if (!isTeacher) return;
+        logger.info(`[${roomName}] ${socket.id} close room`);
+        for (const socketId of room.studentResponses.keys()) {
+            const studentSocket = socketServer.sockets.sockets.get(socketId);
+            if (studentSocket) {
+                studentSocket.emit('closed');
+            }
+        }
+        rooms.delete(roomName);
+    })
 });
 
 // Start the server

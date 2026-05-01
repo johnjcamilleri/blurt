@@ -62,3 +62,7 @@ socket.on('picked', (mode: Mode) => {
 socket.on('unpicked', (mode: Mode) => {
     state.picked = false;
 });
+
+socket.on('closed', () => {
+    window.location.href = '/'
+});
