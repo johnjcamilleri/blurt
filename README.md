@@ -78,20 +78,22 @@ See below for more [features](#features) and [keyboard shortcuts](#keyboard-shor
 
 #### Controlling owner view
 
-| Key(s)                       | Action                     |
-|------------------------------|----------------------------|
-| <kbd>escape</kbd>            | Toggle display menu        |
-| <kbd>q</kbd>                 | Toggle QR code             |
-| <kbd>a</kbd>                 | Toggle auto-hiding responses |
-| <kbd>h</kbd>                 | Hide responses             |
-| <kbd>s</kbd>                 | Show responses             |
-| <kbd>l</kbd>                 | Light theme                |
-| <kbd>d</kbd>                 | Dark theme                 |
-| <kbd>z</kbd>                 | Toggle Zen mode            |
-| <kbd>/</kbd>                 | Toggle response counts     |
-| <kbd>space</kbd>             | Pause/resume updates       |
-| <kbd>p</kbd>                 | Pick participant           |
-| <kbd>u</kbd>                 | Unpick all participants    |
+| Key(s)            | Action                       |
+|-------------------|------------------------------|
+| <kbd>escape</kbd> | Toggle display menu          |
+| <kbd>q</kbd>      | Toggle QR code               |
+| <kbd>a</kbd>      | Toggle auto-hiding responses |
+| <kbd>h</kbd>      | Hide responses               |
+| <kbd>s</kbd>      | Show responses               |
+| <kbd>l</kbd>      | Light theme                  |
+| <kbd>d</kbd>      | Dark theme                   |
+| <kbd>z</kbd>      | Toggle Zen mode              |
+| <kbd>/</kbd>      | Toggle response counts       |
+| <kbd>space</kbd>  | Pause/resume updates         |
+| <kbd>p</kbd>      | Pick participant             |
+| <kbd>u</kbd>      | Unpick all participants      |
+| <kbd>=</kbd>      | Add dummy response           |
+| <kbd>-</kbd>      | Remove dummy response        |
 
 ## Development
 

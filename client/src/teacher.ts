@@ -4,7 +4,7 @@ import Cookies from 'js-cookie';
 import {io} from 'socket.io-client';
 import QRCode from 'qrcode';
 import {
-    type ClientResponses, type Mode, sdbm, debounce,
+    type ClientResponses, type Mode, sdbm, debounce, randomChoice
 } from './common.js';
 
 // Generate QR code for student view URL
@@ -66,6 +66,9 @@ type ResponsesStore = {
     getBadgeStyle: (rc: ResponseCount) => string;
     containerStyle: string;
     refreshKey: number; // dummy prop to trigger reactivity manually
+    dummyResponses: string[];
+    addDummyResponse: () => void;
+    removeDummyResponse: () => void;
 };
 
 type ControlsStore = {
@@ -154,12 +157,76 @@ function getBadgeStyle(rc: ResponseCount): string {
     return c.cssText;
 }
 
+// Add response to a list of response counts
+function addResponse(
+    response: string,
+    counts: ResponseCount[],
+    mode: Mode,
+): void {
+    // Increment count if response exists
+    let found = false;
+    for (const rc of counts) {
+        if (rc.response === response) {
+            rc.count++;
+            found = true;
+            break;
+        }
+    }
+
+    // Add new response if it doesn't exist
+    if (!found) {
+        const newRC = {
+            response,
+            count: 1,
+            key: generateKey(response),
+        };
+        if (mode === 'number') {
+            // insert in place for numeric mode
+            let inserted = false;
+            for (let i = 0; i < counts.length; i++) {
+                // eslint-disable-next-line max-depth
+                if (Number(counts[i].response) > Number(response)) { // Compare as numbers
+                    counts.splice(i, 0, newRC);
+                    inserted = true;
+                    break;
+                }
+            }
+
+            if (!inserted) {
+                counts.push(newRC);
+            }
+        } else {
+            counts.push(newRC);
+        }
+    }
+}
+
+// Remove response from a list of response counts
+function removeResponse(response: string, counts: ResponseCount[]): void {
+    // Decrement count of response
+    let removeIx = null;
+    for (let ix = 0; ix < counts.length; ix++) {
+        const rc = counts[ix]
+        if (rc.response === response) {
+            rc.count--;
+            if (rc.count < 1) removeIx = ix;
+            break;
+        }
+    }
+
+    // Remove response if count is 0
+    if (removeIx !== null) {
+        counts.splice(removeIx, 1);
+    }
+}
+
 const _responsesStore: ResponsesStore = {
     raw: new Map(),
     counts: [],
     clear() {
         socket.emit('clear responses');
         this.counts = [];
+        this.dummyResponses = [];
     },
     pick(response?: string) {
         socket.emit('pick', response);
@@ -168,10 +235,10 @@ const _responsesStore: ResponsesStore = {
         socket.emit('unpick');
     },
     get total(): number {
-        return this.raw.size;
+        return this.raw.size + this.dummyResponses.length;
     },
     get nonEmpty(): number {
-        return Array.from(this.raw.values()).filter(response => response !== null && response !== '').length;
+        return Array.from(this.raw.values()).filter(response => response !== null && response !== '').length + this.dummyResponses.length;
     },
     getBadgeClass,
     getBadgeStyle,
@@ -186,6 +253,71 @@ const _responsesStore: ResponsesStore = {
         return c.cssText;
     },
     refreshKey: 0,
+    dummyResponses: [],
+    addDummyResponse() {
+        const cs = Alpine.store('controls') as ControlsStore;
+        let response;
+        switch (cs.mode) {
+            case 'off':
+                return;
+            case 'text':
+                switch (this.counts.length) {
+                    case 0:
+                    case 1:
+                    case 2:
+                        response = randomChoice(['foo', 'bar', 'cat', 'zoo', 'hex', 'dud']);
+                        break;
+                    default:
+                        response = randomChoice(this.counts.map((rc) => rc.response));
+                }
+                break;
+            case 'number':
+                switch (this.counts.length) {
+                    case 0:
+                        response = '3.14';
+                        break;
+                    case 1:
+                        const n = Number(this.counts[0].response);
+                        response = (n * (Math.random() + 0.5)).toPrecision(3);
+                        break;
+                    case 2:
+                    case 3:
+                        const first = Number(this.counts[0].response);
+                        const last = Number(this.counts[this.counts.length-1].response);
+                        response = (first + (last - first) * (Math.random() + 0.5)).toPrecision(3);
+                        break;
+                    default:
+                        response = randomChoice(this.counts.map((rc) => rc.response));
+                }
+                break;
+            case 'yes-no-maybe':
+                response = randomChoice(['yes', 'no', 'maybe']);
+                break;
+            case 'multi-2':
+                response = randomChoice(['A', 'B']);
+                break;
+            case 'multi-3':
+                response = randomChoice(['A', 'B', 'C']);
+                break;
+            case 'multi-4':
+                response = randomChoice(['A', 'B', 'C', 'D']);
+                break;
+            case 'multi-5':
+                response = randomChoice(['A', 'B', 'C', 'D', 'E']);
+                break;
+        }
+        addResponse(response, this.counts, cs.mode);
+        this.dummyResponses.push(response);
+        console.debug(`added dummy: ${response}`);
+    },
+    removeDummyResponse() {
+        if (!this.dummyResponses.length) return;
+        const response = randomChoice(this.dummyResponses);
+        removeResponse(response, this.counts);
+        const ix = this.dummyResponses.indexOf(response);
+        this.dummyResponses.splice(ix, 1);
+        console.debug(`removed dummy: ${response}`);
+    },
 };
 
 const _controlsStore: ControlsStore = {
@@ -259,40 +391,7 @@ function computeResponseCounts(responses: Array<[string, string]>): ResponseCoun
     for (const rv of responses.values()) {
         const response = rv[1];
         if (!response) continue;
-        let found = false;
-        for (const rc of responseCounts) {
-            if (rc.response === response) {
-                rc.count++;
-                found = true;
-                break;
-            }
-        }
-
-        if (!found) {
-            const newRC = {
-                response,
-                count: 1,
-                key: generateKey(response),
-            };
-            if (cs.mode === 'number') {
-                // insert in place for numeric mode
-                let inserted = false;
-                for (let i = 0; i < responseCounts.length; i++) {
-                    // eslint-disable-next-line max-depth
-                    if (Number(responseCounts[i].response) > Number(response)) { // Compare as numbers
-                        responseCounts.splice(i, 0, newRC);
-                        inserted = true;
-                        break;
-                    }
-                }
-
-                if (!inserted) {
-                    responseCounts.push(newRC);
-                }
-            } else {
-                responseCounts.push(newRC);
-            }
-        }
+        addResponse(response, responseCounts, cs.mode);
     }
 
     return responseCounts;
@@ -302,6 +401,7 @@ socket.on('all responses', (responses: Array<[string, string]>) => {
     const rs = Alpine.store('responses') as ResponsesStore;
     rs.raw = new Map(responses);
     rs.counts = computeResponseCounts(responses);
+    rs.dummyResponses = [];
 });
 
 // Redraw on window resize
@@ -326,59 +426,8 @@ socket.on('update response', (socketId: string, response: string) => {
         rs.raw.set(socketId, response);
     }
 
-    // Increment/Add new response
-    if (response) {
-        let foundNew = false;
-        for (const rc of rs.counts) {
-            if (rc.response === response) {
-                rc.count++;
-                foundNew = true;
-                break;
-            }
-        }
-
-        if (!foundNew) {
-            const newRC = {
-                response,
-                count: 1,
-                key: generateKey(response),
-            };
-            if (cs.mode === 'number') {
-                // insert in place for numeric mode
-                let inserted = false;
-                for (let i = 0; i < rs.counts.length; i++) {
-                    // eslint-disable-next-line max-depth
-                    if (Number(rs.counts[i].response) > Number(response)) { // Compare as numbers
-                        rs.counts.splice(i, 0, newRC);
-                        inserted = true;
-                        break;
-                    }
-                }
-
-                if (!inserted) {
-                    rs.counts.push(newRC);
-                }
-            } else {
-                rs.counts.push(newRC);
-            }
-        }
-    }
-
-    // Decrement/Remove old response
-    if (oldResponse) {
-        let removeOld = false;
-        for (const rc of rs.counts) {
-            if (rc.response === oldResponse) {
-                rc.count--;
-                if (rc.count < 1) removeOld = true;
-                break;
-            }
-        }
-
-        if (removeOld) {
-            rs.counts = rs.counts.filter(rc => rc.count > 0);
-        }
-    }
+    if (response) addResponse(response, rs.counts, cs.mode);
+    if (oldResponse) removeResponse(oldResponse, rs.counts);
 });
 
 // Add global keyboard shortcuts
@@ -541,6 +590,18 @@ document.addEventListener('keydown', event => {
         case '5': {
             cs.setMode('multi-5');
             alert('multi (5)');
+            break;
+        }
+
+        // Add/remove dummy responses
+        case '=':
+        case '+': {
+            rs.addDummyResponse();
+            break;
+        }
+        case '-':
+        case '_': {
+            rs.removeDummyResponse();
             break;
         }
 

@@ -10,6 +10,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 - Implement "close room" in backend (not usable from frontend)
+- Add ability to show dummy responses, for demo purposes
 
 ### Changed
 

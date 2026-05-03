@@ -31,3 +31,8 @@ export function sdbm(string: string): number {
     // Convert it to an unsigned 32-bit integer.
     return hash >>> 0;
 }
+
+// Randomly choose element from list (must be non-empty)
+export function randomChoice<T>(xs: Array<T>): T {
+    return xs[Math.floor(Math.random() * xs.length)];
+}
