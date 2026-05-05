@@ -1,10 +1,10 @@
 #!/usr/bin/env node
-/* eslint-disable @stylistic/array-element-newline */
 
 import http from 'node:http';
 import {randomBytes} from 'node:crypto';
 import cookieParser from 'cookie-parser';
 import express, {type Request, type Response, type NextFunction} from 'express';
+import {readFileSync} from 'fs';
 import {Server as SocketServer, type Socket} from 'socket.io';
 import winston from 'winston';
 
@@ -131,6 +131,10 @@ app.get('/create/:room', (req, res) => {
     }
 });
 
+// Pre-read HTML files on startup, to avoid disk access for each request
+const teacherHtml = readFileSync('./client/src/teacher.html');
+const studentHtml = readFileSync('./client/src/student.html');
+
 // Join a room
 app.get('/:room', (req, res) => {
     const roomName = req.params.room;
@@ -154,11 +158,13 @@ app.get('/:room', (req, res) => {
         const sentSecret = req.cookies[roomName] as string;
         if (sentSecret && room?.secret === sentSecret) {
             // If sending secret which matches, join as teacher
-            res.sendFile('teacher.html', {root: './client/src'});
+            res.appendHeader('Content-Type', 'text/html; charset=UTF-8')
+            res.send(teacherHtml);
         } else {
             // Otherwise join as student
             res.clearCookie(roomName); // in case cookie is stale
-            res.sendFile('student.html', {root: './client/src'});
+            res.appendHeader('Content-Type', 'text/html; charset=UTF-8')
+            res.send(studentHtml);
         }
     } else {
         // Room doesn't exist, fail nicely for navigation requests

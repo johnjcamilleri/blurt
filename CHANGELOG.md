@@ -23,6 +23,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Security
 
 - Enforce owner check for certain actions
+- Pre-read HTML files on startup, to avoid disk access for each request
 
 ---
 
