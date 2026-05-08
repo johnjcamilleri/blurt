@@ -1,4 +1,4 @@
-/* eslint-disable no-bitwise, unicorn/prefer-code-point */
+/* eslint-disable no-bitwise, unicorn/prefer-code-point, @stylistic/indent-binary-ops */
 
 export function debounce<T extends (...args: any[]) => void>(func: T, wait: number): (...args: Parameters<T>) => void {
     let timeout: ReturnType<typeof setTimeout>;
@@ -33,6 +33,6 @@ export function sdbm(string: string): number {
 }
 
 // Randomly choose element from list (must be non-empty)
-export function randomChoice<T>(xs: Array<T>): T {
+export function randomChoice<T>(xs: T[]): T {
     return xs[Math.floor(Math.random() * xs.length)];
 }

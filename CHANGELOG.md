@@ -9,9 +9,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
-- Implement "close room" in backend (not usable from frontend)
-- Add ability to show dummy responses, for demo purposes
-
 ### Changed
 
 ### Deprecated
@@ -22,11 +19,21 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Security
 
+---
+
+## [1.9.0] - 2026-05-08
+
+### Added
+
+- Add ability to show dummy responses, for demo purposes
+- Implement "close room" (not currently usable from frontend)
+
+### Security
+
 - Enforce owner check for certain actions
 - Pre-read HTML files on startup, to avoid disk access for each request
 - Pin CI dependencies
-
----
+- Update npm package versions
 
 ## [1.8.0] - 2026-04-23
 

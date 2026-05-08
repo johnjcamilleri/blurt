@@ -64,5 +64,5 @@ socket.on('unpicked', (mode: Mode) => {
 });
 
 socket.on('closed', () => {
-    window.location.href = '/'
+    globalThis.location.href = '/';
 });
