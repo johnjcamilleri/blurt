@@ -39,7 +39,8 @@ export function randomChoice<T>(xs: T[]): T {
 
 import makeEmojiRegex from 'emoji-regex-xs';
 const emojiRegex = makeEmojiRegex();
+// const emojiRegex = /\p{RGI_Emoji}/v;
 export function containsOnlyEmoji(str: string): boolean {
-    return (str.match(emojiRegex)?.join('') === str);
+    return (str.match(emojiRegex)?.join('') === str.replaceAll(' ', ''));
 }
 
