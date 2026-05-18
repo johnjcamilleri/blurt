@@ -1,10 +1,9 @@
 import Alpine from 'alpinejs';
-import makeEmojiRegex from 'emoji-regex-xs';
 import Cookies from 'js-cookie';
 import {io} from 'socket.io-client';
 import QRCode from 'qrcode';
 import {
-    type ClientResponses, type Mode, sdbm, debounce, randomChoice
+    type ClientResponses, type Mode, sdbm, debounce, randomChoice, containsOnlyEmoji
 } from './common.js';
 
 // Generate QR code for student view URL
@@ -90,8 +89,6 @@ type ControlsStore = {
     isAlertShown: boolean;
 };
 
-const emojiRegex = makeEmojiRegex();
-
 function getBadgeClass(rc: ResponseCount): string {
     const rs = Alpine.store('responses') as ResponsesStore;
     const cs = Alpine.store('controls') as ControlsStore;
@@ -119,7 +116,7 @@ function getBadgeClass(rc: ResponseCount): string {
 
                 default:
             }
-        } else if (rc.response.match(emojiRegex)?.join('') === rc.response) {
+        } else if (containsOnlyEmoji(rc.response)) {
             bgClassName = cs.isLightTheme ? 'text-bg-light' : 'text-bg-dark';
         }
     }

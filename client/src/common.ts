@@ -36,3 +36,10 @@ export function sdbm(string: string): number {
 export function randomChoice<T>(xs: T[]): T {
     return xs[Math.floor(Math.random() * xs.length)];
 }
+
+import makeEmojiRegex from 'emoji-regex-xs';
+const emojiRegex = makeEmojiRegex();
+export function containsOnlyEmoji(str: string): boolean {
+    return (str.match(emojiRegex)?.join('') === str);
+}
+
