@@ -16,8 +16,9 @@ roomInput.addEventListener('keydown', (event: KeyboardEvent) => {
 
 const joinButton: HTMLButtonElement = document.querySelector('#join')!;
 joinButton.addEventListener('click', () => {
-    if (roomInput.value) {
-        globalThis.location.href = '/' + encodeURIComponent(roomInput.value);
+    const roomName = roomInput.value.trim();
+    if (roomName) {
+        globalThis.location.href = '/' + encodeURIComponent(roomName);
     } else {
         roomInput.focus();
     }
@@ -25,7 +26,8 @@ joinButton.addEventListener('click', () => {
 
 const createButton: HTMLButtonElement = document.querySelector('#create')!;
 createButton.addEventListener('click', () => {
-    globalThis.location.href = '/create/' + encodeURIComponent(roomInput.value);
+    const roomName = roomInput.value.trim();
+    globalThis.location.href = '/create/' + encodeURIComponent(roomName);
 });
 
 const messageElem = document.querySelector('#message')!;
