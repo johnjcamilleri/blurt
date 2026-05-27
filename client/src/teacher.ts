@@ -594,13 +594,11 @@ document.addEventListener('keydown', event => {
         }
 
         // Add/remove dummy responses
-        case '=':
-        case '+': {
+        case '=': {
             rs.addDummyResponse();
             break;
         }
-        case '-':
-        case '_': {
+        case '-': {
             rs.removeDummyResponse();
             break;
         }
