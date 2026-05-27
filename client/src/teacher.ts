@@ -1,10 +1,9 @@
 import Alpine from 'alpinejs';
-import makeEmojiRegex from 'emoji-regex-xs';
 import Cookies from 'js-cookie';
 import {io} from 'socket.io-client';
 import QRCode from 'qrcode';
 import {
-    type ClientResponses, type Mode, sdbm, debounce, randomChoice
+    type ClientResponses, type Mode, sdbm, debounce, randomChoice, containsOnlyEmoji
 } from './common.js';
 
 // Generate QR code for student view URL
@@ -90,8 +89,6 @@ type ControlsStore = {
     isAlertShown: boolean;
 };
 
-const emojiRegex = makeEmojiRegex();
-
 function getBadgeClass(rc: ResponseCount): string {
     const rs = Alpine.store('responses') as ResponsesStore;
     const cs = Alpine.store('controls') as ControlsStore;
@@ -119,7 +116,7 @@ function getBadgeClass(rc: ResponseCount): string {
 
                 default:
             }
-        } else if (rc.response.match(emojiRegex)?.join('') === rc.response) {
+        } else if (containsOnlyEmoji(rc.response)) {
             bgClassName = cs.isLightTheme ? 'text-bg-light' : 'text-bg-dark';
         }
     }
@@ -206,7 +203,7 @@ function removeResponse(response: string, counts: ResponseCount[]): void {
     // Decrement count of response
     let removeIx = null;
     for (let ix = 0; ix < counts.length; ix++) {
-        const rc = counts[ix]
+        const rc = counts[ix];
         if (rc.response === response) {
             rc.count--;
             if (rc.count < 1) removeIx = ix;
@@ -238,7 +235,7 @@ const _responsesStore: ResponsesStore = {
         return this.raw.size + this.dummyResponses.length;
     },
     get nonEmpty(): number {
-        return Array.from(this.raw.values()).filter(response => response !== null && response !== '').length + this.dummyResponses.length;
+        return [...this.raw.values()].filter(response => response !== null && response !== '').length + this.dummyResponses.length;
     },
     getBadgeClass,
     getBadgeStyle,
@@ -258,9 +255,10 @@ const _responsesStore: ResponsesStore = {
         const cs = Alpine.store('controls') as ControlsStore;
         let response;
         switch (cs.mode) {
-            case 'off':
+            case 'off': {
                 return;
-            case 'text':
+            }
+            case 'text': {
                 switch (this.counts.length) {
                     case 0:
                     case 1:
@@ -271,7 +269,8 @@ const _responsesStore: ResponsesStore = {
                         response = randomChoice(this.counts.map((rc) => rc.response));
                 }
                 break;
-            case 'number':
+            }
+            case 'number': {
                 switch (this.counts.length) {
                     case 0:
                         response = '3.14';
@@ -290,21 +289,27 @@ const _responsesStore: ResponsesStore = {
                         response = randomChoice(this.counts.map((rc) => rc.response));
                 }
                 break;
-            case 'yes-no-maybe':
+            }
+            case 'yes-no-maybe': {
                 response = randomChoice(['yes', 'no', 'maybe']);
                 break;
-            case 'multi-2':
+            }
+            case 'multi-2': {
                 response = randomChoice(['A', 'B']);
                 break;
-            case 'multi-3':
+            }
+            case 'multi-3': {
                 response = randomChoice(['A', 'B', 'C']);
                 break;
-            case 'multi-4':
+            }
+            case 'multi-4': {
                 response = randomChoice(['A', 'B', 'C', 'D']);
                 break;
-            case 'multi-5':
+            }
+            case 'multi-5': {
                 response = randomChoice(['A', 'B', 'C', 'D', 'E']);
                 break;
+            }
         }
         addResponse(response, this.counts, cs.mode);
         this.dummyResponses.push(response);
