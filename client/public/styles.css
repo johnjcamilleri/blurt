@@ -13,12 +13,16 @@
   --bs-link-hover-color-rgb: var(--chalmers-purple-rgb);
 }
 
+.h-dvh {
+  height: 100dvh;
+}
+
 .cursor-pointer {
-    cursor: pointer;
+  cursor: pointer;
 }
 
 .form-control::placeholder {
-    color: var(--bs-secondary-border-subtle);
+  color: var(--bs-secondary-border-subtle);
 }
 .form-control:focus {
   border-color: var(--chalmers-light-purple);
@@ -26,11 +30,11 @@
 }
 
 .alert {
-    z-index: 1090; /* $zindex-toast */
+  z-index: 1090; /* $zindex-toast */
 
-    /* all alerts are Chalmers-themed */
-    --bs-alert-color: var(--chalmers-light-purple);
-    --bs-alert-link-color: var(--chalmers-light-purple);
-    --bs-alert-bg: var(--chalmers-light-purple-25);
-    --bs-alert-border-color: var(--chalmers-light-purple);
+  /* all alerts are Chalmers-themed */
+  --bs-alert-color: var(--chalmers-light-purple);
+  --bs-alert-link-color: var(--chalmers-light-purple);
+  --bs-alert-bg: var(--chalmers-light-purple-25);
+  --bs-alert-border-color: var(--chalmers-light-purple);
 }
