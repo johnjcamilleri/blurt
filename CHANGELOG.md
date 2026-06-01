@@ -17,12 +17,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
-- Trim whitespace and turn off autocapitalisation on homepage input
-- Adjust viewport height when showing virtual keyboard on mobile
-
 ### Security
 
 ---
+
+## [1.9.1] - 2026-06-01
+
+### Fixed
+
+- Trim whitespace and turn off autocapitalisation on homepage input
+- Adjust viewport height when showing virtual keyboard on mobile
 
 ## [1.9.0] - 2026-05-08
 
