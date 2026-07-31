@@ -94,6 +94,7 @@ See below for more [features](#features) and [keyboard shortcuts](#keyboard-shor
 | <kbd>u</kbd>      | Unpick all participants      |
 | <kbd>=</kbd>      | Add dummy response           |
 | <kbd>-</kbd>      | Remove dummy response        |
+| <kbd>⌘</kbd>+<kbd>c</kbd>  | Copy responses to clipboard |
 
 ## Development
 

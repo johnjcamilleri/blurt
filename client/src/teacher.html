@@ -290,6 +290,15 @@
                             <i class="bi-lightbulb-off me-lg-1"></i>
                             <span class="d-none d-lg-inline"><u>u</u>npick</span>
                         </button>
+                        <button
+                            type="button"
+                            :class="$store.controls.getButtonClass()"
+                            @click="$store.responses.copyToClipboard()"
+                            title="copy (⌘+c)"
+                        >
+                            <i class="bi-copy me-lg-1"></i>
+                            <span class="d-none d-lg-inline">copy</span>
+                        </button>
                     </div>
                 </li>
             </ul>

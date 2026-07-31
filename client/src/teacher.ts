@@ -68,6 +68,7 @@ type ResponsesStore = {
     dummyResponses: string[];
     addDummyResponse: () => void;
     removeDummyResponse: () => void;
+    copyToClipboard: () => void;
 };
 
 type ControlsStore = {
@@ -323,6 +324,22 @@ const _responsesStore: ResponsesStore = {
         this.dummyResponses.splice(ix, 1);
         console.debug(`removed dummy: ${response}`);
     },
+    copyToClipboard() {
+        let responses: string[] = [];
+        for (let resp of this.raw.values()) {
+            if (resp.length > 0 && !responses.includes(resp)) {
+                responses.push(resp);
+            }
+        }
+        if (responses.length > 0) {
+            const data = responses.join('\n');
+            navigator.clipboard.writeText(data)
+                .then(() => alert('responses copied'))
+                .catch(() => alert('copy failed'))
+        } else {
+            alert('no responses copied');
+        }
+    },
 };
 
 const _controlsStore: ControlsStore = {
@@ -440,6 +457,11 @@ socket.on('update response', (socketId: string, response: string) => {
 document.addEventListener('keydown', event => {
     const cs = Alpine.store('controls') as ControlsStore;
     const rs = Alpine.store('responses') as ResponsesStore;
+
+    if (event.metaKey && event.key == 'c') {
+        rs.copyToClipboard();
+        return;
+    }
 
     if (event.altKey || event.ctrlKey || event.metaKey || event.shiftKey) {
         return;
