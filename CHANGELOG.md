@@ -27,6 +27,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Add feature to copy responses to clipboard
 
+### Security
+
+- Update npm package versions
+
 ## [1.9.1] - 2026-06-01
 
 ### Fixed
