@@ -76,7 +76,7 @@
         }
     </style>
 </head>
-<body class="container mt-1">
+<body class="container-fluid">
     <nav class="navbar navbar-expand-sm d-block" x-show.important="!$store.controls.isZenMode">
         <div class="container-fluid">
             <ul class="navbar-nav mx-auto align-items-center gap-1 gap-sm-3">
@@ -177,7 +177,7 @@
         </div>
 
         <!-- Display controls ("menu") -->
-        <div class="container-fluid mt-2" x-show="$store.controls.isMenuShown">
+        <div class="container-fluid mt-2 position-absolute" x-show="$store.controls.isMenuShown">
             <ul class="navbar-nav mx-auto align-items-center gap-1 gap-sm-3">
                 <li class="nav-item">
                     <div class="btn-group" aria-label="response display controls">
@@ -315,8 +315,8 @@
         <canvas id="qrcodeBig"></canvas>
         <p x-text="`participants: ${$store.responses.total}`" class="mt-1 text-body-tertiary" aria-label="joined participants"></p>
     </div>
-    <div
-        class="mt-4 d-flex flex-wrap align-content-center justify-content-center"
+    <main
+        class="d-flex flex-wrap align-content-center justify-content-center"
         :class="$store.controls.mode === 'number' ? 'align-items-end' : 'align-items-center'"
         :style="$store.responses.containerStyle"
     >
@@ -327,7 +327,6 @@
                 :style="$store.responses.getBadgeStyle(rc)"
                 :data-count="rc.count"
                 @click="$store.responses.pick(rc.response)"
-                title="Click to pick a participant with this response"
             >
                 <div x-text="$store.controls.areResponsesShown ? rc.response : '⋯'"></div>
                 <div
@@ -341,7 +340,7 @@
                 </div>
             </div>
         </template>
-    </div>
+    </main>
     <div
         class="alert py-2 px-3 position-absolute top-50 start-50 text-center"
         style="transform: translate(-50%, -50%); opacity: 0.75;"

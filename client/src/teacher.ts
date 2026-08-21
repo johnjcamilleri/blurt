@@ -90,6 +90,7 @@ type ControlsStore = {
     isAlertShown: boolean;
 };
 
+// badge class determines background colour and opacity
 function getBadgeClass(rc: ResponseCount): string {
     const rs = Alpine.store('responses') as ResponsesStore;
     const cs = Alpine.store('controls') as ControlsStore;
@@ -148,10 +149,11 @@ function getBadgeClass(rc: ResponseCount): string {
     return `${className} ${bgClassName} ${bgOpacity}`;
 }
 
+// badge style determines scale based on popularity
 function getBadgeStyle(rc: ResponseCount): string {
     const rs = Alpine.store('responses') as ResponsesStore;
     const c = document.createElement('span').style;
-    c.fontSize = `${Math.max(0.1, (rc.count / rs.total))}em`; // min font size
+    c.fontSize = `${rc.count / rs.total}em`;
     return c.cssText;
 }
 
@@ -236,18 +238,26 @@ const _responsesStore: ResponsesStore = {
         return this.raw.size + this.dummyResponses.length;
     },
     get nonEmpty(): number {
-        return [...this.raw.values()].filter(response => response !== null && response !== '').length + this.dummyResponses.length;
+        return [...this.raw.values()].filter(resp => resp !== null && resp !== '').length + this.dummyResponses.length;
     },
     getBadgeClass,
     getBadgeStyle,
     get containerStyle(): string {
         void this.refreshKey;
+        const cs = Alpine.store('controls') as ControlsStore;
         const c = document.createElement('span').style;
-        const area = window.innerWidth * window.innerHeight;
-        const fontSize = Math.max(Math.ceil(area / 3500), 24); // 24px min font size
-        c.fontSize = `${fontSize}px`;
         const navHeight = document.querySelector('nav')?.getBoundingClientRect().height;
-        c.height = `calc(100vh - ${navHeight}px - 24px - 24px)`;
+        c.height = `calc(100vh - ${navHeight}px)`;
+        
+        const cont = document.querySelector('main')?.getBoundingClientRect() as DOMRect;
+        const area = cont.height * cont.width;
+        const uniqueResponses = this.counts.length;
+        let fontSize;
+        if (cs.areCountsShown)
+            fontSize = Math.ceil(area / 3000) + (uniqueResponses-1) * 15;
+        else
+            fontSize = Math.ceil(area / 3000) + (uniqueResponses-1) * 20;
+        c.fontSize = `${fontSize}px`;
         return c.cssText;
     },
     refreshKey: 0,
