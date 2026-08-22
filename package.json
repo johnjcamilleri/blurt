@@ -1,6 +1,6 @@
 {
   "name": "blurt",
-  "version": "1.10.0",
+  "version": "1.10.1",
   "main": "dist/server.js",
   "type": "module",
   "scripts": {
