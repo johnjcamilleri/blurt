@@ -252,12 +252,9 @@ const _responsesStore: ResponsesStore = {
         const cont = document.querySelector('main')?.getBoundingClientRect() as DOMRect;
         const area = cont.height * cont.width;
         const uniqueResponses = this.counts.length;
-        let fontSize;
-        if (cs.areCountsShown)
-            fontSize = Math.ceil(area / 3000) + (uniqueResponses-1) * 15;
-        else
-            fontSize = Math.ceil(area / 3000) + (uniqueResponses-1) * 20;
+        const fontSize = Math.ceil(area / 3500) + uniqueResponses * (cs.areCountsShown ? 15 : 20);
         c.fontSize = `${fontSize}px`;
+        console.debug(`area ${area}, resps ${uniqueResponses}, font ${fontSize}`);
         return c.cssText;
     },
     refreshKey: 0,
@@ -279,6 +276,7 @@ const _responsesStore: ResponsesStore = {
                     default:
                         response = randomChoice(this.counts.map((rc) => rc.response));
                 }
+                // response = Math.random().toString(36).substring(2); // for testing purposes
                 break;
             }
             case 'number': {
