@@ -274,6 +274,7 @@ socketServer.on('connection', (socket: Socket) => {
 
     // Student response
     socket.on('respond', (response: string) => {
+        if (typeof(response) !== 'string') return;
         response = response.trim();
         logger.info(`[${roomName}] ${socket.id} respond: ${response}`);
         room.studentResponses.set(socket.id, response);

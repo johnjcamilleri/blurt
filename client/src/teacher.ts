@@ -159,7 +159,6 @@ function getBadgeStyle(rc: ResponseCount): string {
     const thisPop = normalise(rc.count);
     const sumPop = rs.counts.reduce((acc,arg) => acc + normalise(arg.count), 0);
     c.fontSize = `${thisPop / sumPop}em`;
-    console.debug(`resp "${rc.response}", count ${rc.count}, ${thisPop} / ${sumPop} = fs ${c.fontSize}`);
     return c.cssText;
 }
 
@@ -253,22 +252,21 @@ const _responsesStore: ResponsesStore = {
     getBadgeStyle,
     get containerStyle(): string {
         void this.refreshKey;
-        const cs = Alpine.store('controls') as ControlsStore;
         const c = document.createElement('span').style;
         const navHeight = document.querySelector('nav')?.getBoundingClientRect().height;
         c.height = `calc(100vh - ${navHeight}px)`;
-
-        // TODO: consider total response length also
         const cont = document.querySelector('main')?.getBoundingClientRect() as DOMRect;
         const area = cont.height * cont.width;
 
-        const baseFontSize = area / 1000 + Math.sqrt(area) / 10;
-        const t = Math.min(this.uniqueResponses / 5, 1);
-        const scale = 0.1 + 0.9 * Math.pow(t, 2);
-        const fontSize = baseFontSize * scale;
+        // TODO: can probably optimise by making these non-reactive
+        const totalResponseLength = this.counts.reduce((acc,arg) => acc + arg.response.length, 0)
+        const [minCount,maxCount] = (this.counts.reduce(([accMin,accMax],arg) => [Math.min(accMin,arg.count),Math.max(accMax,arg.count)], [Infinity,1]));
+        const ratio = maxCount/minCount; // 1 = all equal, > 1 if ranges
+        // const fontSize = area / 2000; // good for trl = 10. as trl grows, this must be bigger
+        // const fontSize = (area / 2000) + totalResponseLength / 1.2; // good with varying sizes, if all unique must be bigger
+        const fontSize = (area / 2500) + totalResponseLength / (0.8 * Math.log(1 + ratio)); // good balance all round
 
         c.fontSize = `${fontSize}px`;
-        console.debug(`area ${area}, resps ${this.uniqueResponses}, font ${fontSize}`);
         return c.cssText;
     },
     refreshKey: 0,
@@ -290,7 +288,7 @@ const _responsesStore: ResponsesStore = {
                     default:
                         response = randomChoice(this.counts.map((rc) => rc.response));
                 }
-                response = Math.random().toString(36).substring(2); // for testing purposes
+                // response = Math.random().toString(36).substring(2); // for testing purposes
                 break;
             }
             case 'number': {
