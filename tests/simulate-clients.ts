@@ -13,6 +13,7 @@ const INTERVAL_MS = 3000; // delay between loop iterations
 const SEND_DELAY_MS = 2000; // delay sending by up to
 const NUM_MIN = -10;
 const NUM_MAX = 64;
+const ACTIVE_CLIENTS = 1.0; // percentage of clients which are active
 let RESPONSES: string[] = [];
 if (MODE === 'text') {
     const FRUITS = [
@@ -45,16 +46,18 @@ if (MODE === 'text') {
     RESPONSES = Array.from({length: NUM_RESPONSES}, () =>
         Math.floor(Math.random() * (NUM_MAX - NUM_MIN + 1)) + NUM_MIN,
     ).map(String);
+} else if (MODE === 'yes-no-maybe') {
+    RESPONSES = ['yes', 'no', 'maybe'];
 }
 
-const clients: Socket[] = [];
-
+// Create room
 async function createTestRoom() {
     await axios.get(`${SERVER_URL}/${ROOM_NAME}`);
 }
-
 await createTestRoom();
 
+// Create clients
+const clients: Socket[] = [];
 for (let i = 0; i < NUM_CLIENTS; i++) {
     const socket = io(SERVER_URL, {query: {roomName: ROOM_NAME}});
 
@@ -69,15 +72,21 @@ for (let i = 0; i < NUM_CLIENTS; i++) {
     clients.push(socket);
 }
 
-setInterval(() => {
+// Send responses
+// setInterval(() => {
     for (const socket of clients) {
         setTimeout(() => {
-            // Weighted selection: earlier items are more likely
-            const idx = Math.floor((Math.random() ** 1.5) * RESPONSES.length);
-            const response = RESPONSES[idx];
-            socket.emit('respond', response);
-            console.log(`${socket.id} sent: ${response}`);
+            if (Math.random() < ACTIVE_CLIENTS) {
+                // Weighted selection: earlier items are more likely
+                const idx = Math.floor((Math.random() ** 2.5) * RESPONSES.length);
+                const response = RESPONSES[idx];
+                socket.emit('respond', response);
+                console.log(`${socket.id} sent: ${response}`);
+            } else {
+                // Send nothing
+                socket.emit('respond', '');
+            }
         }, Math.floor(Math.random() * SEND_DELAY_MS));
     }
-}, INTERVAL_MS);
+// }, INTERVAL_MS);
 

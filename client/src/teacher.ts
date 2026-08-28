@@ -59,8 +59,9 @@ type ResponsesStore = {
     clear: () => void;
     pick: (response?: string) => void;
     unpick: () => void;
-    total: number;
-    nonEmpty: number;
+    total: number; // number of connected clients
+    nonEmpty: number; // number of non-empty responses
+    uniqueResponses: number; // unique responses (not including empty)
     getBadgeClass: (rc: ResponseCount) => string;
     getBadgeStyle: (rc: ResponseCount) => string;
     containerStyle: string;
@@ -153,7 +154,12 @@ function getBadgeClass(rc: ResponseCount): string {
 function getBadgeStyle(rc: ResponseCount): string {
     const rs = Alpine.store('responses') as ResponsesStore;
     const c = document.createElement('span').style;
-    c.fontSize = `${rc.count / rs.total}em`;
+    // Smooth popularities, so that very popular responses don't drown out unpopoular ones
+    const normalise = (count: number) => Math.pow(count, 0.4); // 1.0 = direct proportion
+    const thisPop = normalise(rc.count);
+    const sumPop = rs.counts.reduce((acc,arg) => acc + normalise(arg.count), 0);
+    c.fontSize = `${thisPop / sumPop}em`;
+    console.debug(`resp "${rc.response}", count ${rc.count}, ${thisPop} / ${sumPop} = fs ${c.fontSize}`);
     return c.cssText;
 }
 
@@ -240,6 +246,9 @@ const _responsesStore: ResponsesStore = {
     get nonEmpty(): number {
         return [...this.raw.values()].filter(resp => resp !== null && resp !== '').length + this.dummyResponses.length;
     },
+    get uniqueResponses(): number {
+        return this.counts.length;
+    },
     getBadgeClass,
     getBadgeStyle,
     get containerStyle(): string {
@@ -248,13 +257,18 @@ const _responsesStore: ResponsesStore = {
         const c = document.createElement('span').style;
         const navHeight = document.querySelector('nav')?.getBoundingClientRect().height;
         c.height = `calc(100vh - ${navHeight}px)`;
-        
+
+        // TODO: consider total response length also
         const cont = document.querySelector('main')?.getBoundingClientRect() as DOMRect;
         const area = cont.height * cont.width;
-        const uniqueResponses = this.counts.length;
-        const fontSize = Math.ceil(area / 3500) + uniqueResponses * (cs.areCountsShown ? 15 : 20);
+
+        const baseFontSize = area / 1000 + Math.sqrt(area) / 10;
+        const t = Math.min(this.uniqueResponses / 5, 1);
+        const scale = 0.1 + 0.9 * Math.pow(t, 2);
+        const fontSize = baseFontSize * scale;
+
         c.fontSize = `${fontSize}px`;
-        console.debug(`area ${area}, resps ${uniqueResponses}, font ${fontSize}`);
+        console.debug(`area ${area}, resps ${this.uniqueResponses}, font ${fontSize}`);
         return c.cssText;
     },
     refreshKey: 0,
@@ -276,7 +290,7 @@ const _responsesStore: ResponsesStore = {
                     default:
                         response = randomChoice(this.counts.map((rc) => rc.response));
                 }
-                // response = Math.random().toString(36).substring(2); // for testing purposes
+                response = Math.random().toString(36).substring(2); // for testing purposes
                 break;
             }
             case 'number': {
@@ -446,6 +460,7 @@ socket.on('update response', (socketId: string, response: string) => {
     const cs = Alpine.store('controls') as ControlsStore;
 
     if (cs.areUpdatesPaused) return;
+    if (cs.mode == 'off') return;
 
     const oldResponse = rs.raw.get(socketId);
     if (oldResponse === response) return;
