@@ -13,9 +13,9 @@ const argv = yargs(hideBin(process.argv)).options({
     responses: { type: 'number', default: 10, describe: 'number of possible responses' },
     active: { type: 'number', default: 1.0, describe: 'fraction of clients that are active (0.0-1.0)' },
     skew: { type: 'number', default: 1, describe: 'make certain responses more frequent (1 = uniform, >1 favours earlier responses)' },
+    continuous: { type: 'boolean', default: false, describe: 'keep sending responses continuously' },
 }).parseSync()
 
-const SEND_DELAY_MS = 2000; // spread out responses over this amount of time
 let RESPONSES: string[] = []; // possible responses which can be sent
 if (argv.mode === 'text') {
     const FRUITS = [
@@ -79,18 +79,35 @@ for (let i = 0; i < argv.clients; i++) {
 }
 
 // Send responses
-for (const socket of clients) {
-    setTimeout(() => {
-        if (Math.random() < argv.active) {
-            // Weighted selection: earlier items are more likely
-            const idx = Math.floor((Math.random() ** argv.skew) * RESPONSES.length);
-            const response = RESPONSES[idx];
-            socket.emit('respond', response);
-            console.log(`${socket.id} sent: ${response}`);
-        } else {
-            // Send nothing
-            socket.emit('respond', '');
-        }
-    }, Math.floor(Math.random() * SEND_DELAY_MS));
+function sendResponse(socket: Socket) {
+    if (Math.random() < argv.active) {
+        // Weighted selection: earlier items are more likely
+        const idx = Math.floor((Math.random() ** argv.skew) * RESPONSES.length);
+        const response = RESPONSES[idx];
+        socket.emit('respond', response);
+        console.log(`${socket.id} sent: ${response}`);
+    } else {
+        // Send nothing
+        socket.emit('respond', '');
+    }
 }
+
+const SEND_DELAY_MS = 2000; // spread out responses over this amount of time
+if (argv.continuous) {
+    const INTERVAL_MS = SEND_DELAY_MS; // delay between loop iterations
+    setInterval(() => {
+        for (const socket of clients) {
+            setTimeout(() => {
+                sendResponse(socket);
+            }, Math.floor(Math.random() * SEND_DELAY_MS));
+        }
+    }, INTERVAL_MS);
+} else {
+    for (const socket of clients) {
+        setTimeout(() => {
+            sendResponse(socket);
+        }, Math.floor(Math.random() * SEND_DELAY_MS));
+    }
+}
+
 
