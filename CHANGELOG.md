@@ -17,11 +17,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
-- Participant numbers updated when mode is off
 
 ### Security
 
 ---
+
+## [1.10.4] - 2026-09-06
+
+### Fixed
+
+- Participant numbers updated when mode is off
 
 ## [1.10.3] - 2026-09-06
 
@@ -32,8 +37,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Security
 
 - Update npm package versions
-
----
 
 ## [1.10.2] - 2026-08-28
 
@@ -84,8 +87,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Change logo and styling to use new Chalmers' colours
 - Add logo to teacher page as home link
-
----
 
 ## [1.7.5] - 2026-04-20
 
@@ -147,16 +148,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Error messages do not float over content
 - Move display buttons to separate menu
 
----
-
 ## [1.6.0] - 2025-10-25
 
 ### Added
 
 - Add light theme
 - Add multiple choice modes with 2-5 options
-
----
 
 ## [1.5.3] - 2025-10-10
 
