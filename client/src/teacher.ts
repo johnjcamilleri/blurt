@@ -460,12 +460,10 @@ window.addEventListener('resize', debounce(() => {
 }, 200));
 
 // Update a single response in existing counts
+// This is also triggered when clients connect
 socket.on('update response', (socketId: string, response: string) => {
     const rs = Alpine.store('responses') as ResponsesStore;
     const cs = Alpine.store('controls') as ControlsStore;
-
-    if (cs.areUpdatesPaused) return;
-    if (cs.mode == 'off') return;
 
     const oldResponse = rs.raw.get(socketId);
     if (oldResponse === response) return;
@@ -475,6 +473,9 @@ socket.on('update response', (socketId: string, response: string) => {
     } else {
         rs.raw.set(socketId, response);
     }
+
+    if (cs.areUpdatesPaused) return;
+    if (cs.mode == 'off') return;
 
     if (response) addResponse(response, rs.counts, cs.mode);
     if (oldResponse) removeResponse(oldResponse, rs.counts);
