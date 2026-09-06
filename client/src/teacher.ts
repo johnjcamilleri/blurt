@@ -153,11 +153,13 @@ function getBadgeClass(rc: ResponseCount): string {
 // badge style determines scale based on popularity
 function getBadgeStyle(rc: ResponseCount): string {
     const rs = Alpine.store('responses') as ResponsesStore;
-    const c = document.createElement('span').style;
+
     // Smooth popularities, so that very popular responses don't drown out unpopoular ones
     const normalise = (count: number) => Math.pow(count, 0.4); // 1.0 = direct proportion
     const thisPop = normalise(rc.count);
     const sumPop = rs.counts.reduce((acc,arg) => acc + normalise(arg.count), 0);
+
+    const c = document.createElement('span').style;
     c.fontSize = `${thisPop / sumPop}em`;
     return c.cssText;
 }
@@ -259,13 +261,19 @@ const _responsesStore: ResponsesStore = {
         const area = cont.height * cont.width;
 
         // TODO: can probably optimise by making these non-reactive
+        // Counter-intuitively, font size should grow as total response length increases
         const totalResponseLength = this.counts.reduce((acc,arg) => acc + arg.response.length, 0)
-        const [minCount,maxCount] = (this.counts.reduce(([accMin,accMax],arg) => [Math.min(accMin,arg.count),Math.max(accMax,arg.count)], [Infinity,1]));
-        const ratio = maxCount/minCount; // 1 = all equal, > 1 if ranges
+        const totalResponseCount = this.counts.length;
+        // const tt_ratio = totalResponseLength / totalResponseCount;
+        // const [minCount,maxCount] = (this.counts.reduce(([accMin,accMax],arg) => [Math.min(accMin,arg.count),Math.max(accMax,arg.count)], [Infinity,1]));
+        // const mm_ratio = maxCount/minCount; // 1 = all equal, > 1 if ranges
+
         // const fontSize = area / 2000; // good for trl = 10. as trl grows, this must be bigger
         // const fontSize = (area / 2000) + totalResponseLength / 1.2; // good with varying sizes, if all unique must be bigger
-        const fontSize = (area / 2500) + totalResponseLength / (0.8 * Math.log(1 + ratio)); // good balance all round
-
+        // const fontSize = (area / 2500) + totalResponseLength / (0.8 * Math.log(1 + mm_ratio)); // too small when ratio large
+        let fontSize = (area / 2500) + Math.min(1100, totalResponseLength**1.1);
+        if (totalResponseCount <= 2) fontSize *= 0.7;
+        // console.debug(`totalResponseLength ${totalResponseLength}, totalResponseCount ${totalResponseCount}, fontSize ${fontSize}`);
         c.fontSize = `${fontSize}px`;
         return c.cssText;
     },
@@ -288,7 +296,6 @@ const _responsesStore: ResponsesStore = {
                     default:
                         response = randomChoice(this.counts.map((rc) => rc.response));
                 }
-                // response = Math.random().toString(36).substring(2); // for testing purposes
                 break;
             }
             case 'number': {

@@ -8,11 +8,11 @@ import {io, type Socket} from 'socket.io-client';
 const argv = yargs(hideBin(process.argv)).options({
     url: { type: 'string', default: 'http://localhost:3000'},
     room: { type: 'string', default: 'testroom'},
-    mode: { choices: ['text', 'number', 'yes-no-maybe'], default: 'text' },
+    mode: { choices: ['text', 'number', 'yes-no-maybe', 'multi-5'], default: 'text' },
     clients: { type: 'number', default: 20, describe: 'number of clients' },
     responses: { type: 'number', default: 10, describe: 'number of possible responses' },
     active: { type: 'number', default: 1.0, describe: 'fraction of clients that are active (0.0-1.0)' },
-    skew: { type: 'number', default: 2, describe: 'make certain responses more frequent (1 = uniform, >1 favours earlier responses)' },
+    skew: { type: 'number', default: 1, describe: 'make certain responses more frequent (1 = uniform, >1 favours earlier responses)' },
 }).parseSync()
 
 const SEND_DELAY_MS = 2000; // spread out responses over this amount of time
@@ -52,6 +52,8 @@ if (argv.mode === 'text') {
     ).map(String);
 } else if (argv.mode === 'yes-no-maybe') {
     RESPONSES = ['yes', 'no', 'maybe'];
+} else if (argv.mode === 'multi-5') {
+    RESPONSES = ['A', 'B', 'C', 'D', 'E'];
 }
 
 // Create room
